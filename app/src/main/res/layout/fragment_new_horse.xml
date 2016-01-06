@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             tools:context="com.sporthorsetech.horseshoepad.NewHorseFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_horse_title"
+        android:layout_marginTop="@dimen/pad_10dp"
+        android:gravity="center"
+        android:padding="@dimen/pad_5dp"
+        android:textSize="@dimen/text_22sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/horse_name"
+        android:layout_marginTop="@dimen/pad_20dp"
+        android:layout_marginLeft="@dimen/pad_15dp"
+        android:gravity="left"
+        android:padding="@dimen/pad_5dp"
+        android:textSize="@dimen/text_16sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/horse_name_editText"
+        android:textStyle="normal"
+        android:gravity="left"
+        android:layout_marginLeft="@dimen/pad_15dp"
+        android:padding="@dimen/pad_5dp"
+        android:singleLine="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/horse_sport"
+        android:layout_marginTop="@dimen/pad_10dp"
+        android:layout_marginLeft="@dimen/pad_15dp"
+        android:gravity="left"
+        android:padding="@dimen/pad_5dp"
+        android:textSize="@dimen/text_16sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pad_10dp"
+        android:layout_marginLeft="@dimen/pad_15dp"
+        android:id="@+id/horse_sport_spinner"
+        android:gravity="left"
+        android:padding="@dimen/pad_5dp"
+        android:textSize="@dimen/text_16sp"
+        android:textStyle="normal"
+        android:textColor="@color/black"/>
+
+</LinearLayout>

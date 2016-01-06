@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">HorseShoePad</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="new_horse">Add Horse</string>
+    <string name="new_horse_title">Enter details about your horse</string>
+    <string name="horse_name">Horse\'s Name:</string>
+    <string name="horse_sport">Horse\'s Equestrian Discipline:</string>
+    <string name="title_activity_settings">SetUp</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="new_horse_profile">New Horse Profile</string>
+    <string name="view_gait_data">View Gait Data</string>
+    <string name="activate_horseshoe_pads">Activate Horseshoe Pads</string>
+    <string name="monitor_gait_activity">Monitor Gait Activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
