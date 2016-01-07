@@ -1,10 +1,10 @@
 package com.sporthorsetech.horseshoepad;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +43,6 @@ public class NewHorseFragment extends Fragment
     public static NewHorseFragment newInstance()
     {
         NewHorseFragment fragment = new NewHorseFragment();
-        //Bundle args = new Bundle();
-        //args.putString(Constant.ARG_PARAM1, param1);
-        //fragment.setArguments(args);
 
         return fragment;
     }

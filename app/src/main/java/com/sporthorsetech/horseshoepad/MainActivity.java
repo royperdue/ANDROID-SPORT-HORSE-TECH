@@ -56,41 +56,41 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
             {
                 if(position == 0)
                 {
-                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    while (getFragmentManager().getBackStackEntryCount() > 0)
                     {
-                        getSupportFragmentManager().popBackStackImmediate();
+                        getFragmentManager().popBackStackImmediate();
                     }
-                    getSupportFragmentManager().beginTransaction()
+                    getFragmentManager().beginTransaction()
                             .add(R.id.container, WelcomeFragment.newInstance("Welcome", "Back"))
                             .addToBackStack(getString(R.string.welcome)).commit();
                 }
                 else if(position == 1)
                 {
-                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    while (getFragmentManager().getBackStackEntryCount() > 0)
                     {
-                        getSupportFragmentManager().popBackStackImmediate();
+                        getFragmentManager().popBackStackImmediate();
                     }
-                    getSupportFragmentManager().beginTransaction()
+                    getFragmentManager().beginTransaction()
                             .add(R.id.container, NewHorseFragment.newInstance())
                             .addToBackStack(getString(R.string.new_horse_profile)).commit();
                 }
                 else if (position == 2)
                 {
-                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    while (getFragmentManager().getBackStackEntryCount() > 0)
                     {
-                        getSupportFragmentManager().popBackStackImmediate();
+                        getFragmentManager().popBackStackImmediate();
                     }
-                    getSupportFragmentManager().beginTransaction()
+                    getFragmentManager().beginTransaction()
                             .add(R.id.container, ActivatePadsFragment.newInstance())
                             .addToBackStack(getString(R.string.activate_horseshoe_pads)).commit();
                 }
                 else if (position == 3)
                 {
-                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    while (getFragmentManager().getBackStackEntryCount() > 0)
                     {
-                        getSupportFragmentManager().popBackStackImmediate();
+                        getFragmentManager().popBackStackImmediate();
                     }
-                    getSupportFragmentManager().beginTransaction()
+                    getFragmentManager().beginTransaction()
                             .add(R.id.container, GaitMonitorFragment.newInstance())
                             .addToBackStack(getString(R.string.monitor_gait_activity)).commit();
                 }
@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                 }
                 else
                 {
-                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    while (getFragmentManager().getBackStackEntryCount() > 0)
                     {
-                        getSupportFragmentManager().popBackStackImmediate();
+                        getFragmentManager().popBackStackImmediate();
                     }
-                    getSupportFragmentManager().beginTransaction()
+                    getFragmentManager().beginTransaction()
                             .add(R.id.container, DeleteHorseProfileFragment.newInstance())
                             .addToBackStack(getString(R.string.delete_all_horse_profiles)).commit();
                 }
@@ -158,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     {
         if (keyCode == KeyEvent.KEYCODE_BACK)
         {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            if (getFragmentManager().getBackStackEntryCount() > 0)
             {
-                getSupportFragmentManager().popBackStackImmediate();
+                getFragmentManager().popBackStackImmediate();
             }
             else
                 finish();

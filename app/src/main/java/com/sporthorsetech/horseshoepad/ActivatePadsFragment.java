@@ -1,35 +1,39 @@
 package com.sporthorsetech.horseshoepad;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.avast.android.dialogs.iface.ISimpleDialogCancelListener;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.simplealertdialog.SimpleAlertDialog;
+import com.simplealertdialog.SimpleAlertDialogFragment;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.HorseFoot;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivatePadsFragment extends Fragment implements ISimpleDialogCancelListener
+public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.OnClickListener
 {
     private OnFragmentInteractionListener mListener;
     private RadioGroup radioGroup;
@@ -37,18 +41,25 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
     private RadioButton radioButton2;
     private RadioButton radioButton3;
     private RadioButton radioButton4;
-    private TextView textView1;
-    private TextView textView2;
-    private TextView textView3;
-    private TextView textView4;
+    private EditText textView1;
+    private EditText textView2;
+    private EditText textView3;
+    private EditText textView4;
     private ImageView imageView;
     private ImageButton rightHind;
     private ImageButton leftHind;
     private ImageButton leftFront;
     private ImageButton rightFront;
     private Spinner selectHorseSpinner;
+    private Button activatePadsButton;
     private Horse horse;
+    private String horseShoePadId = "horseShoePadId";
     private final List<Bean> beans = new ArrayList<>();
+    private boolean leftHindSelected = false;
+    private boolean leftFrontSelected = false;
+    private boolean rightHindSelected = false;
+    private boolean rightFrontSelected = false;
+    private boolean horseSelected = false;
 
     public ActivatePadsFragment()
     {
@@ -156,6 +167,7 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
             {
                 if (initializing == false)
                 {
+                    horseSelected = true;
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
                     horse = spinnerAdapter.getHorse(position);
 
@@ -176,10 +188,10 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
         radioButton2 = (RadioButton) view.findViewById(R.id.radioButton2);
         radioButton3 = (RadioButton) view.findViewById(R.id.radioButton3);
         radioButton4 = (RadioButton) view.findViewById(R.id.radioButton4);
-        textView1 = (TextView) view.findViewById(R.id.textView1);
-        textView2 = (TextView) view.findViewById(R.id.textView2);
-        textView3 = (TextView) view.findViewById(R.id.textView3);
-        textView4 = (TextView) view.findViewById(R.id.textView4);
+        textView1 = (EditText) view.findViewById(R.id.textView1);
+        textView2 = (EditText) view.findViewById(R.id.textView2);
+        textView3 = (EditText) view.findViewById(R.id.textView3);
+        textView4 = (EditText) view.findViewById(R.id.textView4);
         imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.horse_trotting_top);
 
@@ -190,8 +202,33 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
             @Override
             public void onClick(View v)
             {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                Toast.makeText(getActivity(), ((RadioButton) view.findViewById(selectedId)).getText(), Toast.LENGTH_SHORT).show();
+                if (horseSelected == false)
+                {
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("You must select a horse.")
+                            .setPositiveButton(android.R.string.ok)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
+                else
+                {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
+                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                    rightFrontSelected = true;
+                    rightHindSelected = false;
+                    leftFrontSelected = false;
+                    leftHindSelected = false;
+
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("Set horseshoe pad " + ((RadioButton)
+                                    view.findViewById(selectedId)).getText() + " to right front foot?")
+                            .setPositiveButton(android.R.string.ok)
+                            .setNegativeButton(android.R.string.cancel)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .setRequestCode(1)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
             }
         });
 
@@ -202,8 +239,33 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
             @Override
             public void onClick(View v)
             {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                Toast.makeText(getActivity(), ((RadioButton) view.findViewById(selectedId)).getText(), Toast.LENGTH_SHORT).show();
+                if (horseSelected == false)
+                {
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("You must select a horse.")
+                            .setPositiveButton(android.R.string.ok)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
+                else
+                {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
+                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                    rightFrontSelected = false;
+                    rightHindSelected = true;
+                    leftFrontSelected = false;
+                    leftHindSelected = false;
+
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("Set horseshoe pad " + ((RadioButton)
+                                    view.findViewById(selectedId)).getText() + " to right hind foot?")
+                            .setPositiveButton(android.R.string.ok)
+                            .setNegativeButton(android.R.string.cancel)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .setRequestCode(1)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
             }
         });
 
@@ -214,8 +276,33 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
             @Override
             public void onClick(View v)
             {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                Toast.makeText(getActivity(), ((RadioButton) view.findViewById(selectedId)).getText(), Toast.LENGTH_SHORT).show();
+                if (horseSelected == false)
+                {
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("You must select a horse.")
+                            .setPositiveButton(android.R.string.ok)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
+                else
+                {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
+                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                    rightFrontSelected = false;
+                    rightHindSelected = false;
+                    leftFrontSelected = true;
+                    leftHindSelected = false;
+
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("Set horseshoe pad " + ((RadioButton)
+                                    view.findViewById(selectedId)).getText() + " to left front foot?")
+                            .setPositiveButton(android.R.string.ok)
+                            .setNegativeButton(android.R.string.cancel)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .setRequestCode(1)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
             }
         });
 
@@ -226,8 +313,52 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
             @Override
             public void onClick(View v)
             {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                Toast.makeText(getActivity(), ((RadioButton) view.findViewById(selectedId)).getText(), Toast.LENGTH_SHORT).show();
+                if (horseSelected == false)
+                {
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("You must select a horse.")
+                            .setPositiveButton(android.R.string.ok)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
+                else
+                {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
+                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                    rightFrontSelected = false;
+                    rightHindSelected = false;
+                    leftFrontSelected = false;
+                    leftHindSelected = true;
+
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("Set horseshoe pad " + ((RadioButton)
+                                    view.findViewById(selectedId)).getText() + " to left hind foot?")
+                            .setPositiveButton(android.R.string.ok)
+                            .setNegativeButton(android.R.string.cancel)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .setRequestCode(1)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
+            }
+        });
+
+        activatePadsButton = (Button) view.findViewById(R.id.buttonActivatePads);
+        activatePadsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (horse.getHorseFeet().size() == 2 || horse.getHorseFeet().size() == 4)
+                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                else
+                {
+                    new SimpleAlertDialogFragment.Builder()
+                            .setMessage("You must assign all horseshoe pads before activating.")
+                            .setPositiveButton(android.R.string.ok)
+                            .setTargetFragment(ActivatePadsFragment.this)
+                            .create().show(getActivity().getFragmentManager(), "dialog");
+                }
             }
         });
 
@@ -265,7 +396,83 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
     }
 
     @Override
-    public void onCancelled(int requestCode)
+    public void onDialogPositiveButtonClicked(SimpleAlertDialog dialog, int requestCode, View view)
+    {
+        ArrayList<HorseFoot> horseFeet;
+
+        if (requestCode == 1)
+        {
+            if (rightFrontSelected == true)
+            {
+                HorseFoot horseFoot = new HorseFoot("1", "RF");
+                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+
+                if(horse.getHorseFeet() != null)
+                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                else
+                    horseFeet = new ArrayList<>();
+
+                horseFeet.add(horseFoot);
+                horse.setHorseFeet(horseFeet);
+            }
+            else if (rightHindSelected == true)
+            {
+                HorseFoot horseFoot = new HorseFoot("2", "RH");
+                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+
+                if(horse.getHorseFeet() != null)
+                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                else
+                    horseFeet = new ArrayList<>();
+
+                horseFeet.add(horseFoot);
+                horse.setHorseFeet(horseFeet);
+            }
+            else if (leftFrontSelected == true)
+            {
+                HorseFoot horseFoot = new HorseFoot("3", "LF");
+                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+
+                if(horse.getHorseFeet() != null)
+                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                else
+                    horseFeet = new ArrayList<>();
+
+                horseFeet.add(horseFoot);
+                horse.setHorseFeet(horseFeet);
+            }
+            else if (leftHindSelected == true)
+            {
+                HorseFoot horseFoot = new HorseFoot("4", "LH");
+                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+
+                if(horse.getHorseFeet() != null)
+                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                else
+                    horseFeet = new ArrayList<>();
+
+                horseFeet.add(horseFoot);
+                horse.setHorseFeet(horseFeet);
+            }
+
+            if (TextUtils.isEmpty(this.textView1.getText().toString()))
+            {
+                this.textView1.setText(horseShoePadId);
+            } else if (TextUtils.isEmpty(this.textView2.getText().toString()))
+            {
+                this.textView2.setText(horseShoePadId);
+            } else if (TextUtils.isEmpty(this.textView3.getText().toString()))
+            {
+                this.textView3.setText(horseShoePadId);
+            } else if (TextUtils.isEmpty(this.textView4.getText().toString()))
+            {
+                this.textView4.setText(horseShoePadId);
+            }
+        }
+    }
+
+    @Override
+    public void onDialogNegativeButtonClicked(SimpleAlertDialog dialog, int requestCode, View view)
     {
 
     }

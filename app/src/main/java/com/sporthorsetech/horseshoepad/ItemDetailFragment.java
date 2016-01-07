@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.HorseFoot;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -59,7 +62,18 @@ public class ItemDetailFragment extends Fragment
         // Show the content as text in a TextView.
         if (mItem != null)
         {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.getName() + " " + mItem.getBreed() + " " + mItem.getDiscipline());
+            ArrayList<HorseFoot> horseFeet = (ArrayList<HorseFoot>) mItem.getHorseFeet();
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (horseFeet != null && horseFeet.size() > 0)
+            {
+                for (HorseFoot horseFoot : horseFeet)
+                {
+                    stringBuilder.append(horseFoot.getFoot() + " ");
+                }
+                ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.getName() + " " + mItem.getBreed() + " "
+                        + mItem.getDiscipline() + " " + stringBuilder.toString());
+            }
         }
 
         return rootView;

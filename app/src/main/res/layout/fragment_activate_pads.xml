@@ -11,10 +11,10 @@
         android:orientation="vertical">
 
         <Spinner
+            android:id="@+id/spinnerSelectHorse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/pad_15dp"
-            android:id="@+id/spinnerSelectHorse"/>
+            android:layout_marginLeft="@dimen/pad_15dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,8 +120,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_height="fill_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -129,29 +128,65 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <TextView
+                <EditText
                     android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_14sp"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_14sp"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_14sp"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_14sp"/>
             </LinearLayout>
 
             <RadioGroup
@@ -207,6 +242,21 @@
                     android:textSize="@dimen/text_20sp"
                     android:textStyle="normal"/>
             </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/pad_40dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activate_pads"
+                android:id="@+id/buttonActivatePads"
+                />
         </LinearLayout>
 
     </LinearLayout>

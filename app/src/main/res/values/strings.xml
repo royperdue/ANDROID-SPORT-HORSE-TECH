@@ -28,9 +28,14 @@
     <string name="activate_horseshoe_pads">Activate Horseshoe Pads</string>
     <string name="monitor_gait_activity">Monitor Gait Activity</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="title_confirm">Confirm</string>
+
     <!-- Button labels-->
     <string name="create_horse_profile">Create Horse Profile</string>
     <string name="delete_all_horse_profiles">Delete All Horse Profiles</string>
+    <string name="activate_pads">Activate Pads</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
