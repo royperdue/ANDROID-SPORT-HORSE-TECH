@@ -189,6 +189,25 @@
                     android:textSize="@dimen/text_14sp"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/pad_10dp"
+                android:layout_marginLeft="@dimen/pad_15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad_10dp"
+                    android:text="@string/horseshoePadIds"
+                    android:textColor="@color/black"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_16sp"/>
+
+                </LinearLayout>
+
             <RadioGroup
                 android:id="@+id/radioButtonGroupEquine"
                 android:layout_width="match_parent"
