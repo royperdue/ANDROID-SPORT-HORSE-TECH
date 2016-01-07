@@ -232,7 +232,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 if (horseSelected == false)
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horse.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -249,7 +248,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                     leftHindSelected = false;
 
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("Set horseshoe pad " + ((RadioButton)
                                     view.findViewById(selectedId)).getText() + " to right front foot?")
                             .setPositiveButton(android.R.string.ok)
@@ -266,7 +264,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 else
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horseshoe pad.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -285,7 +282,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 if (horseSelected == false)
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horse.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -302,7 +298,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                     leftHindSelected = false;
 
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("Set horseshoe pad " + ((RadioButton)
                                     view.findViewById(selectedId)).getText() + " to right hind foot?")
                             .setPositiveButton(android.R.string.ok)
@@ -319,7 +314,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 else
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horseshoe pad.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -338,7 +332,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 if (horseSelected == false)
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horse.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -355,7 +348,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                     leftHindSelected = false;
 
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("Set horseshoe pad " + ((RadioButton)
                                     view.findViewById(selectedId)).getText() + " to left front foot?")
                             .setPositiveButton(android.R.string.ok)
@@ -372,7 +364,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 else
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horseshoe pad.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -391,7 +382,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 if (horseSelected == false)
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horse.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -408,7 +398,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                     leftHindSelected = true;
 
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("Set horseshoe pad " + ((RadioButton)
                                     view.findViewById(selectedId)).getText() + " to left hind foot?")
                             .setPositiveButton(android.R.string.ok)
@@ -425,7 +414,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 else
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must select a horseshoe pad.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
@@ -445,7 +433,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                 else
                 {
                     new SimpleAlertDialogFragment.Builder()
-                            .setTheme(android.R.style.Theme_Holo_Light_Dialog)
                             .setMessage("You must assign all horseshoe pads before activating.")
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
