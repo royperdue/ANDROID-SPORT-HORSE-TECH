@@ -137,7 +137,7 @@ public class ActivatePadsFragment extends Fragment implements OnClickableAreaCli
         List<ClickableArea> clickableAreas = new ArrayList<>();
 
         // ClickableArea(x, y, w, h, object);
-        clickableAreas.add(new ClickableArea(20, 20, 50, 50, new HorseFoot("Gustavo", "Fring")));
+        //clickableAreas.add(new ClickableArea(20, 20, 50, 50, new HorseFoot("Gustavo", "Fring")));
 
 
         return clickableAreas;

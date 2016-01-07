@@ -7,22 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import com.sporthorsetech.horseshoepad.utility.Constant;
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NewHorseFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NewHorseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NewHorseFragment extends Fragment
+public class NewHorseFragment extends Fragment implements AdapterView.OnItemSelectedListener
 {
     private OnFragmentInteractionListener mListener;
-    private String mParam1;
 
     public NewHorseFragment()
     {
@@ -43,18 +34,40 @@ public class NewHorseFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(Constant.NEW_HORSE_ARG_PARAM1);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_horse, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_horse, container, false);
+
+        Spinner equestrianSportSpinner = (Spinner) view.findViewById(R.id.horse_sport_spinner);
+        ArrayAdapter<CharSequence> adapterSport = ArrayAdapter.createFromResource(getActivity(),
+                R.array.equestrian_discipline_array, android.R.layout.simple_spinner_item);
+        adapterSport.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        equestrianSportSpinner.setAdapter(adapterSport);
+
+        Spinner horseSexSpinner = (Spinner) view.findViewById(R.id.horse_sex_spinner);
+        ArrayAdapter<CharSequence> adapterSex = ArrayAdapter.createFromResource(getActivity(),
+                R.array.horse_sex_array, android.R.layout.simple_spinner_item);
+        adapterSex.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        equestrianSportSpinner.setAdapter(adapterSex);
+
+        return view;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent)
+    {
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,12 +101,6 @@ public class NewHorseFragment extends Fragment
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
     public interface OnFragmentInteractionListener
     {
         void onFragmentInteraction(String title);

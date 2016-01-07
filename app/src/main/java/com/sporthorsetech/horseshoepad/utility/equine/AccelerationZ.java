@@ -9,17 +9,16 @@ import java.util.List;
 /**
  * Created by royperdue on 1/5/16.
  */
-public class HorseFoot implements Database.StoredObject
+public class AccelerationZ implements Database.StoredObject
 {
     String id;
-    String foot;
+    String axis;
     Long timeCreated;
-    String currentHorseShoePad;
-    List<String> previousHorseshoePads;
+    Long value;
 
     public enum TYPE implements Database.StoredObject.TYPE
     {
-        horseFoot(HorseFoot.class);
+        accelerationZ(AccelerationZ.class);
 
         private Class cls;
 
@@ -41,77 +40,23 @@ public class HorseFoot implements Database.StoredObject
         }
     }
 
-    public HorseFoot(String id, String foot, String currentHorseShoePad)
+    public AccelerationZ(String id, String axis, Long value)
     {
         this.id = id;
-        this.foot = foot;
-        setTimeCreated();
-
-        if(this.currentHorseShoePad != null)
-            previousHorseshoePads.add(currentHorseShoePad);
-
-        this.currentHorseShoePad = currentHorseShoePad;
+        this.axis = axis;
+       setTimeCreated();
+        this.value = value;
     }
 
     public TYPE getStoredObjectType()
     {
-        return TYPE.horseFoot;
+        return TYPE.accelerationZ;
     }
 
     @Override
     public String getStoredObjectId()
     {
         return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    public String getFoot()
-    {
-        return foot;
-    }
-
-    public void setFoot(String foot)
-    {
-        this.foot = foot;
-    }
-
-    public String getCurrentHorseShoePad()
-    {
-        return currentHorseShoePad;
-    }
-
-    public void setCurrentHorseShoePad(String currentHorseShoePad)
-    {
-        this.currentHorseShoePad = currentHorseShoePad;
-    }
-
-    public List<String> getPreviousHorseshoePads()
-    {
-        return previousHorseshoePads;
-    }
-
-    public void setPreviousHorseshoePads(List<String> previousHorseshoePads)
-    {
-        this.previousHorseshoePads = previousHorseshoePads;
-    }
-
-    // Return a list of tags that you want to be able to search for this object by.
-    public List<SearchableTagValuePair> getStoredObjectSearchableTags()
-    {
-        List<SearchableTagValuePair> retval = new LinkedList<>();
-        retval.add(new SearchableTagValuePair("foot", foot));
-
-        return retval;
-    }
-
-    @Override
-    public Long getStoredObjectTimestampMillis()
-    {
-        return System.currentTimeMillis() / 1000;
     }
 
     public Long getTimeCreated()
@@ -122,5 +67,45 @@ public class HorseFoot implements Database.StoredObject
     public void setTimeCreated()
     {
         this.timeCreated = System.currentTimeMillis();
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getAxis()
+    {
+        return axis;
+    }
+
+    public void setAxis(String axis)
+    {
+        this.axis = axis;
+    }
+
+    public Long getValue()
+    {
+        return value;
+    }
+
+    public void setValue(Long value)
+    {
+        this.value = value;
+    }
+
+    // Return a list of tags that you want to be able to search for this object by.
+    public List<SearchableTagValuePair> getStoredObjectSearchableTags()
+    {
+        List<SearchableTagValuePair> retval = new LinkedList<>();
+        retval.add(new SearchableTagValuePair("axis", axis));
+
+        return retval;
+    }
+
+    @Override
+    public Long getStoredObjectTimestampMillis()
+    {
+        return System.currentTimeMillis() / 1000;
     }
 }

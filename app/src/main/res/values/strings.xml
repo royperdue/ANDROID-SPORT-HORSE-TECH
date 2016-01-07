@@ -12,7 +12,10 @@
     <string name="new_horse_title">Enter details about your horse</string>
     <string name="horse_name">Horse\'s Name:</string>
     <string name="horse_sport">Horse\'s Equestrian Discipline:</string>
-    <string name="title_activity_settings">SetUp</string>
+    <string name="horse_sex">Select Horse\'s Sex:</string>
+    <string name="horse_age">Enter Horse\'s Age:</string>
+    <string name="horse_height">Enter Horse\'s Height:</string>
+    <string name="horse_breed">Enter Horse\'s Breed:</string>
 
     <string name="welcome">Welcome</string>
     <string name="new_horse_profile">New Horse Profile</string>
@@ -20,6 +23,28 @@
     <string name="activate_horseshoe_pads">Activate Horseshoe Pads</string>
     <string name="monitor_gait_activity">Monitor Gait Activity</string>
 
+    <!-- Button labels-->
+    <string name="create_horse_profile">Create Horse Profile</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="equestrian_discipline_array">
+        <item>Dressage</item>
+        <item>Hunt Seat</item>
+        <item>Jumpers</item>
+        <item>Eventing</item>
+        <item>Western Pleasure</item>
+        <item>Reining</item>
+        <item>Thoroughbred Racing</item>
+        <item>Standardbred Racing</item>
+    </string-array>
+
+    <string-array name="horse_sex_array">
+        <item>Filly</item>
+        <item>Mare</item>
+        <item>Colt</item>
+        <item>Stallion</item>
+        <item>Gelding</item>
+    </string-array>
 </resources>
