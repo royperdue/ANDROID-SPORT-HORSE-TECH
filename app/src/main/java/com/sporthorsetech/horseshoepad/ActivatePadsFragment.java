@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,9 @@ import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,8 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
     private ImageButton leftHind;
     private ImageButton leftFront;
     private ImageButton rightFront;
+    private Spinner selectHorseSpinner;
+    private Horse horse;
     private final List<Bean> beans = new ArrayList<>();
 
     public ActivatePadsFragment()
@@ -125,6 +132,44 @@ public class ActivatePadsFragment extends Fragment implements ISimpleDialogCance
                              Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
+
+        List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
+
+        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
+
+        final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                horseArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectHorseSpinner.setAdapter(adapter);
+
+        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            // boolean variable that is used so that the onItemSelected method is not executed
+            // on the first initializing round that happens when the class is created.
+            boolean initializing = true;
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if (initializing == false)
+                {
+                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+                    horse = spinnerAdapter.getHorse(position);
+
+                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                }
+                initializing = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioButtonGroupEquine);
         radioButton1 = (RadioButton) view.findViewById(R.id.radioButton1);

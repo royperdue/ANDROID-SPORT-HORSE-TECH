@@ -10,6 +10,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_15dp"
+            android:id="@+id/spinnerSelectHorse"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -202,5 +208,6 @@
                     android:textStyle="normal"/>
             </RadioGroup>
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
