@@ -25,6 +25,7 @@
 
     <!-- Button labels-->
     <string name="create_horse_profile">Create Horse Profile</string>
+    <string name="delete_all_horse_profiles">Delete All Horse Profiles</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -46,5 +47,15 @@
         <item>Colt</item>
         <item>Stallion</item>
         <item>Gelding</item>
+    </string-array>
+
+    <!--Horse breed array must be in alphabetical order-->
+    <string-array name="horse_breed_array">
+        <item>Appaloosa</item>
+        <item>Belgian</item>
+        <item>Standardbred</item>
+        <item>Thoroughbred</item>
+        <item>Quarter Horse</item>
+
     </string-array>
 </resources>

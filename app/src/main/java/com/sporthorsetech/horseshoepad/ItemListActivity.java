@@ -4,18 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.sporthorsetech.horseshoepad.content.Content;
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.List;
 
@@ -29,11 +30,8 @@ import java.util.List;
  */
 public class ItemListActivity extends AppCompatActivity
 {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+    public static List<Horse> horses;
+    // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
 
     @Override
@@ -73,16 +71,16 @@ public class ItemListActivity extends AppCompatActivity
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView)
     {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Content.ITEMS));
+        horses = Database.with(getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(horses));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>
     {
+        private final List<Horse> mValues;
 
-        private final List<Content.ContentItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<Content.ContentItem> items)
+        public SimpleItemRecyclerViewAdapter(List<Horse> items)
         {
             mValues = items;
         }
@@ -92,6 +90,7 @@ public class ItemListActivity extends AppCompatActivity
         {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_list_content, parent, false);
+
             return new ViewHolder(view);
         }
 
@@ -99,8 +98,8 @@ public class ItemListActivity extends AppCompatActivity
         public void onBindViewHolder(final ViewHolder holder, int position)
         {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getStoredObjectId());
+            holder.mContentView.setText(mValues.get(position).getName());
 
             holder.mView.setOnClickListener(new View.OnClickListener()
             {
@@ -110,9 +109,10 @@ public class ItemListActivity extends AppCompatActivity
                     if (mTwoPane)
                     {
                         Bundle arguments = new Bundle();
-                        arguments.putString(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(Constant.ARG_ITEM_ID, holder.mItem.getStoredObjectId());
                         ItemDetailFragment fragment = new ItemDetailFragment();
                         fragment.setArguments(arguments);
+
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.item_detail_container, fragment)
                                 .commit();
@@ -120,7 +120,7 @@ public class ItemListActivity extends AppCompatActivity
                     {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ItemDetailActivity.class);
-                        intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(Constant.ARG_ITEM_ID, holder.mItem.getStoredObjectId());
 
                         context.startActivity(intent);
                     }
@@ -139,11 +139,12 @@ public class ItemListActivity extends AppCompatActivity
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public Content.ContentItem mItem;
+            public Horse mItem;
 
             public ViewHolder(View view)
             {
                 super(view);
+
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);

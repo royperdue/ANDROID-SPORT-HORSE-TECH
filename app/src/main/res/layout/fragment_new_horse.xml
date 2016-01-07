@@ -84,14 +84,14 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/horse_age_editText"
         android:textStyle="normal"
         android:gravity="left"
         android:layout_marginLeft="@dimen/pad_15dp"
         android:padding="@dimen/pad_5dp"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:inputType="number"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -105,17 +105,17 @@
         android:textStyle="normal"
         android:textColor="@color/black"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/horse_breed_editText"
-        android:textStyle="normal"
-        android:gravity="left"
-        android:layout_marginLeft="@dimen/pad_15dp"
-        android:padding="@dimen/pad_5dp"
-        android:singleLine="true"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pad_10dp"
+            android:layout_marginLeft="@dimen/pad_15dp"
+            android:id="@+id/horse_breed_spinner"
+            android:gravity="left"
+            android:padding="@dimen/pad_5dp"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="normal"
+            android:textColor="@color/black"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -132,14 +132,14 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/horse_height_editText"
         android:textStyle="normal"
         android:gravity="left"
         android:layout_marginLeft="@dimen/pad_15dp"
         android:padding="@dimen/pad_5dp"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:inputType="number"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -171,14 +171,18 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_marginBottom="@dimen/pad_10dp"
-            android:layout_marginTop="@dimen/pad_20dp">
+            android:layout_marginTop="@dimen/pad_30dp">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/create_horse_profile"
                 android:id="@+id/create_horse_profile"
-                />
+                android:paddingLeft="@dimen/pad_10dp"
+                android:paddingRight="@dimen/pad_10dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:gravity="center"/>
         </LinearLayout>
 
     </LinearLayout>

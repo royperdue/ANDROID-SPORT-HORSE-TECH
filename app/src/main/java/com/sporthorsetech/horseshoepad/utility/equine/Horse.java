@@ -158,6 +158,7 @@ public class Horse implements Database.StoredObject
     public List<SearchableTagValuePair> getStoredObjectSearchableTags()
     {
         List<SearchableTagValuePair> retval = new LinkedList<>();
+        retval.add(new SearchableTagValuePair("id", id));
         retval.add(new SearchableTagValuePair("name", name));
 
         return retval;

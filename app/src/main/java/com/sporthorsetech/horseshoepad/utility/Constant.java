@@ -9,6 +9,7 @@ public final class Constant
     public static final String ACTIVATE_PAD_ARG_PARAM1 = "activatePadArgParam1";
     public static final String ACTIVATE_PAD_ARG_PARAM2 = "activatePadArgParam2";
     public static final String NEW_HORSE_ARG_PARAM1 = "newHorseArgParam1";
+    public static final String ARG_ITEM_ID = "item_id";
 
     public static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -21,5 +22,8 @@ public final class Constant
     public static final String ACCELERATION_Y_IDS = "accelerationYIds";
     public static final String ACCELERATION_Z_IDS = "accelerationZIds";
     public static final String FORCE_IDS = "forceIds";
+    public static final String HORSE_NAMES = "horseNames";
+
+    public static final int MAX_HORSES = 20;
 
 }

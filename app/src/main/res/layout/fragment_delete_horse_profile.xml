@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             tools:context="com.sporthorsetech.horseshoepad.DeleteHorseProfileFragment"
+              android:gravity="center_horizontal">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_all_horse_profiles"
+        android:id="@+id/delete_all_horse_profiles"
+        android:layout_marginTop="@dimen/pad_20dp"/>
+</LinearLayout>

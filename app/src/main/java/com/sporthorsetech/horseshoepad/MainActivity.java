@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
         WelcomeFragment.OnFragmentInteractionListener, GaitMonitorFragment.OnFragmentInteractionListener,
-        ActivatePadsFragment.OnFragmentInteractionListener
+        ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener
 {
 
     @Override
@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                         getString(R.string.new_horse_profile),
                         getString(R.string.activate_horseshoe_pads),
                         getString(R.string.monitor_gait_activity),
-                        getString(R.string.view_gait_data)
+                        getString(R.string.view_gait_data),
+                        getString(R.string.delete_all_horse_profiles)
                 }));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener()
@@ -93,9 +94,19 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                             .add(R.id.container, GaitMonitorFragment.newInstance())
                             .addToBackStack(getString(R.string.monitor_gait_activity)).commit();
                 }
-                else
+                else if (position == 4)
                 {
                     startActivity(new Intent(getBaseContext(), ItemListActivity.class));
+                }
+                else
+                {
+                    while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    {
+                        getSupportFragmentManager().popBackStackImmediate();
+                    }
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, DeleteHorseProfileFragment.newInstance())
+                            .addToBackStack(getString(R.string.delete_all_horse_profiles)).commit();
                 }
             }
 
