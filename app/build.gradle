@@ -29,4 +29,5 @@ dependencies {
     compile 'com.punchthrough.bean.sdk:sdk:1.0.1'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.commit451:PhotoView:1.2.4'
+    compile 'com.avast:android-styled-dialogs:2.3.0'
 }

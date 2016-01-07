@@ -41,16 +41,11 @@ public class HorseFoot implements Database.StoredObject
         }
     }
 
-    public HorseFoot(String id, String foot, String currentHorseShoePad)
+    public HorseFoot(String id, String foot)
     {
         this.id = id;
         this.foot = foot;
         setTimeCreated();
-
-        if(this.currentHorseShoePad != null)
-            previousHorseshoePads.add(currentHorseShoePad);
-
-        this.currentHorseShoePad = currentHorseShoePad;
     }
 
     public TYPE getStoredObjectType()
@@ -86,6 +81,9 @@ public class HorseFoot implements Database.StoredObject
 
     public void setCurrentHorseShoePad(String currentHorseShoePad)
     {
+        if(this.currentHorseShoePad != null)
+            previousHorseshoePads.add(currentHorseShoePad);
+
         this.currentHorseShoePad = currentHorseShoePad;
     }
 

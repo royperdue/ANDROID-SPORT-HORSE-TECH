@@ -17,6 +17,11 @@
     <string name="horse_height">Enter Horse\'s Height:</string>
     <string name="horse_breed">Enter Horse\'s Breed:</string>
 
+    <string name="right_hind">Right Hind</string>
+    <string name="right_front">Right Front</string>
+    <string name="left_hind">Left Hind</string>
+    <string name="left_front">Left Front</string>
+
     <string name="welcome">Welcome</string>
     <string name="new_horse_profile">New Horse Profile</string>
     <string name="view_gait_data">View Gait Data</string>

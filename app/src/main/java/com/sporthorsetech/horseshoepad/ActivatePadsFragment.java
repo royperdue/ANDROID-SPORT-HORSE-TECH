@@ -8,11 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avast.android.dialogs.iface.ISimpleDialogCancelListener;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
@@ -28,10 +31,25 @@ import java.util.List;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ActivatePadsFragment extends Fragment implements OnClickableAreaClickedListener
+public class ActivatePadsFragment extends Fragment implements OnClickableAreaClickedListener, ISimpleDialogCancelListener
 {
     private OnFragmentInteractionListener mListener;
-    PhotoViewAttacher attacher;
+    private PhotoViewAttacher attacher;
+    private List<ClickableArea> clickableAreas;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton1;
+    private RadioButton radioButton2;
+    private RadioButton radioButton3;
+    private RadioButton radioButton4;
+    private TextView textView1;
+    private TextView textView2;
+    private TextView textView3;
+    private TextView textView4;
+    private ImageView imageView;
+    private ImageButton rightHind;
+    private ImageButton leftHind;
+    private ImageButton leftFront;
+    private ImageButton rightFront;
     private final List<Bean> beans = new ArrayList<>();
 
     public ActivatePadsFragment()
@@ -109,7 +127,6 @@ public class ActivatePadsFragment extends Fragment implements OnClickableAreaCli
                 }
             }
         };
-
     }
 
     @Override
@@ -118,13 +135,30 @@ public class ActivatePadsFragment extends Fragment implements OnClickableAreaCli
     {
         View view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
 
-        ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        image.setImageResource(R.drawable.horse_trotting);
+        radioGroup = (RadioGroup) view.findViewById(R.id.radioButtonGroupEquine);
+        radioButton1 = (RadioButton) view.findViewById(R.id.radioButton1);
+        radioButton2 = (RadioButton) view.findViewById(R.id.radioButton2);
+        radioButton3 = (RadioButton) view.findViewById(R.id.radioButton3);
+        radioButton4 = (RadioButton) view.findViewById(R.id.radioButton4);
+        textView1 = (TextView) view.findViewById(R.id.textView1);
+        textView2 = (TextView) view.findViewById(R.id.textView2);
+        textView3 = (TextView) view.findViewById(R.id.textView3);
+        textView4 = (TextView) view.findViewById(R.id.textView4);
+        imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.horse_trotting_top);
+        rightFront = (ImageButton) view.findViewById(R.id.imageButtonRF);
+        rightFront.setImageResource(R.drawable.rf);
+        rightHind = (ImageButton) view.findViewById(R.id.imageButtonRH);
+        rightHind.setImageResource(R.drawable.rh);
+        leftFront = (ImageButton) view.findViewById(R.id.imageButtonLF);
+        leftFront.setImageResource(R.drawable.lf);
+        leftHind = (ImageButton) view.findViewById(R.id.imageButtonLH);
+        leftHind.setImageResource(R.drawable.lh);
 
-        attacher = new PhotoViewAttacher(image);
+        attacher = new PhotoViewAttacher(imageView);
         ClickableAreasImage clickableAreasImage = new ClickableAreasImage(attacher, this);
 
-        List<ClickableArea> clickableAreas = getClickableAreas();
+        clickableAreas = getClickableAreas();
         clickableAreasImage.setClickableAreas(clickableAreas);
 
         return view;
@@ -133,12 +167,23 @@ public class ActivatePadsFragment extends Fragment implements OnClickableAreaCli
     @NonNull
     private List<ClickableArea> getClickableAreas()
     {
+        this.clickableAreas = new ArrayList<>();
+        int measuredWidth = this.imageView.getWidth();
+        int measuredHeight = this.imageView.getHeight();
 
-        List<ClickableArea> clickableAreas = new ArrayList<>();
+        int leftHindX = (measuredWidth / 2) - (measuredWidth / 10);
+        int leftFrontX = (measuredWidth / 2) + (measuredWidth / 10);
+        int rightHindX = (measuredWidth / 2) - (measuredWidth / 6);
+        int rightFrontX = (measuredWidth / 2) + (measuredWidth / 6);
+        int y = measuredHeight - ((measuredHeight / 2) + (measuredHeight / 3));
+        int width = measuredWidth / 18;
+        int height = measuredHeight / 16;
 
         // ClickableArea(x, y, w, h, object);
-        //clickableAreas.add(new ClickableArea(20, 20, 50, 50, new HorseFoot("Gustavo", "Fring")));
-
+        this.clickableAreas.add(new ClickableArea(leftFrontX, y, width, height, new HorseFoot("1", "LF")));
+        this.clickableAreas.add(new ClickableArea(leftHindX, y, width, height, new HorseFoot("2", "LH")));
+        this.clickableAreas.add(new ClickableArea(rightFrontX, y, width, height, new HorseFoot("3", "RF")));
+        this.clickableAreas.add(new ClickableArea(rightHindX, y, width, height, new HorseFoot("4", "RH")));
 
         return clickableAreas;
     }
@@ -183,9 +228,17 @@ public class ActivatePadsFragment extends Fragment implements OnClickableAreaCli
             text = (String) item;
         } else if (item instanceof HorseFoot)
         {
+            text = ((HorseFoot) item).getFoot();
+
+            Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
             //text = ((HorseFoot) item).getFirstName() + " " + ((HorseFoot) item).getLastName();
         }
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCancelled(int requestCode)
+    {
+
     }
 
     public interface OnFragmentInteractionListener
