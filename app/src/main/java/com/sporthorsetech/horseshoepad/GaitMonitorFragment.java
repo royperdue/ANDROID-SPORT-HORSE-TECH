@@ -22,18 +22,15 @@ import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
-import com.punchthrough.bean.sdk.message.Callback;
 import com.punchthrough.bean.sdk.message.ScratchBank;
-import com.punchthrough.bean.sdk.message.ScratchData;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GaitMonitorFragment extends Fragment
+public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
     private final List<Bean> beans = new ArrayList<>();
@@ -58,109 +55,6 @@ public class GaitMonitorFragment extends Fragment
 
         return fragment;
     }
-
-    final BeanListener beanListener = new BeanListener()
-    {
-        @Override
-        public void onConnected()
-        {
-            if (beans.get(0).isConnected())
-            {
-                beans.get(0).readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
-                {
-                    @Override
-                    public void onResult(ScratchData result)
-                    {
-                        System.out.println("PAD NAME: " + result.getDataAsString());
-                    }
-                });
-
-            }
-        }
-
-        @Override
-        public void onError(BeanError berr)
-        {
-            System.out.println("Bean has errors..");
-        }
-
-        @Override
-        public void onConnectionFailed()
-        {
-            System.out.println("Bean connection failed");
-        }
-
-        @Override
-        public void onDisconnected()
-        {
-            System.out.println("Bean disconnected");
-        }
-
-        @Override
-        public void onScratchValueChanged(ScratchBank bank, byte[] value)
-        {
-            System.out.println("Bean scratch value changed");
-
-            for (final Bean bean : beans)
-            {
-                if (bean.isConnected())
-                {
-                    bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
-                    {
-                        @Override
-                        public void onResult(ScratchData result)
-                        {
-                            try
-                            {
-                                String s = new String(result.data(), "UTF-8");
-
-                            } catch (UnsupportedEncodingException e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                }
-            }
-        }
-
-        @Override
-        public void onSerialMessageReceived(byte[] data)
-        {
-            try
-            {
-                String s = new String(data, "UTF-8");
-
-            } catch (UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-            }
-
-        }
-    };
-
-    BeanDiscoveryListener listener = new BeanDiscoveryListener()
-    {
-        @Override
-        public void onBeanDiscovered(Bean bean, int rssi)
-        {
-            beans.add(bean);
-            bean.connect(getActivity(), beanListener);
-        }
-
-        @Override
-        public void onDiscoveryComplete()
-        {
-            System.out.println("Total beans discovered: " + beans.size());
-            Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
-
-            for (Bean bean : beans)
-            {
-                System.out.println(bean.getDevice().getName());   // "Bean"
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -253,7 +147,7 @@ public class GaitMonitorFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        BeanManager.getInstance().startDiscovery(listener);
+        BeanManager.getInstance().startDiscovery(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -300,10 +194,58 @@ public class GaitMonitorFragment extends Fragment
     {
         if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
         {
-            BeanManager.getInstance().startDiscovery(listener);
+            BeanManager.getInstance().startDiscovery(this);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBeanDiscovered(Bean bean, int rssi)
+    {
+
+    }
+
+    @Override
+    public void onDiscoveryComplete()
+    {
+
+    }
+
+    @Override
+    public void onConnected()
+    {
+
+    }
+
+    @Override
+    public void onConnectionFailed()
+    {
+
+    }
+
+    @Override
+    public void onDisconnected()
+    {
+
+    }
+
+    @Override
+    public void onSerialMessageReceived(byte[] data)
+    {
+
+    }
+
+    @Override
+    public void onScratchValueChanged(ScratchBank bank, byte[] value)
+    {
+
+    }
+
+    @Override
+    public void onError(BeanError error)
+    {
+
     }
 
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +38,8 @@ import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.OnClickListener
+public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.OnClickListener,
+        BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
     private RadioGroup radioGroup;
@@ -69,7 +71,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
 
     public ActivatePadsFragment()
     {
-        // Required empty public constructor
     }
 
     public static ActivatePadsFragment newInstance()
@@ -140,19 +141,16 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId)
             {
-                if(radioButton1.isChecked())
+                if (radioButton1.isChecked())
                 {
                     horseshoePadSelected = true;
-                }
-                else if(radioButton2.isChecked())
+                } else if (radioButton2.isChecked())
                 {
                     horseshoePadSelected = true;
-                }
-                else if(radioButton3.isChecked())
+                } else if (radioButton3.isChecked())
                 {
                     horseshoePadSelected = true;
-                }
-                else if(radioButton4.isChecked())
+                } else if (radioButton4.isChecked())
                 {
                     horseshoePadSelected = true;
                 }
@@ -163,10 +161,18 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         textView2 = (EditText) view.findViewById(R.id.textView2);
         textView3 = (EditText) view.findViewById(R.id.textView3);
         textView4 = (EditText) view.findViewById(R.id.textView4);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
         imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.horse_trotting_top);
+        imageView.getLayoutParams().width = metrics.widthPixels;
+        imageView.requestLayout();
 
         rightFront = (ImageButton) view.findViewById(R.id.imageButtonRF);
+        rightFront.getLayoutParams().width = metrics.widthPixels / 4;
+        rightFront.requestLayout();
         rightFront.setImageResource(R.drawable.rf);
         rightFront.setOnClickListener(new View.OnClickListener()
         {
@@ -180,8 +186,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
                             .create().show(getActivity().getFragmentManager(), "dialog");
-                }
-                else if (horseshoePadSelected == true)
+                } else if (horseshoePadSelected == true)
                 {
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
@@ -204,8 +209,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             view.findViewById(selectedId)).getText();
                     horseshoePadSelected = false;
                     rightFront.setEnabled(false);
-                }
-                else
+                } else
                 {
                     new SimpleAlertDialogFragment.Builder()
                             .setMessage("You must select a horseshoe pad.")
@@ -217,6 +221,8 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         });
 
         rightHind = (ImageButton) view.findViewById(R.id.imageButtonRH);
+        rightHind.getLayoutParams().width = metrics.widthPixels / 4;
+        rightHind.requestLayout();
         rightHind.setImageResource(R.drawable.rh);
         rightHind.setOnClickListener(new View.OnClickListener()
         {
@@ -230,8 +236,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
                             .create().show(getActivity().getFragmentManager(), "dialog");
-                }
-                else if (horseshoePadSelected == true)
+                } else if (horseshoePadSelected == true)
                 {
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
@@ -254,8 +259,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             view.findViewById(selectedId)).getText();
                     horseshoePadSelected = false;
                     rightHind.setEnabled(false);
-                }
-                else
+                } else
                 {
                     new SimpleAlertDialogFragment.Builder()
                             .setMessage("You must select a horseshoe pad.")
@@ -267,6 +271,8 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         });
 
         leftFront = (ImageButton) view.findViewById(R.id.imageButtonLF);
+        leftFront.getLayoutParams().width = metrics.widthPixels / 4;
+        leftFront.requestLayout();
         leftFront.setImageResource(R.drawable.lf);
         leftFront.setOnClickListener(new View.OnClickListener()
         {
@@ -280,8 +286,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
                             .create().show(getActivity().getFragmentManager(), "dialog");
-                }
-                else if (horseshoePadSelected == true)
+                } else if (horseshoePadSelected == true)
                 {
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
@@ -304,8 +309,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             view.findViewById(selectedId)).getText();
                     horseshoePadSelected = false;
                     leftFront.setEnabled(false);
-                }
-                else
+                } else
                 {
                     new SimpleAlertDialogFragment.Builder()
                             .setMessage("You must select a horseshoe pad.")
@@ -317,6 +321,8 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         });
 
         leftHind = (ImageButton) view.findViewById(R.id.imageButtonLH);
+        leftHind.getLayoutParams().width = metrics.widthPixels / 4;
+        leftHind.requestLayout();
         leftHind.setImageResource(R.drawable.lh);
         leftHind.setOnClickListener(new View.OnClickListener()
         {
@@ -330,8 +336,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             .setPositiveButton(android.R.string.ok)
                             .setTargetFragment(ActivatePadsFragment.this)
                             .create().show(getActivity().getFragmentManager(), "dialog");
-                }
-                else if (horseshoePadSelected == true)
+                } else if (horseshoePadSelected == true)
                 {
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
@@ -354,8 +359,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                             view.findViewById(selectedId)).getText();
                     horseshoePadSelected = false;
                     leftHind.setEnabled(false);
-                }
-                else
+                } else
                 {
                     new SimpleAlertDialogFragment.Builder()
                             .setMessage("You must select a horseshoe pad.")
@@ -385,114 +389,15 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
             }
         });
 
+        BeanManager.getInstance().startDiscovery(this);
+
         return view;
     }
-
-    BeanDiscoveryListener listener = new BeanDiscoveryListener()
-    {
-        @Override
-        public void onBeanDiscovered(Bean bean, int rssi)
-        {
-            beans.add(bean);
-            bean.connect(getActivity(), beanListener);
-        }
-
-        @Override
-        public void onDiscoveryComplete()
-        {
-            System.out.println("Total beans discovered: " + beans.size());
-            Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
-
-            if (beans.size() == 0)
-            {
-                new SimpleAlertDialogFragment.Builder()
-                        .setMessage("No horseshoe pads detected")
-                        .setPositiveButton(android.R.string.ok)
-                        .setTargetFragment(ActivatePadsFragment.this)
-                        .create().show(getActivity().getFragmentManager(), "dialog");
-            }
-            else if (beans.size() == 1)
-            {
-                radioButton1.setVisibility(View.VISIBLE);
-            }
-            else if (beans.size() == 2)
-            {
-                radioButton1.setVisibility(View.VISIBLE);
-                radioButton2.setVisibility(View.VISIBLE);
-            }
-            else if (beans.size() == 3)
-            {
-                radioButton1.setVisibility(View.VISIBLE);
-                radioButton2.setVisibility(View.VISIBLE);
-                radioButton3.setVisibility(View.VISIBLE);
-            }
-            else if (beans.size() == 4)
-            {
-                radioButton1.setVisibility(View.VISIBLE);
-                radioButton2.setVisibility(View.VISIBLE);
-                radioButton3.setVisibility(View.VISIBLE);
-                radioButton4.setVisibility(View.VISIBLE);
-            }
-
-            if (beans.size() % 2 != 0)
-            {
-                new SimpleAlertDialogFragment.Builder()
-                        .setMessage("You are one horseshoe pad short.")
-                        .setPositiveButton(android.R.string.ok)
-                        .setTargetFragment(ActivatePadsFragment.this)
-                        .create().show(getActivity().getFragmentManager(), "dialog");
-            }
-
-            for (int i = 0; i < beans.size(); i++)
-            {
-                ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
-            }
-        }
-    };
-
-    final BeanListener beanListener = new BeanListener()
-    {
-        @Override
-        public void onConnected()
-        {
-        }
-
-        @Override
-        public void onError(BeanError berr)
-        {
-            System.out.println("Bean has errors..");
-        }
-
-        @Override
-        public void onConnectionFailed()
-        {
-            System.out.println("Bean connection failed");
-        }
-
-        @Override
-        public void onDisconnected()
-        {
-            System.out.println("Bean disconnected");
-        }
-
-        @Override
-        public void onScratchValueChanged(ScratchBank bank, byte[] value)
-        {
-        }
-
-        @Override
-        public void onSerialMessageReceived(byte[] data)
-        {
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        BeanManager.getInstance().startDiscovery(listener);
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -539,7 +444,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
     {
         if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
         {
-            BeanManager.getInstance().startDiscovery(listener);
+            BeanManager.getInstance().startDiscovery(this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -624,6 +529,101 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
 
     @Override
     public void onDialogNegativeButtonClicked(SimpleAlertDialog dialog, int requestCode, View view)
+    {
+
+    }
+
+    @Override
+    public void onBeanDiscovered(Bean bean, int rssi)
+    {
+        beans.add(bean);
+        bean.connect(getActivity(), this);
+    }
+
+    @Override
+    public void onDiscoveryComplete()
+    {
+        System.out.println("Total beans discovered: " + beans.size());
+        Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
+
+        if (beans.size() == 0)
+        {
+            new SimpleAlertDialogFragment.Builder()
+                    .setMessage("No horseshoe pads detected")
+                    .setPositiveButton(android.R.string.ok)
+                    .setTargetFragment(ActivatePadsFragment.this)
+                    .create().show(getActivity().getFragmentManager(), "dialog");
+        }
+        else if (beans.size() == 1)
+        {
+            radioButton1.setVisibility(View.VISIBLE);
+        }
+        else if (beans.size() == 2)
+        {
+            radioButton1.setVisibility(View.VISIBLE);
+            radioButton2.setVisibility(View.VISIBLE);
+        }
+        else if (beans.size() == 3)
+        {
+            radioButton1.setVisibility(View.VISIBLE);
+            radioButton2.setVisibility(View.VISIBLE);
+            radioButton3.setVisibility(View.VISIBLE);
+        }
+        else if (beans.size() == 4)
+        {
+            radioButton1.setVisibility(View.VISIBLE);
+            radioButton2.setVisibility(View.VISIBLE);
+            radioButton3.setVisibility(View.VISIBLE);
+            radioButton4.setVisibility(View.VISIBLE);
+        }
+
+        for (int i = 0; i < beans.size(); i++)
+        {
+            ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
+        }
+
+        if (beans.size() % 2 != 0)
+        {
+            new SimpleAlertDialogFragment.Builder()
+                    .setMessage("You are one horseshoe pad short.")
+                    .setPositiveButton(android.R.string.ok)
+                    .setTargetFragment(ActivatePadsFragment.this)
+                    .create().show(getActivity().getFragmentManager(), "dialog");
+        }
+    }
+
+    @Override
+    public void onConnected()
+    {
+
+    }
+
+    @Override
+    public void onConnectionFailed()
+    {
+
+    }
+
+    @Override
+    public void onDisconnected()
+    {
+
+    }
+
+    @Override
+    public void onSerialMessageReceived(byte[] data)
+    {
+
+    }
+
+    @Override
+    public void onScratchValueChanged(ScratchBank bank, byte[] value)
+    {
+
+    }
+
+    @Override
+    public void onError(BeanError error)
     {
 
     }
