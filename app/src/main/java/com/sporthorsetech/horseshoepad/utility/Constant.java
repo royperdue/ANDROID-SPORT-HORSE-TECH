@@ -26,4 +26,7 @@ public final class Constant
 
     public static final int MAX_HORSES = 20;
 
+    // MENU ITEM CONSTANTS.
+    public static final int DETECT_HORSESHOE_PADS = 100;
+
 }

@@ -58,6 +58,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/pad_30dp"
             android:orientation="vertical">
 
             <TextView
@@ -85,7 +86,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <TextView
@@ -113,7 +114,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <TextView
@@ -141,7 +142,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <TextView
@@ -169,7 +170,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <TextView
@@ -197,7 +198,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <TextView
@@ -225,7 +226,7 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_22sp"
                 />
 
             <LinearLayout

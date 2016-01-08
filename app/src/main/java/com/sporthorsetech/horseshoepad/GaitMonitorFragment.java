@@ -5,6 +5,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -60,106 +63,7 @@ public class GaitMonitorFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        final BeanListener beanListener = new BeanListener()
-        {
-            @Override
-            public void onConnected()
-            {
-                if (beans.get(0).isConnected())
-                {
-                    beans.get(0).readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
-                    {
-                        @Override
-                        public void onResult(ScratchData result)
-                        {
-                            System.out.println("PAD NAME: " + result.getDataAsString());
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void onError(BeanError berr)
-            {
-                System.out.println("Bean has errors..");
-            }
-
-            @Override
-            public void onConnectionFailed()
-            {
-                System.out.println("Bean connection failed");
-            }
-
-            @Override
-            public void onDisconnected()
-            {
-                System.out.println("Bean disconnected");
-            }
-
-            @Override
-            public void onScratchValueChanged(ScratchBank bank, byte[] value)
-            {
-                System.out.println("Bean scratch value changed");
-
-                for (final Bean bean : beans)
-                {
-                    if (bean.isConnected())
-                    {
-                        bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
-                        {
-                            @Override
-                            public void onResult(ScratchData result)
-                            {
-                                try
-                                {
-                                    String s = new String(result.data(), "UTF-8");
-                                    
-                                } catch (UnsupportedEncodingException e)
-                                {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                    }
-                }
-            }
-
-            @Override
-            public void onSerialMessageReceived(byte[] data)
-            {
-                try
-                {
-                    String s = new String(data, "UTF-8");
-
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-        BeanDiscoveryListener listener = new BeanDiscoveryListener()
-        {
-            @Override
-            public void onBeanDiscovered(Bean bean, int rssi)
-            {
-                beans.add(bean);
-                bean.connect(getActivity(), beanListener);
-            }
-
-            @Override
-            public void onDiscoveryComplete()
-            {
-                System.out.println("Total beans discovered: " + beans.size());
-                for (Bean bean : beans)
-                {
-                    System.out.println(bean.getDevice().getName());   // "Bean"
-                }
-            }
-        };
+        detectHorseshoePads();
     }
 
     @Override
@@ -167,6 +71,7 @@ public class GaitMonitorFragment extends Fragment
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_gait_monitor, container, false);
+        setHasOptionsMenu(true);
 
         gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
         averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
@@ -247,6 +152,117 @@ public class GaitMonitorFragment extends Fragment
         return view;
     }
 
+    private void detectHorseshoePads()
+    {
+        if (beans.size() > 0)
+        {
+            beans.clear();
+        }
+
+        final BeanListener beanListener = new BeanListener()
+        {
+            @Override
+            public void onConnected()
+            {
+                if (beans.get(0).isConnected())
+                {
+                    beans.get(0).readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
+                    {
+                        @Override
+                        public void onResult(ScratchData result)
+                        {
+                            System.out.println("PAD NAME: " + result.getDataAsString());
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onError(BeanError berr)
+            {
+                System.out.println("Bean has errors..");
+            }
+
+            @Override
+            public void onConnectionFailed()
+            {
+                System.out.println("Bean connection failed");
+            }
+
+            @Override
+            public void onDisconnected()
+            {
+                System.out.println("Bean disconnected");
+            }
+
+            @Override
+            public void onScratchValueChanged(ScratchBank bank, byte[] value)
+            {
+                System.out.println("Bean scratch value changed");
+
+                for (final Bean bean : beans)
+                {
+                    if (bean.isConnected())
+                    {
+                        bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
+                        {
+                            @Override
+                            public void onResult(ScratchData result)
+                            {
+                                try
+                                {
+                                    String s = new String(result.data(), "UTF-8");
+
+                                } catch (UnsupportedEncodingException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onSerialMessageReceived(byte[] data)
+            {
+                try
+                {
+                    String s = new String(data, "UTF-8");
+
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        BeanDiscoveryListener listener = new BeanDiscoveryListener()
+        {
+            @Override
+            public void onBeanDiscovered(Bean bean, int rssi)
+            {
+                beans.add(bean);
+                bean.connect(getActivity(), beanListener);
+            }
+
+            @Override
+            public void onDiscoveryComplete()
+            {
+                System.out.println("Total beans discovered: " + beans.size());
+                Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
+
+                for (Bean bean : beans)
+                {
+                    System.out.println(bean.getDevice().getName());   // "Bean"
+                }
+            }
+        };
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri)
     {
@@ -276,6 +292,27 @@ public class GaitMonitorFragment extends Fragment
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem detectHorseshoePads = menu.add(Menu.NONE, Constant.DETECT_HORSESHOE_PADS, 0, getString(R.string.detect_horseshoe_pads));
+        detectHorseshoePads.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
+        {
+            detectHorseshoePads();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public interface OnFragmentInteractionListener
     {

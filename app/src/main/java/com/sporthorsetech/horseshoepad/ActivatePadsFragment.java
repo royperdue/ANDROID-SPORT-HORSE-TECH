@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -80,64 +83,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
     {
         super.onCreate(savedInstanceState);
 
-        final BeanListener beanListener = new BeanListener()
-        {
-            @Override
-            public void onConnected()
-            {
-            }
-
-            @Override
-            public void onError(BeanError berr)
-            {
-                System.out.println("Bean has errors..");
-            }
-
-            @Override
-            public void onConnectionFailed()
-            {
-                System.out.println("Bean connection failed");
-            }
-
-            @Override
-            public void onDisconnected()
-            {
-                System.out.println("Bean disconnected");
-            }
-
-            @Override
-            public void onScratchValueChanged(ScratchBank bank, byte[] value)
-            {
-            }
-
-            @Override
-            public void onSerialMessageReceived(byte[] data)
-            {
-            }
-        };
-
-        BeanDiscoveryListener listener = new BeanDiscoveryListener()
-        {
-            @Override
-            public void onBeanDiscovered(Bean bean, int rssi)
-            {
-                beans.add(bean);
-                bean.connect(getActivity(), beanListener);
-            }
-
-            @Override
-            public void onDiscoveryComplete()
-            {
-                RadioGroup radioGroup = (RadioGroup) getView().findViewById(R.id.radioButtonGroupEquine);
-
-                System.out.println("Total beans discovered: " + beans.size());
-
-                for (int i = 0; i < radioGroup.getChildCount(); i++)
-                {
-                    ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
-                }
-            }
-        };
+        detectHorseshoePads();
     }
 
     @Override
@@ -145,6 +91,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
                              Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
+        setHasOptionsMenu(true);
 
         List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
         Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
@@ -444,6 +391,72 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         return view;
     }
 
+    private void detectHorseshoePads()
+    {
+        final BeanListener beanListener = new BeanListener()
+        {
+            @Override
+            public void onConnected()
+            {
+            }
+
+            @Override
+            public void onError(BeanError berr)
+            {
+                System.out.println("Bean has errors..");
+            }
+
+            @Override
+            public void onConnectionFailed()
+            {
+                System.out.println("Bean connection failed");
+            }
+
+            @Override
+            public void onDisconnected()
+            {
+                System.out.println("Bean disconnected");
+            }
+
+            @Override
+            public void onScratchValueChanged(ScratchBank bank, byte[] value)
+            {
+            }
+
+            @Override
+            public void onSerialMessageReceived(byte[] data)
+            {
+            }
+        };
+
+        BeanDiscoveryListener listener = new BeanDiscoveryListener()
+        {
+            @Override
+            public void onBeanDiscovered(Bean bean, int rssi)
+            {
+                beans.add(bean);
+                bean.connect(getActivity(), beanListener);
+            }
+
+            @Override
+            public void onDiscoveryComplete()
+            {
+                System.out.println("Total beans discovered: " + beans.size());
+                Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
+
+                for (Bean bean : beans)
+                {
+                    System.out.println(bean.getDevice().getName());   // "Bean"
+                }
+
+                for (int i = 0; i < radioGroup.getChildCount(); i++)
+                {
+                    ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
+                }
+            }
+        };
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri)
     {
@@ -473,6 +486,27 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem detectHorseshoePads = menu.add(Menu.NONE, Constant.DETECT_HORSESHOE_PADS, 0, getString(R.string.detect_horseshoe_pads));
+        detectHorseshoePads.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
+        {
+            detectHorseshoePads();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public void onDialogPositiveButtonClicked(SimpleAlertDialog dialog, int requestCode, View view)
