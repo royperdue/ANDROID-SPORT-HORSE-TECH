@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
+import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.simplealertdialog.SimpleAlertDialog;
@@ -79,14 +80,6 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        detectHorseshoePads();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
@@ -133,9 +126,13 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         });
 
         radioButton1 = (RadioButton) view.findViewById(R.id.radioButton1);
+        radioButton1.setVisibility(View.INVISIBLE);
         radioButton2 = (RadioButton) view.findViewById(R.id.radioButton2);
+        radioButton2.setVisibility(View.INVISIBLE);
         radioButton3 = (RadioButton) view.findViewById(R.id.radioButton3);
+        radioButton3.setVisibility(View.INVISIBLE);
         radioButton4 = (RadioButton) view.findViewById(R.id.radioButton4);
+        radioButton4.setVisibility(View.INVISIBLE);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioButtonGroupEquine);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -391,70 +388,111 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
         return view;
     }
 
-    private void detectHorseshoePads()
+    BeanDiscoveryListener listener = new BeanDiscoveryListener()
     {
-        final BeanListener beanListener = new BeanListener()
+        @Override
+        public void onBeanDiscovered(Bean bean, int rssi)
         {
-            @Override
-            public void onConnected()
-            {
-            }
+            beans.add(bean);
+            bean.connect(getActivity(), beanListener);
+        }
 
-            @Override
-            public void onError(BeanError berr)
-            {
-                System.out.println("Bean has errors..");
-            }
-
-            @Override
-            public void onConnectionFailed()
-            {
-                System.out.println("Bean connection failed");
-            }
-
-            @Override
-            public void onDisconnected()
-            {
-                System.out.println("Bean disconnected");
-            }
-
-            @Override
-            public void onScratchValueChanged(ScratchBank bank, byte[] value)
-            {
-            }
-
-            @Override
-            public void onSerialMessageReceived(byte[] data)
-            {
-            }
-        };
-
-        BeanDiscoveryListener listener = new BeanDiscoveryListener()
+        @Override
+        public void onDiscoveryComplete()
         {
-            @Override
-            public void onBeanDiscovered(Bean bean, int rssi)
+            System.out.println("Total beans discovered: " + beans.size());
+            Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
+
+            if (beans.size() == 0)
             {
-                beans.add(bean);
-                bean.connect(getActivity(), beanListener);
+                new SimpleAlertDialogFragment.Builder()
+                        .setMessage("No horseshoe pads detected")
+                        .setPositiveButton(android.R.string.ok)
+                        .setTargetFragment(ActivatePadsFragment.this)
+                        .create().show(getActivity().getFragmentManager(), "dialog");
+            }
+            else if (beans.size() == 1)
+            {
+                radioButton1.setVisibility(View.VISIBLE);
+            }
+            else if (beans.size() == 2)
+            {
+                radioButton1.setVisibility(View.VISIBLE);
+                radioButton2.setVisibility(View.VISIBLE);
+            }
+            else if (beans.size() == 3)
+            {
+                radioButton1.setVisibility(View.VISIBLE);
+                radioButton2.setVisibility(View.VISIBLE);
+                radioButton3.setVisibility(View.VISIBLE);
+            }
+            else if (beans.size() == 4)
+            {
+                radioButton1.setVisibility(View.VISIBLE);
+                radioButton2.setVisibility(View.VISIBLE);
+                radioButton3.setVisibility(View.VISIBLE);
+                radioButton4.setVisibility(View.VISIBLE);
             }
 
-            @Override
-            public void onDiscoveryComplete()
+            if (beans.size() % 2 != 0)
             {
-                System.out.println("Total beans discovered: " + beans.size());
-                Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
-
-                for (Bean bean : beans)
-                {
-                    System.out.println(bean.getDevice().getName());   // "Bean"
-                }
-
-                for (int i = 0; i < radioGroup.getChildCount(); i++)
-                {
-                    ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
-                }
+                new SimpleAlertDialogFragment.Builder()
+                        .setMessage("You are one horseshoe pad short.")
+                        .setPositiveButton(android.R.string.ok)
+                        .setTargetFragment(ActivatePadsFragment.this)
+                        .create().show(getActivity().getFragmentManager(), "dialog");
             }
-        };
+
+            for (int i = 0; i < beans.size(); i++)
+            {
+                ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
+            }
+        }
+    };
+
+    final BeanListener beanListener = new BeanListener()
+    {
+        @Override
+        public void onConnected()
+        {
+        }
+
+        @Override
+        public void onError(BeanError berr)
+        {
+            System.out.println("Bean has errors..");
+        }
+
+        @Override
+        public void onConnectionFailed()
+        {
+            System.out.println("Bean connection failed");
+        }
+
+        @Override
+        public void onDisconnected()
+        {
+            System.out.println("Bean disconnected");
+        }
+
+        @Override
+        public void onScratchValueChanged(ScratchBank bank, byte[] value)
+        {
+        }
+
+        @Override
+        public void onSerialMessageReceived(byte[] data)
+        {
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        BeanManager.getInstance().startDiscovery(listener);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -501,7 +539,7 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
     {
         if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
         {
-            detectHorseshoePads();
+            BeanManager.getInstance().startDiscovery(listener);
         }
 
         return super.onOptionsItemSelected(item);
