@@ -22,13 +22,17 @@ import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
+import com.punchthrough.bean.sdk.message.Callback;
 import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.punchthrough.bean.sdk.message.ScratchData;
 import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +49,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Spinner selectHorseSpinner;
     private Spinner selectFootingSpinner;
     private Button beginMonitoringButton;
+    private Button pauseMonitoringButton;
     private Horse horse;
 
     public GaitMonitorFragment()
@@ -132,12 +137,24 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         });
 
         beginMonitoringButton = (Button) view.findViewById(R.id.begin_monitoring_button);
+        beginMonitoringButton.setEnabled(false);
         beginMonitoringButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 new CommandThread((HashMap<String, Bean>) beans, "TAKE_READINGS");
+            }
+        });
+
+        pauseMonitoringButton = (Button) view.findViewById(R.id.pause_monitoring_button);
+        pauseMonitoringButton.setEnabled(false);
+        pauseMonitoringButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new CommandThread((HashMap<String, Bean>) beans, "PAUSE_READINGS");
             }
         });
 
@@ -219,7 +236,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onConnected()
     {
-
+        beginMonitoringButton.setEnabled(true);
+        pauseMonitoringButton.setEnabled(true);
     }
 
     @Override
@@ -237,13 +255,97 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
-
+        String s = null;
+        try
+        {
+            s = new String(data, "UTF-8");
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("data received: " + s);
     }
 
     @Override
     public void onScratchValueChanged(ScratchBank bank, byte[] value)
     {
+        Iterator<Map.Entry<String, Bean>> entries = beans.entrySet().iterator();
 
+        while (entries.hasNext())
+        {
+            Map.Entry<String, Bean> entry = entries.next();
+
+            if (entry.getValue().isConnected())
+            {
+                entry.getValue().readScratchData(ScratchBank.BANK_1, new Callback<ScratchData>()
+                {
+                    @Override
+                    public void onResult(ScratchData result)
+                    {
+                        try
+                        {
+                            String s = new String(result.data(), "UTF-8");
+
+                            System.out.println("SCRATCH BANK 1: " + s);
+                        } catch (UnsupportedEncodingException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                entry.getValue().readScratchData(ScratchBank.BANK_2, new Callback<ScratchData>()
+                {
+                    @Override
+                    public void onResult(ScratchData result)
+                    {
+                        try
+                        {
+                            String s = new String(result.data(), "UTF-8");
+
+                            System.out.println("SCRATCH BANK 2: " + s);
+                        } catch (UnsupportedEncodingException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                entry.getValue().readScratchData(ScratchBank.BANK_3, new Callback<ScratchData>()
+                {
+                    @Override
+                    public void onResult(ScratchData result)
+                    {
+                        try
+                        {
+                            String s = new String(result.data(), "UTF-8");
+
+                            System.out.println("SCRATCH BANK 3: " + s);
+                        } catch (UnsupportedEncodingException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                entry.getValue().readScratchData(ScratchBank.BANK_4, new Callback<ScratchData>()
+                {
+                    @Override
+                    public void onResult(ScratchData result)
+                    {
+                        try
+                        {
+                            String s = new String(result.data(), "UTF-8");
+
+                            System.out.println("SCRATCH BANK 4: " + s);
+                        } catch (UnsupportedEncodingException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override

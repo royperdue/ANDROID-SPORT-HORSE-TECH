@@ -37,6 +37,7 @@
     <string name="delete_all_horse_profiles">Delete All Horse Profiles</string>
     <string name="activate_pads">Activate Pads</string>
     <string name="begin_monitoring">Begin Monitoring</string>
+    <string name="pause_monitoring">Pause Monitoring</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>
