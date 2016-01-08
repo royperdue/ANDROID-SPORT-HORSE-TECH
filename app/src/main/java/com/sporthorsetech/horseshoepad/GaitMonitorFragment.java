@@ -23,17 +23,19 @@ import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
-    private final List<Bean> beans = new ArrayList<>();
+    private final Map<String, Bean> beans = new HashMap<>();
     private EditText gaitDetected;
     private EditText averageStrideLength;
     private EditText averageForce;
@@ -135,7 +137,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-
+                new CommandThread((HashMap<String, Bean>) beans, "TAKE_READINGS");
             }
         });
 
@@ -203,12 +205,14 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onBeanDiscovered(Bean bean, int rssi)
     {
-
+        beans.put(bean.getDevice().getName(), bean);
+        bean.connect(getActivity(), this);
     }
 
     @Override
     public void onDiscoveryComplete()
     {
+
 
     }
 
