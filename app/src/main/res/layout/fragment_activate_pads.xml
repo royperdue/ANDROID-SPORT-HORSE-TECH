@@ -10,6 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/pad_5dp"
+        android:background="@drawable/border"
+        android:cropToPadding="true"
+        android:padding="1dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,13 +26,15 @@
             android:text="@string/select_horse"
             android:textColor="@color/black"
             android:singleLine="true"
-            android:textSize="@dimen/text_16sp"/>
+            android:textSize="@dimen/text_22sp"/>
 
         <Spinner
             android:id="@+id/spinnerSelectHorse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/pad_15dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,7 +141,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="@dimen/pad_5dp"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:padding="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -141,7 +156,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:layout_marginTop="@dimen/pad_15dp"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
@@ -213,14 +228,18 @@
                     android:text="@string/horseshoePadIds"
                     android:textColor="@color/black"
                     android:singleLine="true"
-                    android:textSize="@dimen/text_16sp"/>
+                    android:textSize="@dimen/text_22sp"/>
 
                 </LinearLayout>
 
             <RadioGroup
                 android:id="@+id/radioButtonGroupEquine"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:cropToPadding="true"
+                android:padding="1dp">
 
                 <RadioButton
                     android:id="@+id/radioButton1"
