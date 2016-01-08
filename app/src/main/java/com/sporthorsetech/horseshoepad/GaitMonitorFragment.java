@@ -7,41 +7,51 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.punchthrough.bean.sdk.Bean;
+import com.punchthrough.bean.sdk.BeanDiscoveryListener;
+import com.punchthrough.bean.sdk.BeanListener;
+import com.punchthrough.bean.sdk.message.BeanError;
+import com.punchthrough.bean.sdk.message.Callback;
+import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.punchthrough.bean.sdk.message.ScratchData;
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GaitMonitorFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GaitMonitorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class GaitMonitorFragment extends Fragment
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+    private final List<Bean> beans = new ArrayList<>();
+    private EditText gaitDetected;
+    private EditText averageStrideLength;
+    private EditText averageForce;
+    private EditText averageAccelerationX;
+    private EditText averageAccelerationY;
+    private EditText averageAccelerationZ;
+    private Spinner selectHorseSpinner;
+    private Spinner selectFootingSpinner;
+    private Button beginMonitoringButton;
+    private Horse horse;
 
     public GaitMonitorFragment()
     {
-        // Required empty public constructor
     }
 
     public static GaitMonitorFragment newInstance()
     {
         GaitMonitorFragment fragment = new GaitMonitorFragment();
-        //Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        //fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -49,19 +59,192 @@ public class GaitMonitorFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+
+        final BeanListener beanListener = new BeanListener()
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+            @Override
+            public void onConnected()
+            {
+                if (beans.get(0).isConnected())
+                {
+                    beans.get(0).readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
+                    {
+                        @Override
+                        public void onResult(ScratchData result)
+                        {
+                            System.out.println("PAD NAME: " + result.getDataAsString());
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onError(BeanError berr)
+            {
+                System.out.println("Bean has errors..");
+            }
+
+            @Override
+            public void onConnectionFailed()
+            {
+                System.out.println("Bean connection failed");
+            }
+
+            @Override
+            public void onDisconnected()
+            {
+                System.out.println("Bean disconnected");
+            }
+
+            @Override
+            public void onScratchValueChanged(ScratchBank bank, byte[] value)
+            {
+                System.out.println("Bean scratch value changed");
+
+                for (final Bean bean : beans)
+                {
+                    if (bean.isConnected())
+                    {
+                        bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
+                        {
+                            @Override
+                            public void onResult(ScratchData result)
+                            {
+                                try
+                                {
+                                    String s = new String(result.data(), "UTF-8");
+                                    
+                                } catch (UnsupportedEncodingException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onSerialMessageReceived(byte[] data)
+            {
+                try
+                {
+                    String s = new String(data, "UTF-8");
+
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        BeanDiscoveryListener listener = new BeanDiscoveryListener()
+        {
+            @Override
+            public void onBeanDiscovered(Bean bean, int rssi)
+            {
+                beans.add(bean);
+                bean.connect(getActivity(), beanListener);
+            }
+
+            @Override
+            public void onDiscoveryComplete()
+            {
+                System.out.println("Total beans discovered: " + beans.size());
+                for (Bean bean : beans)
+                {
+                    System.out.println(bean.getDevice().getName());   // "Bean"
+                }
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gait_monitor, container, false);
+        View view = inflater.inflate(R.layout.fragment_gait_monitor, container, false);
+
+        gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
+        averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
+        averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
+        averageAccelerationX = (EditText) view.findViewById(R.id.average_acceleration_x_edittext);
+        averageAccelerationY = (EditText) view.findViewById(R.id.average_acceleration_y_edittext);
+        averageAccelerationZ = (EditText) view.findViewById(R.id.average_acceleration_z_edittext);
+
+        List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
+
+        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
+
+        final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                horseArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectHorseSpinner.setAdapter(adapter);
+
+        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            // boolean variable that is used so that the onItemSelected method is not executed
+            // on the first initializing round that happens when the class is created.
+            boolean initializing = true;
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if (initializing == false)
+                {
+                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+                    horse = spinnerAdapter.getHorse(position);
+
+                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                }
+                initializing = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
+
+
+        selectFootingSpinner = (Spinner) view.findViewById(R.id.spinnerSelectFooting);
+        ArrayAdapter<CharSequence> adapterFooting = ArrayAdapter.createFromResource(getActivity(),
+                R.array.footings_array, android.R.layout.simple_spinner_item);
+        adapterFooting.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectFootingSpinner.setAdapter(adapterFooting);
+        selectFootingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+        beginMonitoringButton = (Button) view.findViewById(R.id.begin_monitoring_button);
+        beginMonitoringButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -94,16 +277,6 @@ public class GaitMonitorFragment extends Fragment
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener
     {
         void onFragmentInteraction(String title);

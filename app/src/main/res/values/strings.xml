@@ -36,9 +36,18 @@
     <string name="create_horse_profile">Create Horse Profile</string>
     <string name="delete_all_horse_profiles">Delete All Horse Profiles</string>
     <string name="activate_pads">Activate Pads</string>
+    <string name="begin_monitoring">Begin Monitoring</string>
 
     <!-- Labels-->
-    <string name="horseshoePadIds">Horseshoe pad ids</string>
+    <string name="horseshoePadIds">Horseshoe pad ids:</string>
+    <string name="select_horse">Select a horse:</string>
+    <string name="select_footing">Select a footing:</string>
+    <string name="gait_detected">Gait detected:</string>
+    <string name="average_force">Average force per step:</string>
+    <string name="average_acceleration_x">Average acceleration x axis</string>
+    <string name="average_acceleration_y">Average acceleration y axis</string>
+    <string name="average_acceleration_z">Average acceleration z axis</string>
+    <string name="average_stride_length">Average stride length</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -69,6 +78,13 @@
         <item>Standardbred</item>
         <item>Thoroughbred</item>
         <item>Quarter Horse</item>
+    </string-array>
 
+    <string-array name="footings_array">
+        <item>Sand</item>
+        <item>Grass</item>
+        <item>Dirt</item>
+        <item>Pavement</item>
+        <item>Various</item>
     </string-array>
 </resources>

@@ -1,13 +1,252 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.sporthorsetech.horseshoepad.GaitMonitorFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.sporthorsetech.horseshoepad.GaitMonitorFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:orientation="vertical">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/select_horse"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <Spinner
+                android:id="@+id/spinnerSelectHorse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_15dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/select_footing"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <Spinner
+                android:id="@+id/spinnerSelectFooting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_15dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/gait_detected"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/gait_detected_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_stride_length"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/average_stride_length_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_force"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/average_force_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_acceleration_x"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/average_acceleration_x_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_acceleration_y"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/average_acceleration_y_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_acceleration_z"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
+
+            <EditText
+                android:id="@+id/average_acceleration_z_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/border"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:singleLine="true"
+                android:textSize="@dimen/text_16sp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/pad_40dp">
+
+                <Button
+                    android:id="@+id/begin_monitoring_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:paddingRight="@dimen/pad_15dp"
+                    android:paddingBottom="@dimen/pad_10dp"
+                    android:paddingTop="@dimen/pad_10dp"
+                    android:text="@string/begin_monitoring"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

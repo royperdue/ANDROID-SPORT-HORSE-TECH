@@ -10,6 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/pad_10dp"
+            android:text="@string/select_horse"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:textSize="@dimen/text_16sp"/>
+
         <Spinner
             android:id="@+id/spinnerSelectHorse"
             android:layout_width="wrap_content"
