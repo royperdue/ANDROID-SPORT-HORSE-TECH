@@ -1,6 +1,6 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,13 +65,13 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private GaitActivity gaitActivity;
     private Gait gait;
     private Step step;
-    private ProgressBar mProgressBar;
+    private ProgressBar progressBar;
 
     public GaitMonitorFragment()
     {
     }
 
-    public static GaitMonitorFragment newInstance()
+    public static Fragment newInstance()
     {
         GaitMonitorFragment fragment = new GaitMonitorFragment();
 
@@ -85,7 +85,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         View view = inflater.inflate(R.layout.fragment_gait_monitor, container, false);
         setHasOptionsMenu(true);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
+
         gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
         averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
         averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
@@ -211,7 +213,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
-
         selectFootingSpinner = (Spinner) view.findViewById(R.id.spinnerSelectFooting);
         ArrayAdapter<CharSequence> adapterFooting = ArrayAdapter.createFromResource(getActivity(),
                 R.array.footings_array, android.R.layout.simple_spinner_item);
@@ -222,7 +223,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-
+                if (gaitActivity != null)
+                {
+                    gaitActivity.setFooting(selectFootingSpinner.getSelectedItem().toString());
+                }
             }
 
             @Override
@@ -242,6 +246,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 CommandTask commandTask = new CommandTask();
                 commandTask.setBeans(beans);
                 commandTask.setCommand("TAKE_READINGS");
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 Loom.execute(commandTask);
             }
@@ -465,23 +471,22 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         public void onSuccess(SuccessEvent event)
         {
             Log.i("CommandTask", "Success Received for task Progress");
-            mProgressBar.setProgress(100);
-
-
+            progressBar.setProgress(100);
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
         public void onFailure(FailureEvent event)
         {
             Log.i("CommandTask", "Failure Received for task Progress");
-            mProgressBar.setProgress(0);
+            progressBar.setProgress(0);
         }
 
         @Override
         public void onProgress(ProgressEvent event)
         {
             Log.i("CommandTask", "Progress Received for task Progress: " + event.getProgress());
-            mProgressBar.setProgress(event.getProgress());
+            progressBar.setProgress(event.getProgress());
         }
 
         @NonNull

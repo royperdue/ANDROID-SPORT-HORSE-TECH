@@ -1,6 +1,6 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -40,7 +40,7 @@ public class NewHorseFragment extends Fragment
     {
     }
 
-    public static NewHorseFragment newInstance()
+    public static Fragment newInstance()
     {
         NewHorseFragment fragment = new NewHorseFragment();
 

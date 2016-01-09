@@ -55,6 +55,17 @@
     <!-- Menu items. -->
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>
 
+    <!--Dialog titles-->
+    <string name="confirm_pad_assignment">Please Confirm</string>
+    <string name="notice">Notice</string>
+
+    <!--Dialog messages-->
+    <string name="must_select_horse">You must select a horse.</string>
+    <string name="must_select_horseshoe_pad">You must select a horseshoe pad.</string>
+    <string name="must_select_all_horseshoe_pads">You must assign all horseshoe pads before activating.</string>
+    <string name="no_pads_detected">No horseshoe pads detected.</string>
+    <string name="short_one_horseshoe_pad">You are one horseshoe pad short.</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

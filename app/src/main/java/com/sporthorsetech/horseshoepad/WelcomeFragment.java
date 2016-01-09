@@ -1,6 +1,6 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +30,7 @@ public class WelcomeFragment extends Fragment
     {
     }
 
-    public static WelcomeFragment newInstance()
+    public static Fragment newInstance()
     {
         WelcomeFragment fragment = new WelcomeFragment();
 
@@ -117,7 +117,6 @@ public class WelcomeFragment extends Fragment
         if (context instanceof OnFragmentInteractionListener)
         {
             mListener = (OnFragmentInteractionListener) context;
-            //mListener.onFragmentInteraction(getString(R.string.welcome));
         } else
         {
             throw new RuntimeException(context.toString()

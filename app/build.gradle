@@ -29,6 +29,17 @@ dependencies {
     compile 'com.punchthrough.bean.sdk:sdk:1.0.1'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.commit451:PhotoView:1.2.4'
-    compile 'com.github.ksoichiro:simplealertdialog:1.2.1@aar'
+    compile 'me.drakeet.materialdialog:library:1.2.8'
     compile 'com.nbarraille.loom:loom:0.1-alpha'
+
+    compile('com.mikepenz:materialdrawer:4.6.3@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:iconics-core:2.5.3@aar'//Google Material Icons
+    compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
+    compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.1@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
+    compile 'com.mikepenz:octicons-typeface:3.2.0.1@aar'
+    compile 'com.mikepenz:meteocons-typeface:1.1.0.1@aar'
+    compile 'com.mikepenz:weather-icons-typeface:2.0.10.1@aar'
 }
