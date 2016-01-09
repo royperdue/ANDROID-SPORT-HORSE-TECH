@@ -6,8 +6,19 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/test_textview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/pad_15dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:id="@+id/test_button"
+        android:layout_marginTop="100dp"
+        />
 
 </FrameLayout>

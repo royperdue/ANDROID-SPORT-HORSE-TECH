@@ -19,7 +19,7 @@ public class Horse implements Database.StoredObject
     String breed;
     Long height;
     String discipline;
-    List<HorseFoot> horseFeet;
+    List<HorseHoof> horseHooves;
     List<GaitActivity> gaitActivities;
 
     public enum TYPE implements Database.StoredObject.TYPE
@@ -134,14 +134,14 @@ public class Horse implements Database.StoredObject
         this.discipline = discipline;
     }
 
-    public List<HorseFoot> getHorseFeet()
+    public List<HorseHoof> getHorseHooves()
     {
-        return horseFeet;
+        return horseHooves;
     }
 
-    public void setHorseFeet(List<HorseFoot> horseFeet)
+    public void setHorseHooves(List<HorseHoof> horseHooves)
     {
-        this.horseFeet = horseFeet;
+        this.horseHooves = horseHooves;
     }
 
     public List<GaitActivity> getGaitActivities()

@@ -3,7 +3,6 @@ package com.sporthorsetech.horseshoepad.utility.equine;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import com.sporthorsetech.horseshoepad.utility.persist.SearchableTagValuePair;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,10 +14,7 @@ public class Gait implements Database.StoredObject
     String id;
     String name;
     Long timeCreated;
-    ArrayList<AccelerationX> accelerationsX;
-    ArrayList<AccelerationY> accelerationsY;
-    ArrayList<AccelerationZ> accelerationsZ;
-    ArrayList<Force> forces;
+    List<Step> steps;
 
     public enum TYPE implements Database.StoredObject.TYPE
     {
@@ -87,44 +83,14 @@ public class Gait implements Database.StoredObject
         this.name = name;
     }
 
-    public ArrayList<AccelerationX> getAccelerationsX()
+    public List<Step> getSteps()
     {
-        return accelerationsX;
+        return steps;
     }
 
-    public void setAccelerationsX(ArrayList<AccelerationX> accelerationsX)
+    public void setSteps(List<Step> steps)
     {
-        this.accelerationsX = accelerationsX;
-    }
-
-    public ArrayList<AccelerationY> getAccelerationsY()
-    {
-        return accelerationsY;
-    }
-
-    public void setAccelerationsY(ArrayList<AccelerationY> accelerationsY)
-    {
-        this.accelerationsY = accelerationsY;
-    }
-
-    public ArrayList<AccelerationZ> getAccelerationsZ()
-    {
-        return accelerationsZ;
-    }
-
-    public void setAccelerationsZ(ArrayList<AccelerationZ> accelerationsZ)
-    {
-        this.accelerationsZ = accelerationsZ;
-    }
-
-    public ArrayList<Force> getForces()
-    {
-        return forces;
-    }
-
-    public void setForces(ArrayList<Force> forces)
-    {
-        this.forces = forces;
+        this.steps = steps;
     }
 
     // Return a list of tags that you want to be able to search for this object by.

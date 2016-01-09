@@ -48,6 +48,11 @@ public class GaitActivity implements Database.StoredObject
         this.gaits = gaits;
     }
 
+    public GaitActivity(String id)
+    {
+        this.id = id;
+    }
+
     public TYPE getStoredObjectType()
     {
         return TYPE.gaitActivity;

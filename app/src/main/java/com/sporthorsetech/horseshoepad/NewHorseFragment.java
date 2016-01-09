@@ -151,7 +151,6 @@ public class NewHorseFragment extends Fragment
 
         if (horseIds == null || horseIds.size() == 0)
         {
-            horseIds = new ArrayList<>();
             id = "1";
             horseIds.add("1");
             LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.HORSE_IDS, horseIds);

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                         getFragmentManager().popBackStackImmediate();
                     }
                     getFragmentManager().beginTransaction()
-                            .add(R.id.container, WelcomeFragment.newInstance("Welcome", "Back"))
+                            .add(R.id.container, WelcomeFragment.newInstance())
                             .addToBackStack(getString(R.string.welcome)).commit();
                 }
                 else if(position == 1)

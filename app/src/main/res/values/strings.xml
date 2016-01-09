@@ -38,11 +38,13 @@
     <string name="activate_pads">Activate Pads</string>
     <string name="begin_monitoring">Begin Monitoring</string>
     <string name="pause_monitoring">Pause Monitoring</string>
+    <string name="change_gait">Change Gait</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>
     <string name="select_horse">Select a horse:</string>
     <string name="select_footing">Select a footing:</string>
+    <string name="select_gait">Select a gait:</string>
     <string name="gait_detected">Gait detected:</string>
     <string name="average_force">Average force per step:</string>
     <string name="average_acceleration_x">Average acceleration x axis</string>
@@ -91,5 +93,14 @@
         <item>Dirt</item>
         <item>Pavement</item>
         <item>Various</item>
+    </string-array>
+
+    <string-array name="gaits_array">
+        <item>Walk</item>
+        <item>Trot</item>
+        <item>Jog</item>
+        <item>Canter</item>
+        <item>Lope</item>
+        <item>Gallop</item>
     </string-array>
 </resources>

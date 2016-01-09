@@ -50,6 +50,33 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/pad_10dp"
                 android:singleLine="true"
+                android:text="@string/select_gait"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_22sp"/>
+
+            <Spinner
+                android:id="@+id/spinnerSelectGait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_15dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad_5dp"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:orientation="vertical"
+            android:padding="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                android:singleLine="true"
                 android:text="@string/select_footing"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_22sp"/>
@@ -261,10 +288,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/pad_10dp"
                     android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_10dp"
+                    android:paddingBottom="@dimen/pad_20dp"
                     android:paddingLeft="@dimen/pad_15dp"
                     android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_10dp"
+                    android:paddingTop="@dimen/pad_20dp"
                     android:text="@string/begin_monitoring"/>
 
                 <Button
@@ -273,11 +300,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/pad_10dp"
                     android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_10dp"
+                    android:paddingBottom="@dimen/pad_20dp"
                     android:paddingLeft="@dimen/pad_15dp"
                     android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_10dp"
+                    android:paddingTop="@dimen/pad_20dp"
                     android:text="@string/pause_monitoring"/>
+
+                <Button
+                    android:id="@+id/change_gait_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:layout_marginRight="@dimen/pad_10dp"
+                    android:paddingBottom="@dimen/pad_20dp"
+                    android:paddingLeft="@dimen/pad_15dp"
+                    android:paddingRight="@dimen/pad_15dp"
+                    android:paddingTop="@dimen/pad_20dp"
+                    android:text="@string/change_gait"/>
 
             </LinearLayout>
 

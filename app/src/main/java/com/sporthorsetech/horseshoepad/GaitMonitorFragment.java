@@ -27,12 +27,16 @@ import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.punchthrough.bean.sdk.message.ScratchData;
 import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.equine.Gait;
+import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.Step;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,10 +51,15 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private EditText averageAccelerationY;
     private EditText averageAccelerationZ;
     private Spinner selectHorseSpinner;
+    private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
+    private Button changeGaitButton;
     private Horse horse;
+    private GaitActivity gaitActivity;
+    private Gait gait;
+    private Step step;
 
     public GaitMonitorFragment()
     {
@@ -102,8 +111,31 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
                     horse = spinnerAdapter.getHorse(position);
+                    horse = spinnerAdapter.getHorse(position);
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                    String gaitActivityId = "-1";
+                    ArrayList<String> gaitActivityIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_ACTIVITY_IDS);
+
+                    if (gaitActivityIds == null || gaitActivityIds.size() == 0)
+                    {
+                        gaitActivityId = "1";
+                        gaitActivityIds.add("1");
+                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
+                    }
+                    else if (gaitActivityIds != null && gaitActivityIds.size() > 0)
+                    {
+                        String lastId = gaitActivityIds.get(gaitActivityIds.size() - 1);
+                        gaitActivityId = String.valueOf(Integer.parseInt(lastId) + 1);
+                        gaitActivityIds.add(lastId);
+                        gaitActivityIds.add(gaitActivityId);
+                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
+                    }
+
+                    gaitActivity = new GaitActivity(gaitActivityId);
+
+                    System.out.println("GAIT ACTIVITY ID: " + gaitActivity.getStoredObjectId());
 
                 }
                 initializing = false;
@@ -112,6 +144,66 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
+            }
+        });
+
+        selectGaitSpinner = (Spinner) view.findViewById(R.id.spinnerSelectGait);
+        ArrayAdapter<CharSequence> adapterGait = ArrayAdapter.createFromResource(getActivity(),
+                R.array.gaits_array, android.R.layout.simple_spinner_item);
+        adapterGait.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectGaitSpinner.setAdapter(adapterGait);
+        selectGaitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String gaitId = "-1";
+                ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
+
+                if (gaitIds == null || gaitIds.size() == 0)
+                {
+                    gaitId = "1";
+                    gaitIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+                }
+                else if (gaitIds != null && gaitIds.size() > 0)
+                {
+                    String lastId = gaitIds.get(gaitIds.size() - 1);
+                    gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    gaitIds.add(lastId);
+                    gaitIds.add(gaitId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+                }
+
+                gait = new Gait(gaitId, selectGaitSpinner.getSelectedItem().toString());
+                System.out.println("GAIT: " + gait.getName());
+
+                String stepId = "-1";
+                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+                if (stepIds == null || stepIds.size() == 0)
+                {
+                    stepId = "1";
+                    stepIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+                else if (stepIds != null && stepIds.size() > 0)
+                {
+                    String lastId = stepIds.get(stepIds.size() - 1);
+                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    stepIds.add(lastId);
+                    stepIds.add(stepId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+
+                step = new Step(stepId);
+                System.out.println("STEP: " + step.getStoredObjectId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
             }
         });
 
@@ -155,6 +247,29 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             public void onClick(View v)
             {
                 new CommandThread((HashMap<String, Bean>) beans, "PAUSE_READINGS");
+            }
+        });
+
+        changeGaitButton = (Button) view.findViewById(R.id.change_gait_button);
+        changeGaitButton.setEnabled(false);
+        changeGaitButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ArrayList<Step> steps = (ArrayList<Step>) gait.getSteps();
+                steps.add(step);
+                gait.setSteps(steps);
+
+                ArrayList<Gait> gaits = (ArrayList<Gait>) gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                ArrayList<GaitActivity> gaitActivities = (ArrayList<GaitActivity>) horse.getGaitActivities();
+                gaitActivities.add(gaitActivity);
+                horse.setGaitActivities(gaitActivities);
+
+                Database.with(getActivity().getApplicationContext()).saveObject(horse);
             }
         });
 
@@ -206,6 +321,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         MenuItem detectHorseshoePads = menu.add(Menu.NONE, Constant.DETECT_HORSESHOE_PADS, 0, getString(R.string.detect_horseshoe_pads));
         detectHorseshoePads.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+        // TEMPORARY...
+        MenuItem bankData = menu.add(Menu.NONE, 200, 0, "Bank Data");
+        bankData.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
     }
 
     @Override
@@ -214,6 +333,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
         {
             BeanManager.getInstance().startDiscovery(this);
+        }
+        else if (item.getItemId() == 200)
+        {
+            new CommandThread((HashMap<String, Bean>) beans, "BANK_DATA");
         }
 
         return super.onOptionsItemSelected(item);
@@ -269,83 +392,101 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onScratchValueChanged(ScratchBank bank, byte[] value)
     {
-        Iterator<Map.Entry<String, Bean>> entries = beans.entrySet().iterator();
+        System.out.println("-->Scratch value changed<--");
 
-        while (entries.hasNext())
+        for (final Map.Entry<String, Bean> entry : beans.entrySet())
         {
-            Map.Entry<String, Bean> entry = entries.next();
-
             if (entry.getValue().isConnected())
             {
-                entry.getValue().readScratchData(ScratchBank.BANK_1, new Callback<ScratchData>()
-                {
-                    @Override
-                    public void onResult(ScratchData result)
-                    {
-                        try
-                        {
-                            String s = new String(result.data(), "UTF-8");
-
-                            System.out.println("SCRATCH BANK 1: " + s);
-                        } catch (UnsupportedEncodingException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                entry.getValue().readScratchData(ScratchBank.BANK_2, new Callback<ScratchData>()
-                {
-                    @Override
-                    public void onResult(ScratchData result)
-                    {
-                        try
-                        {
-                            String s = new String(result.data(), "UTF-8");
-
-                            System.out.println("SCRATCH BANK 2: " + s);
-                        } catch (UnsupportedEncodingException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                entry.getValue().readScratchData(ScratchBank.BANK_3, new Callback<ScratchData>()
-                {
-                    @Override
-                    public void onResult(ScratchData result)
-                    {
-                        try
-                        {
-                            String s = new String(result.data(), "UTF-8");
-
-                            System.out.println("SCRATCH BANK 3: " + s);
-                        } catch (UnsupportedEncodingException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                entry.getValue().readScratchData(ScratchBank.BANK_4, new Callback<ScratchData>()
-                {
-                    @Override
-                    public void onResult(ScratchData result)
-                    {
-                        try
-                        {
-                            String s = new String(result.data(), "UTF-8");
-
-                            System.out.println("SCRATCH BANK 4: " + s);
-                        } catch (UnsupportedEncodingException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                readScratchBankOne(entry.getValue());
             }
         }
+    }
+
+    private void readScratchBankOne(final Bean bean)
+    {
+        bean.readScratchData(ScratchBank.BANK_1, new Callback<ScratchData>()
+        {
+            @Override
+            public void onResult(ScratchData result)
+            {
+                try
+                {
+                    String s = new String(result.data(), "UTF-8");
+
+                    System.out.println("SCRATCH BANK 1: " + s);
+
+                    readScratchBankTwo(bean);
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void readScratchBankTwo(final Bean bean)
+    {
+        bean.readScratchData(ScratchBank.BANK_2, new Callback<ScratchData>()
+        {
+            @Override
+            public void onResult(ScratchData result)
+            {
+                try
+                {
+                    String s = new String(result.data(), "UTF-8");
+
+                    System.out.println("SCRATCH BANK 2: " + s);
+
+                    readScratchBankThree(bean);
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void readScratchBankThree(final Bean bean)
+    {
+        bean.readScratchData(ScratchBank.BANK_3, new Callback<ScratchData>()
+        {
+            @Override
+            public void onResult(ScratchData result)
+            {
+                try
+                {
+                    String s = new String(result.data(), "UTF-8");
+
+                    System.out.println("SCRATCH BANK 3: " + s);
+
+                    readScratchBankFour(bean);
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void readScratchBankFour(Bean bean)
+    {
+        bean.readScratchData(ScratchBank.BANK_4, new Callback<ScratchData>()
+        {
+            @Override
+            public void onResult(ScratchData result)
+            {
+                try
+                {
+                    String s = new String(result.data(), "UTF-8");
+
+                    System.out.println("SCRATCH BANK 4: " + s);
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

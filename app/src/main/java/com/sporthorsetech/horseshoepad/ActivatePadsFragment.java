@@ -32,7 +32,7 @@ import com.simplealertdialog.SimpleAlertDialog;
 import com.simplealertdialog.SimpleAlertDialogFragment;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
-import com.sporthorsetech.horseshoepad.utility.equine.HorseFoot;
+import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
@@ -376,7 +376,8 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
             @Override
             public void onClick(View v)
             {
-                if (horse.getHorseFeet().size() == 2 || horse.getHorseFeet().size() == 4)
+                // CHANGED FROM 2 & 4 TO 1 & 4 FOR TESTING.
+                if (horse.getHorseHooves().size() == 1 || horse.getHorseHooves().size() == 4)
                     Database.with(getActivity().getApplicationContext()).saveObject(horse);
                 else
                 {
@@ -454,61 +455,61 @@ public class ActivatePadsFragment extends Fragment implements SimpleAlertDialog.
     @Override
     public void onDialogPositiveButtonClicked(SimpleAlertDialog dialog, int requestCode, View view)
     {
-        ArrayList<HorseFoot> horseFeet;
+        ArrayList<HorseHoof> horseFeet;
 
         if (requestCode == 1)
         {
             if (rightFrontSelected == true)
             {
-                HorseFoot horseFoot = new HorseFoot("1", "RF");
-                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+                HorseHoof horseHoof = new HorseHoof("1", "RF");
+                horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
-                if(horse.getHorseFeet() != null)
-                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                if(horse.getHorseHooves() != null)
+                    horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
                 else
                     horseFeet = new ArrayList<>();
 
-                horseFeet.add(horseFoot);
-                horse.setHorseFeet(horseFeet);
+                horseFeet.add(horseHoof);
+                horse.setHorseHooves(horseFeet);
             }
             else if (rightHindSelected == true)
             {
-                HorseFoot horseFoot = new HorseFoot("2", "RH");
-                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+                HorseHoof horseHoof = new HorseHoof("2", "RH");
+                horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
-                if(horse.getHorseFeet() != null)
-                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                if(horse.getHorseHooves() != null)
+                    horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
                 else
                     horseFeet = new ArrayList<>();
 
-                horseFeet.add(horseFoot);
-                horse.setHorseFeet(horseFeet);
+                horseFeet.add(horseHoof);
+                horse.setHorseHooves(horseFeet);
             }
             else if (leftFrontSelected == true)
             {
-                HorseFoot horseFoot = new HorseFoot("3", "LF");
-                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+                HorseHoof horseHoof = new HorseHoof("3", "LF");
+                horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
-                if(horse.getHorseFeet() != null)
-                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                if(horse.getHorseHooves() != null)
+                    horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
                 else
                     horseFeet = new ArrayList<>();
 
-                horseFeet.add(horseFoot);
-                horse.setHorseFeet(horseFeet);
+                horseFeet.add(horseHoof);
+                horse.setHorseHooves(horseFeet);
             }
             else if (leftHindSelected == true)
             {
-                HorseFoot horseFoot = new HorseFoot("4", "LH");
-                horseFoot.setCurrentHorseShoePad(horseShoePadId);
+                HorseHoof horseHoof = new HorseHoof("4", "LH");
+                horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
-                if(horse.getHorseFeet() != null)
-                    horseFeet = (ArrayList<HorseFoot>) horse.getHorseFeet();
+                if(horse.getHorseHooves() != null)
+                    horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
                 else
                     horseFeet = new ArrayList<>();
 
-                horseFeet.add(horseFoot);
-                horse.setHorseFeet(horseFeet);
+                horseFeet.add(horseHoof);
+                horse.setHorseHooves(horseFeet);
             }
 
             if (TextUtils.isEmpty(this.textView1.getText().toString()))
