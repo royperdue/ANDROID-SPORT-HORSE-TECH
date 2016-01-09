@@ -41,7 +41,6 @@ import me.drakeet.materialdialog.MaterialDialog;
 public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
-    private MaterialDialog materialDialog;
     private RadioGroup radioGroup;
     private RadioButton radioButton1;
     private RadioButton radioButton2;
@@ -59,15 +58,9 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     private Spinner selectHorseSpinner;
     private Button activatePadsButton;
     private Horse horse;
-    private String horseShoePadId = "horseShoePadId";
     private final List<Bean> beans = new ArrayList<>();
-    private boolean leftHindSelected = false;
-    private boolean leftFrontSelected = false;
-    private boolean rightHindSelected = false;
-    private boolean rightFrontSelected = false;
     private boolean horseSelected = false;
     private boolean horseshoePadSelected = false;
-    private String horseshoePadAssignment = "";
 
     public ActivatePadsFragment()
     {
@@ -90,7 +83,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
         Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
 
-        materialDialog = new MaterialDialog(getActivity());
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
 
         final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
@@ -182,85 +174,97 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             {
                 if (horseSelected == false)
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 } else if (horseshoePadSelected == true)
                 {
-                    int selectedId = radioGroup.getCheckedRadioButtonId();
-                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                    rightFrontSelected = true;
-                    rightHindSelected = false;
-                    leftFrontSelected = false;
-                    leftHindSelected = false;
+                    final int selectedId = radioGroup.getCheckedRadioButtonId();
+                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
 
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                                view.findViewById(selectedId)).getText() + " to right front foot?")
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        assignHorseshoePad();
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
+                            view.findViewById(selectedId)).getText() + " to right front foot?")
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    ArrayList<HorseHoof> horseHooves;
+                                    HorseHoof horseHoof = new HorseHoof("1", "RF");
+                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
-                    horseshoePadAssignment = "Right Front: " + ((RadioButton)
-                            view.findViewById(selectedId)).getText();
+                                    if (horse.getHorseHooves() != null)
+                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                                    else
+                                        horseHooves = new ArrayList<>();
+
+                                    horseHooves.add(horseHoof);
+                                    horse.setHorseHooves(horseHooves);
+                                    String horseshoePadAssignment = "Right Front: " + ((RadioButton)
+                                            view.findViewById(selectedId)).getText();
+                                    if (TextUtils.isEmpty(textView1.getText().toString()))
+                                    {
+                                        textView1.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
+                                    {
+                                        textView2.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
+                                    {
+                                        textView3.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
+                                    {
+                                        textView4.setText(horseshoePadAssignment);
+                                    }
+                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                     horseshoePadSelected = false;
                     rightFront.setEnabled(false);
                 } else
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 }
             }
         });
@@ -277,86 +281,97 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             {
                 if (horseSelected == false)
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 } else if (horseshoePadSelected == true)
                 {
-                    int selectedId = radioGroup.getCheckedRadioButtonId();
-                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                    rightFrontSelected = false;
-                    rightHindSelected = true;
-                    leftFrontSelected = false;
-                    leftHindSelected = false;
+                    final int selectedId = radioGroup.getCheckedRadioButtonId();
+                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
 
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                                view.findViewById(selectedId)).getText() + " to right hind foot?")
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        assignHorseshoePad();
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
+                            view.findViewById(selectedId)).getText() + " to right hind foot?")
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    ArrayList<HorseHoof> horseHooves;
+                                    HorseHoof horseHoof = new HorseHoof("2", "RH");
+                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
+                                    if (horse.getHorseHooves() != null)
+                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                                    else
+                                        horseHooves = new ArrayList<>();
 
-                    horseshoePadAssignment = "Right Hind: " + ((RadioButton)
-                            view.findViewById(selectedId)).getText();
+                                    horseHooves.add(horseHoof);
+                                    horse.setHorseHooves(horseHooves);
+                                    String horseshoePadAssignment = "Right Hind: " + ((RadioButton)
+                                            view.findViewById(selectedId)).getText();
+                                    if (TextUtils.isEmpty(textView1.getText().toString()))
+                                    {
+                                        textView1.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
+                                    {
+                                        textView2.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
+                                    {
+                                        textView3.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
+                                    {
+                                        textView4.setText(horseshoePadAssignment);
+                                    }
+                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                     horseshoePadSelected = false;
                     rightHind.setEnabled(false);
                 } else
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 }
             }
         });
@@ -373,86 +388,97 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             {
                 if (horseSelected == false)
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 } else if (horseshoePadSelected == true)
                 {
-                    int selectedId = radioGroup.getCheckedRadioButtonId();
-                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                    rightFrontSelected = false;
-                    rightHindSelected = false;
-                    leftFrontSelected = true;
-                    leftHindSelected = false;
+                    final int selectedId = radioGroup.getCheckedRadioButtonId();
+                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
 
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                                view.findViewById(selectedId)).getText() + " to left front foot?")
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        assignHorseshoePad();
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
+                            view.findViewById(selectedId)).getText() + " to left front foot?")
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    ArrayList<HorseHoof> horseHooves;
+                                    HorseHoof horseHoof = new HorseHoof("3", "LF");
+                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
+                                    if (horse.getHorseHooves() != null)
+                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                                    else
+                                        horseHooves = new ArrayList<>();
 
-                    horseshoePadAssignment = "Left Front: " + ((RadioButton)
-                            view.findViewById(selectedId)).getText();
+                                    horseHooves.add(horseHoof);
+                                    horse.setHorseHooves(horseHooves);
+                                    String horseshoePadAssignment = "Left Front: " + ((RadioButton)
+                                            view.findViewById(selectedId)).getText();
+                                    if (TextUtils.isEmpty(textView1.getText().toString()))
+                                    {
+                                        textView1.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
+                                    {
+                                        textView2.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
+                                    {
+                                        textView3.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
+                                    {
+                                        textView4.setText(horseshoePadAssignment);
+                                    }
+                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                     horseshoePadSelected = false;
                     leftFront.setEnabled(false);
                 } else
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 }
             }
         });
@@ -469,86 +495,97 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             {
                 if (horseSelected == false)
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 } else if (horseshoePadSelected == true)
                 {
-                    int selectedId = radioGroup.getCheckedRadioButtonId();
-                    horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                    rightFrontSelected = false;
-                    rightHindSelected = false;
-                    leftFrontSelected = false;
-                    leftHindSelected = true;
+                    final int selectedId = radioGroup.getCheckedRadioButtonId();
+                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
 
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                                view.findViewById(selectedId)).getText() + " to left hind foot?")
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        assignHorseshoePad();
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
+                            view.findViewById(selectedId)).getText() + " to left hind foot?")
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    ArrayList<HorseHoof> horseHooves;
+                                    HorseHoof horseHoof = new HorseHoof("4", "LH");
+                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
 
+                                    if (horse.getHorseHooves() != null)
+                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                                    else
+                                        horseHooves = new ArrayList<>();
 
-                    horseshoePadAssignment = "Left Hind: " + ((RadioButton)
-                            view.findViewById(selectedId)).getText();
+                                    horseHooves.add(horseHoof);
+                                    horse.setHorseHooves(horseHooves);
+                                    String horseshoePadAssignment = "Left Hind: " + ((RadioButton)
+                                            view.findViewById(selectedId)).getText();
+                                    if (TextUtils.isEmpty(textView1.getText().toString()))
+                                    {
+                                        textView1.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
+                                    {
+                                        textView2.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
+                                    {
+                                        textView3.setText(horseshoePadAssignment);
+                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
+                                    {
+                                        textView4.setText(horseshoePadAssignment);
+                                    }
+                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                     horseshoePadSelected = false;
                     leftHind.setEnabled(false);
                 } else
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 }
             }
         });
@@ -565,33 +602,29 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                     Database.with(getActivity().getApplicationContext()).saveObject(horse);
                 else
                 {
-                    if (materialDialog != null)
-                    {
-                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
-                                //materialDialog.setBackgroundResource(R.drawable.background);
-                                .setPositiveButton("OK", new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        materialDialog.dismiss();
-                                    }
-                                }).setNegativeButton("CANCEL", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
                             {
-                                materialDialog.dismiss();
-                            }
-                        }).show();
-                    }
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
                 }
             }
         });
 
-        BeanManager.getInstance().
-
-                startDiscovery(this);
+        BeanManager.getInstance().startDiscovery(this);
 
         return view;
     }
@@ -653,75 +686,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         return super.onOptionsItemSelected(item);
     }
 
-    private void assignHorseshoePad()
-    {
-        ArrayList<HorseHoof> horseFeet;
-
-        if (rightFrontSelected == true)
-        {
-            HorseHoof horseHoof = new HorseHoof("1", "RF");
-            horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-            if (horse.getHorseHooves() != null)
-                horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
-            else
-                horseFeet = new ArrayList<>();
-
-            horseFeet.add(horseHoof);
-            horse.setHorseHooves(horseFeet);
-        } else if (rightHindSelected == true)
-        {
-            HorseHoof horseHoof = new HorseHoof("2", "RH");
-            horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-            if (horse.getHorseHooves() != null)
-                horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
-            else
-                horseFeet = new ArrayList<>();
-
-            horseFeet.add(horseHoof);
-            horse.setHorseHooves(horseFeet);
-        } else if (leftFrontSelected == true)
-        {
-            HorseHoof horseHoof = new HorseHoof("3", "LF");
-            horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-            if (horse.getHorseHooves() != null)
-                horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
-            else
-                horseFeet = new ArrayList<>();
-
-            horseFeet.add(horseHoof);
-            horse.setHorseHooves(horseFeet);
-        } else if (leftHindSelected == true)
-        {
-            HorseHoof horseHoof = new HorseHoof("4", "LH");
-            horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-            if (horse.getHorseHooves() != null)
-                horseFeet = (ArrayList<HorseHoof>) horse.getHorseHooves();
-            else
-                horseFeet = new ArrayList<>();
-
-            horseFeet.add(horseHoof);
-            horse.setHorseHooves(horseFeet);
-        }
-
-        if (TextUtils.isEmpty(this.textView1.getText().toString()))
-        {
-            this.textView1.setText(horseshoePadAssignment);
-        } else if (TextUtils.isEmpty(this.textView2.getText().toString()))
-        {
-            this.textView2.setText(horseshoePadAssignment);
-        } else if (TextUtils.isEmpty(this.textView3.getText().toString()))
-        {
-            this.textView3.setText(horseshoePadAssignment);
-        } else if (TextUtils.isEmpty(this.textView4.getText().toString()))
-        {
-            this.textView4.setText(horseshoePadAssignment);
-        }
-    }
-
     @Override
     public void onBeanDiscovered(Bean bean, int rssi)
     {
@@ -737,26 +701,24 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
 
         if (beans.size() == 0)
         {
-            if (materialDialog != null)
-            {
-                materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
-                        //materialDialog.setBackgroundResource(R.drawable.background);
-                        .setPositiveButton("OK", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                materialDialog.dismiss();
-                            }
-                        }).setNegativeButton("CANCEL", new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
+            final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+            materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
+                    //materialDialog.setBackgroundResource(R.drawable.background);
+                    .setPositiveButton("OK", new View.OnClickListener()
                     {
-                        materialDialog.dismiss();
-                    }
-                }).show();
-            }
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).setNegativeButton("CANCEL", new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    materialDialog.dismiss();
+                }
+            }).show();
         } else if (beans.size() == 1)
         {
             radioButton1.setVisibility(View.VISIBLE);
@@ -784,26 +746,24 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
 
         if (beans.size() % 2 != 0)
         {
-            if (materialDialog != null)
-            {
-                materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.short_one_horseshoe_pad))
-                        //materialDialog.setBackgroundResource(R.drawable.background);
-                        .setPositiveButton("OK", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                materialDialog.dismiss();
-                            }
-                        }).setNegativeButton("CANCEL", new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
+            final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+            materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.short_one_horseshoe_pad))
+                    //materialDialog.setBackgroundResource(R.drawable.background);
+                    .setPositiveButton("OK", new View.OnClickListener()
                     {
-                        materialDialog.dismiss();
-                    }
-                }).show();
-            }
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).setNegativeButton("CANCEL", new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    materialDialog.dismiss();
+                }
+            }).show();
         }
     }
 

@@ -28,6 +28,5 @@ public final class Constant
     // MENU ITEM CONSTANTS.
     public static final int DETECT_HORSESHOE_PADS = 100;
 
-    public final static String TASK_NAME = "commandTask";
-
+    public final static String TASK_NAME_COMMAND = "taskNameCommand";
 }

@@ -95,10 +95,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         averageAccelerationY = (EditText) view.findViewById(R.id.average_acceleration_y_edittext);
         averageAccelerationZ = (EditText) view.findViewById(R.id.average_acceleration_z_edittext);
 
-        List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
 
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
+        List<Horse> horseList = Database.with(getActivity().getApplicationContext())
+                .load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
 
         final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_item,
@@ -348,7 +349,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         Loom.unregisterListener(commandListener);
     }
 
-
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
     {
@@ -493,7 +493,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         @Override
         public String taskName()
         {
-            return Constant.TASK_NAME;
+            return Constant.TASK_NAME_COMMAND;
         }
     };
 
@@ -505,7 +505,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         @Override
         protected String name()
         {
-            return Constant.TASK_NAME;
+            return Constant.TASK_NAME_COMMAND;
         }
 
         @Override
