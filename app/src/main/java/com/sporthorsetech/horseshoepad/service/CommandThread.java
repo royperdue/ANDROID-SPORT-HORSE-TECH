@@ -33,7 +33,7 @@ public class CommandThread implements Runnable
         while (entries.hasNext())
         {
             Map.Entry<String, Bean> entry = entries.next();
-            entry.getValue().setScratchData(ScratchBank.BANK_5, command);
+            entry.getValue().setScratchData(ScratchBank.BANK_1, command);
         }
     }
 }

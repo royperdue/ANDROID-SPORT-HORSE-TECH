@@ -398,31 +398,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         {
             if (entry.getValue().isConnected())
             {
-                readScratchBankOne(entry.getValue());
+                readScratchBankTwo(entry.getValue());
             }
         }
-    }
-
-    private void readScratchBankOne(final Bean bean)
-    {
-        bean.readScratchData(ScratchBank.BANK_1, new Callback<ScratchData>()
-        {
-            @Override
-            public void onResult(ScratchData result)
-            {
-                try
-                {
-                    String s = new String(result.data(), "UTF-8");
-
-                    System.out.println("SCRATCH BANK 1: " + s);
-
-                    readScratchBankTwo(bean);
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     private void readScratchBankTwo(final Bean bean)
@@ -469,7 +447,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         });
     }
 
-    private void readScratchBankFour(Bean bean)
+    private void readScratchBankFour(final Bean bean)
     {
         bean.readScratchData(ScratchBank.BANK_4, new Callback<ScratchData>()
         {
@@ -481,6 +459,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     String s = new String(result.data(), "UTF-8");
 
                     System.out.println("SCRATCH BANK 4: " + s);
+
+                    readScratchBankFive(bean);
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void readScratchBankFive(Bean bean)
+    {
+        bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
+        {
+            @Override
+            public void onResult(ScratchData result)
+            {
+                try
+                {
+                    String s = new String(result.data(), "UTF-8");
+
+                    System.out.println("SCRATCH BANK 5: " + s);
                 } catch (UnsupportedEncodingException e)
                 {
                     e.printStackTrace();
