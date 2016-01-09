@@ -1,28 +1,26 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.Drawer.OnDrawerItemClickListener;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -31,10 +29,12 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
         ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener
 {
     private Toolbar toolbar;
+    private String title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -42,93 +42,19 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // Setup spinner
-        /*Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.setAdapter(new SpinnerAdapter(
-                toolbar.getContext(),
-                new String[]{
-                        getString(R.string.welcome),
-                        getString(R.string.new_horse_profile),
-                        getString(R.string.activate_horseshoe_pads),
-                        getString(R.string.monitor_gait_activity),
-                        getString(R.string.view_gait_data),
-                        getString(R.string.delete_all_horse_profiles)
-                }));
-
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                if (position == 0)
-                {
-                    while (getFragmentManager().getBackStackEntryCount() > 0)
-                    {
-                        getFragmentManager().popBackStackImmediate();
-                    }
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.container, WelcomeFragment.newInstance())
-                            .addToBackStack(getString(R.string.welcome)).commit();
-                } else if (position == 1)
-                {
-                    while (getFragmentManager().getBackStackEntryCount() > 0)
-                    {
-                        getFragmentManager().popBackStackImmediate();
-                    }
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.container, NewHorseFragment.newInstance())
-                            .addToBackStack(getString(R.string.new_horse_profile)).commit();
-                } else if (position == 2)
-                {
-                    while (getFragmentManager().getBackStackEntryCount() > 0)
-                    {
-                        getFragmentManager().popBackStackImmediate();
-                    }
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.container, ActivatePadsFragment.newInstance())
-                            .addToBackStack(getString(R.string.activate_horseshoe_pads)).commit();
-                } else if (position == 3)
-                {
-                    while (getFragmentManager().getBackStackEntryCount() > 0)
-                    {
-                        getFragmentManager().popBackStackImmediate();
-                    }
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.container, GaitMonitorFragment.newInstance())
-                            .addToBackStack(getString(R.string.monitor_gait_activity)).commit();
-                } else if (position == 4)
-                {
-                    startActivity(new Intent(getBaseContext(), ItemListActivity.class));
-                } else
-                {
-                    while (getFragmentManager().getBackStackEntryCount() > 0)
-                    {
-                        getFragmentManager().popBackStackImmediate();
-                    }
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.container, DeleteHorseProfileFragment.newInstance())
-                            .addToBackStack(getString(R.string.delete_all_horse_profiles)).commit();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
-        });*/
-
         Drawer builder = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_camera).withName(R.string.welcome),
+                        new PrimaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_wb_sunny).withName(R.string.welcome),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_gallery).withName(R.string.new_horse_profile),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_manage).withName(R.string.activate_horseshoe_pads),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_share).withName(R.string.monitor_gait_activity),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_slideshow).withName(R.string.view_gait_data),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_send).withName(R.string.delete_all_horse_profiles)
                 )
-                .withOnDrawerItemClickListener(new OnDrawerItemClickListener() {
+                .withOnDrawerItemClickListener(new OnDrawerItemClickListener()
+                {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem)
                     {
@@ -139,26 +65,33 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                         switch (position)
                         {
                             case 0:
+                                title = getString(R.string.welcome);
                                 fragment = WelcomeFragment.newInstance();
                                 break;
                             case 1:
+                                title = getString(R.string.new_horse_profile);
                                 fragment = NewHorseFragment.newInstance();
                                 break;
                             case 2:
+                                title = getString(R.string.activate_horseshoe_pads);
                                 fragment = ActivatePadsFragment.newInstance();
                                 break;
                             case 3:
+                                title = getString(R.string.monitor_gait_activity);
                                 fragment = GaitMonitorFragment.newInstance();
                                 break;
                             case 4:
+                                title = getString(R.string.view_gait_data);
                                 startActivity(new Intent(MainActivity.this, ItemListActivity.class));
                                 break;
                             case 5:
+                                title = getString(R.string.delete_all_horse_profiles);
                                 fragment = DeleteHorseProfileFragment.newInstance();
                                 break;
                         }
 
-                        transaction.replace(R.id.container, fragment);
+                        transaction.addToBackStack(title);
+                        transaction.replace(R.id.container, fragment, title);
                         transaction.commit();
 
                         return false;
@@ -188,9 +121,6 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -203,52 +133,24 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+           if(getSupportFragmentManager().getBackStackEntryCount() > 0)
+           {
+               Fragment fragment = getSupportFragmentManager().getFragments()
+                       .get(getSupportFragmentManager().getBackStackEntryCount() - 1);
+               fragment.onResume();
+           }
+        }
+
+        return (super.onKeyDown(keyCode, event));
+    }
+
+    @Override
     public void onFragmentInteraction(String title)
     {
         //getSupportActionBar().setTitle(title);
-    }
-
-    private static class SpinnerAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter
-    {
-        private final ThemedSpinnerAdapter.Helper mDropDownHelper;
-
-        public SpinnerAdapter(Context context, String[] objects)
-        {
-            super(context, android.R.layout.simple_list_item_1, objects);
-            mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent)
-        {
-            View view;
-
-            if (convertView == null)
-            {
-                // Inflate the drop down using the helper's LayoutInflater
-                LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
-                view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-            } else
-            {
-                view = convertView;
-            }
-
-            TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(getItem(position));
-
-            return view;
-        }
-
-        @Override
-        public Theme getDropDownViewTheme()
-        {
-            return mDropDownHelper.getDropDownViewTheme();
-        }
-
-        @Override
-        public void setDropDownViewTheme(Theme theme)
-        {
-            mDropDownHelper.setDropDownViewTheme(theme);
-        }
     }
 }
