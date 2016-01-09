@@ -10,6 +10,8 @@ public final class Constant
     public static final String ACTIVATE_PAD_ARG_PARAM2 = "activatePadArgParam2";
     public static final String NEW_HORSE_ARG_PARAM1 = "newHorseArgParam1";
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String BEANS = "*beans*";
+    public static final String COMMAND = "command";
 
     public static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -25,5 +27,7 @@ public final class Constant
 
     // MENU ITEM CONSTANTS.
     public static final int DETECT_HORSESHOE_PADS = 100;
+
+    public final static String TASK_NAME = "commandTask";
 
 }

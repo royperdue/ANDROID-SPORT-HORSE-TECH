@@ -10,6 +10,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_15dp"
+            android:layout_marginRight="@dimen/pad_15dp"
+            android:layout_marginTop="@dimen/pad_15dp"
+            android:layout_marginBottom="@dimen/pad_15dp"
+            android:layout_centerInParent="true"
+            style="@android:style/Widget.ProgressBar.Horizontal" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

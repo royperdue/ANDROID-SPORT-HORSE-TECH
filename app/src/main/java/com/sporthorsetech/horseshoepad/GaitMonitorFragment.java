@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,18 +16,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.nbarraille.loom.Loom;
+import com.nbarraille.loom.Task;
+import com.nbarraille.loom.events.FailureEvent;
+import com.nbarraille.loom.events.ProgressEvent;
+import com.nbarraille.loom.events.SuccessEvent;
+import com.nbarraille.loom.listeners.GenericUiThreadListener;
+import com.nbarraille.loom.listeners.LoomListener;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
-import com.punchthrough.bean.sdk.message.Callback;
 import com.punchthrough.bean.sdk.message.ScratchBank;
-import com.punchthrough.bean.sdk.message.ScratchData;
-import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.Gait;
@@ -36,14 +43,12 @@ import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
-    private final Map<String, Bean> beans = new HashMap<>();
+    private List<Bean> beans = new ArrayList<>();
     private EditText gaitDetected;
     private EditText averageStrideLength;
     private EditText averageForce;
@@ -60,6 +65,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private GaitActivity gaitActivity;
     private Gait gait;
     private Step step;
+    private ProgressBar mProgressBar;
 
     public GaitMonitorFragment()
     {
@@ -79,6 +85,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         View view = inflater.inflate(R.layout.fragment_gait_monitor, container, false);
         setHasOptionsMenu(true);
 
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
         averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
         averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
@@ -123,8 +130,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         gaitActivityId = "1";
                         gaitActivityIds.add("1");
                         LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
-                    }
-                    else if (gaitActivityIds != null && gaitActivityIds.size() > 0)
+                    } else if (gaitActivityIds != null && gaitActivityIds.size() > 0)
                     {
                         String lastId = gaitActivityIds.get(gaitActivityIds.size() - 1);
                         gaitActivityId = String.valueOf(Integer.parseInt(lastId) + 1);
@@ -165,8 +171,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     gaitId = "1";
                     gaitIds.add("1");
                     LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
-                }
-                else if (gaitIds != null && gaitIds.size() > 0)
+                } else if (gaitIds != null && gaitIds.size() > 0)
                 {
                     String lastId = gaitIds.get(gaitIds.size() - 1);
                     gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
@@ -186,8 +191,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     stepId = "1";
                     stepIds.add("1");
                     LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
-                }
-                else if (stepIds != null && stepIds.size() > 0)
+                } else if (stepIds != null && stepIds.size() > 0)
                 {
                     String lastId = stepIds.get(stepIds.size() - 1);
                     stepId = String.valueOf(Integer.parseInt(lastId) + 1);
@@ -235,7 +239,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                new CommandThread((HashMap<String, Bean>) beans, "TAKE_READINGS");
+                CommandTask commandTask = new CommandTask();
+                commandTask.setBeans(beans);
+                commandTask.setCommand("TAKE_READINGS");
+
+                Loom.execute(commandTask);
             }
         });
 
@@ -246,7 +254,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                new CommandThread((HashMap<String, Bean>) beans, "PAUSE_READINGS");
+                CommandTask commandTask = new CommandTask();
+                commandTask.setBeans(beans);
+                commandTask.setCommand("PAUSE_READINGS");
+
+                Loom.execute(commandTask);
             }
         });
 
@@ -315,6 +327,23 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        Loom.registerListener(commandListener);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        Loom.unregisterListener(commandListener);
+    }
+
+
+    @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
@@ -333,10 +362,13 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
         {
             BeanManager.getInstance().startDiscovery(this);
-        }
-        else if (item.getItemId() == 200)
+        } else if (item.getItemId() == 200)
         {
-            new CommandThread((HashMap<String, Bean>) beans, "BANK_DATA");
+            CommandTask commandTask = new CommandTask();
+            commandTask.setBeans(beans);
+            commandTask.setCommand("BANK_DATA");
+
+            Loom.execute(commandTask);
         }
 
         return super.onOptionsItemSelected(item);
@@ -345,7 +377,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onBeanDiscovered(Bean bean, int rssi)
     {
-        beans.put(bean.getDevice().getName(), bean);
+        beans.add(bean);
         bean.connect(getActivity(), this);
     }
 
@@ -378,15 +410,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
-        String s = null;
-        try
-        {
-            s = new String(data, "UTF-8");
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        System.out.println("data received: " + s);
     }
 
     @Override
@@ -394,99 +417,34 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         System.out.println("-->Scratch value changed<--");
 
-        for (final Map.Entry<String, Bean> entry : beans.entrySet())
+        String s = null;
+        try
         {
-            if (entry.getValue().isConnected())
+            s = new String(value, "UTF-8");
+
+            int bankNumber = bank.getRawValue();
+
+            if (bankNumber == 0)
             {
-                readScratchBankTwo(entry.getValue());
+                System.out.println("BANK 1: " + s);
+            } else if (bankNumber == 1)
+            {
+                System.out.println("BANK 2: " + s);
+            } else if (bankNumber == 2)
+            {
+                System.out.println("BANK 3: " + s);
+            } else if (bankNumber == 3)
+            {
+                System.out.println("BANK 4: " + s);
+            } else if (bankNumber == 4)
+            {
+                System.out.println("BANK 5: " + s);
             }
+
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
         }
-    }
-
-    private void readScratchBankTwo(final Bean bean)
-    {
-        bean.readScratchData(ScratchBank.BANK_2, new Callback<ScratchData>()
-        {
-            @Override
-            public void onResult(ScratchData result)
-            {
-                try
-                {
-                    String s = new String(result.data(), "UTF-8");
-
-                    System.out.println("SCRATCH BANK 2: " + s);
-
-                    readScratchBankThree(bean);
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void readScratchBankThree(final Bean bean)
-    {
-        bean.readScratchData(ScratchBank.BANK_3, new Callback<ScratchData>()
-        {
-            @Override
-            public void onResult(ScratchData result)
-            {
-                try
-                {
-                    String s = new String(result.data(), "UTF-8");
-
-                    System.out.println("SCRATCH BANK 3: " + s);
-
-                    readScratchBankFour(bean);
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void readScratchBankFour(final Bean bean)
-    {
-        bean.readScratchData(ScratchBank.BANK_4, new Callback<ScratchData>()
-        {
-            @Override
-            public void onResult(ScratchData result)
-            {
-                try
-                {
-                    String s = new String(result.data(), "UTF-8");
-
-                    System.out.println("SCRATCH BANK 4: " + s);
-
-                    readScratchBankFive(bean);
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void readScratchBankFive(Bean bean)
-    {
-        bean.readScratchData(ScratchBank.BANK_5, new Callback<ScratchData>()
-        {
-            @Override
-            public void onResult(ScratchData result)
-            {
-                try
-                {
-                    String s = new String(result.data(), "UTF-8");
-
-                    System.out.println("SCRATCH BANK 5: " + s);
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override
@@ -499,5 +457,71 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     public interface OnFragmentInteractionListener
     {
         void onFragmentInteraction(String title);
+    }
+
+    private LoomListener commandListener = new GenericUiThreadListener()
+    {
+        @Override
+        public void onSuccess(SuccessEvent event)
+        {
+            Log.i("CommandTask", "Success Received for task Progress");
+            mProgressBar.setProgress(100);
+
+
+        }
+
+        @Override
+        public void onFailure(FailureEvent event)
+        {
+            Log.i("CommandTask", "Failure Received for task Progress");
+            mProgressBar.setProgress(0);
+        }
+
+        @Override
+        public void onProgress(ProgressEvent event)
+        {
+            Log.i("CommandTask", "Progress Received for task Progress: " + event.getProgress());
+            mProgressBar.setProgress(event.getProgress());
+        }
+
+        @NonNull
+        @Override
+        public String taskName()
+        {
+            return Constant.TASK_NAME;
+        }
+    };
+
+    public static class CommandTask extends Task
+    {
+        private String command;
+        private List<Bean> beans = new ArrayList<>();
+
+        @Override
+        protected String name()
+        {
+            return Constant.TASK_NAME;
+        }
+
+        @Override
+        protected void runTask() throws Exception
+        {
+            for (Bean bean : beans)
+            {
+                bean.setScratchData(ScratchBank.BANK_5, command);
+                postProgress(100 / beans.size());
+                Thread.sleep(50);
+            }
+        }
+
+        public void setCommand(String command)
+        {
+            this.command = command;
+        }
+
+        public void setBeans(List<Bean> beans)
+        {
+            this.beans = beans;
+        }
     }
 }
