@@ -27,4 +27,5 @@ public final class Constant
     public static final int DETECT_HORSESHOE_PADS = 100;
 
     public final static String TASK_NAME_COMMAND = "taskNameCommand";
+    public final static String TASK_NAME_SET_BEAN_NAME = "taskNameSetBeanName";
 }
