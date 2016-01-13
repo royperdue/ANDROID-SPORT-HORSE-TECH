@@ -1,10 +1,11 @@
 package com.sporthorsetech.horseshoepad;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,11 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,32 +28,26 @@ import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
-import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
 import me.drakeet.materialdialog.MaterialDialog;
 
-public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListener, BeanListener
+public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListener, BeanListener, View.OnClickListener
 {
     private OnFragmentInteractionListener mListener;
-    private RadioGroup radioGroup;
-    private RadioButton radioButton1;
-    private RadioButton radioButton2;
-    private RadioButton radioButton3;
-    private RadioButton radioButton4;
+    private View view;
+    private AlertDialog dialog;
+    private Horse[] horseArray;
     private EditText textView1;
     private EditText textView2;
     private EditText textView3;
     private EditText textView4;
-    private ImageView imageView;
-    private ImageButton rightHind;
-    private ImageButton leftHind;
-    private ImageButton leftFront;
-    private ImageButton rightFront;
     private Spinner selectHorseSpinner;
     private Button activatePadsButton;
     private Horse horse;
@@ -77,554 +70,17 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        final View view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
+        this.view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
         setHasOptionsMenu(true);
 
+        this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+        dialog.show();
+
         List<Horse> horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
-
-        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
-
-        final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_item,
-                horseArray);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectHorseSpinner.setAdapter(adapter);
-
-        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            // boolean variable that is used so that the onItemSelected method is not executed
-            // on the first initializing round that happens when the class is created.
-            boolean initializing = true;
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                if (initializing == false)
-                {
-                    horseSelected = true;
-                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
-                    horse = spinnerAdapter.getHorse(position);
-
-                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
-
-                }
-                initializing = false;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
-        });
-
-        radioButton1 = (RadioButton) view.findViewById(R.id.radioButton1);
-        radioButton1.setVisibility(View.INVISIBLE);
-        radioButton2 = (RadioButton) view.findViewById(R.id.radioButton2);
-        radioButton2.setVisibility(View.INVISIBLE);
-        radioButton3 = (RadioButton) view.findViewById(R.id.radioButton3);
-        radioButton3.setVisibility(View.INVISIBLE);
-        radioButton4 = (RadioButton) view.findViewById(R.id.radioButton4);
-        radioButton4.setVisibility(View.INVISIBLE);
-
-        radioGroup = (RadioGroup) view.findViewById(R.id.radioButtonGroupEquine);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                if (radioButton1.isChecked())
-                {
-                    horseshoePadSelected = true;
-                } else if (radioButton2.isChecked())
-                {
-                    horseshoePadSelected = true;
-                } else if (radioButton3.isChecked())
-                {
-                    horseshoePadSelected = true;
-                } else if (radioButton4.isChecked())
-                {
-                    horseshoePadSelected = true;
-                }
-            }
-        });
-
-        textView1 = (EditText) view.findViewById(R.id.textView1);
-        textView2 = (EditText) view.findViewById(R.id.textView2);
-        textView3 = (EditText) view.findViewById(R.id.textView3);
-        textView4 = (EditText) view.findViewById(R.id.textView4);
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        imageView = (ImageView) view.findViewById(R.id.imageView);
-        imageView.setImageResource(R.drawable.horse_trotting_top);
-        imageView.getLayoutParams().width = metrics.widthPixels;
-        imageView.requestLayout();
-
-        rightFront = (ImageButton) view.findViewById(R.id.imageButtonRF);
-        rightFront.getLayoutParams().width = metrics.widthPixels / 4;
-        rightFront.requestLayout();
-        rightFront.setImageResource(R.drawable.rf);
-        rightFront.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (horseSelected == false)
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                } else if (horseshoePadSelected == true)
-                {
-                    final int selectedId = radioGroup.getCheckedRadioButtonId();
-                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                            view.findViewById(selectedId)).getText() + " to right front foot?")
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    ArrayList<HorseHoof> horseHooves;
-                                    HorseHoof horseHoof = new HorseHoof("1", "RF");
-                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-                                    if (horse.getHorseHooves() != null)
-                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                                    else
-                                        horseHooves = new ArrayList<>();
-
-                                    horseHooves.add(horseHoof);
-                                    horse.setHorseHooves(horseHooves);
-                                    String horseshoePadAssignment = "Right Front: " + ((RadioButton)
-                                            view.findViewById(selectedId)).getText();
-                                    if (TextUtils.isEmpty(textView1.getText().toString()))
-                                    {
-                                        textView1.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
-                                    {
-                                        textView2.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
-                                    {
-                                        textView3.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
-                                    {
-                                        textView4.setText(horseshoePadAssignment);
-                                    }
-                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                    horseshoePadSelected = false;
-                    rightFront.setEnabled(false);
-                } else
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
-        rightHind = (ImageButton) view.findViewById(R.id.imageButtonRH);
-        rightHind.getLayoutParams().width = metrics.widthPixels / 4;
-        rightHind.requestLayout();
-        rightHind.setImageResource(R.drawable.rh);
-        rightHind.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (horseSelected == false)
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                } else if (horseshoePadSelected == true)
-                {
-                    final int selectedId = radioGroup.getCheckedRadioButtonId();
-                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                            view.findViewById(selectedId)).getText() + " to right hind foot?")
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    ArrayList<HorseHoof> horseHooves;
-                                    HorseHoof horseHoof = new HorseHoof("2", "RH");
-                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-                                    if (horse.getHorseHooves() != null)
-                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                                    else
-                                        horseHooves = new ArrayList<>();
-
-                                    horseHooves.add(horseHoof);
-                                    horse.setHorseHooves(horseHooves);
-                                    String horseshoePadAssignment = "Right Hind: " + ((RadioButton)
-                                            view.findViewById(selectedId)).getText();
-                                    if (TextUtils.isEmpty(textView1.getText().toString()))
-                                    {
-                                        textView1.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
-                                    {
-                                        textView2.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
-                                    {
-                                        textView3.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
-                                    {
-                                        textView4.setText(horseshoePadAssignment);
-                                    }
-                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                    horseshoePadSelected = false;
-                    rightHind.setEnabled(false);
-                } else
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
-        leftFront = (ImageButton) view.findViewById(R.id.imageButtonLF);
-        leftFront.getLayoutParams().width = metrics.widthPixels / 4;
-        leftFront.requestLayout();
-        leftFront.setImageResource(R.drawable.lf);
-        leftFront.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (horseSelected == false)
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                } else if (horseshoePadSelected == true)
-                {
-                    final int selectedId = radioGroup.getCheckedRadioButtonId();
-                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                            view.findViewById(selectedId)).getText() + " to left front foot?")
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    ArrayList<HorseHoof> horseHooves;
-                                    HorseHoof horseHoof = new HorseHoof("3", "LF");
-                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-                                    if (horse.getHorseHooves() != null)
-                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                                    else
-                                        horseHooves = new ArrayList<>();
-
-                                    horseHooves.add(horseHoof);
-                                    horse.setHorseHooves(horseHooves);
-                                    String horseshoePadAssignment = "Left Front: " + ((RadioButton)
-                                            view.findViewById(selectedId)).getText();
-                                    if (TextUtils.isEmpty(textView1.getText().toString()))
-                                    {
-                                        textView1.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
-                                    {
-                                        textView2.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
-                                    {
-                                        textView3.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
-                                    {
-                                        textView4.setText(horseshoePadAssignment);
-                                    }
-                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                    horseshoePadSelected = false;
-                    leftFront.setEnabled(false);
-                } else
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
-        leftHind = (ImageButton) view.findViewById(R.id.imageButtonLH);
-        leftHind.getLayoutParams().width = metrics.widthPixels / 4;
-        leftHind.requestLayout();
-        leftHind.setImageResource(R.drawable.lh);
-        leftHind.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (horseSelected == false)
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                } else if (horseshoePadSelected == true)
-                {
-                    final int selectedId = radioGroup.getCheckedRadioButtonId();
-                    final String horseShoePadId = ((RadioButton) view.findViewById(selectedId)).getText().toString();
-
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.confirm_pad_assignment)).setMessage("Set horseshoe pad " + ((RadioButton)
-                            view.findViewById(selectedId)).getText() + " to left hind foot?")
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    ArrayList<HorseHoof> horseHooves;
-                                    HorseHoof horseHoof = new HorseHoof("4", "LH");
-                                    horseHoof.setCurrentHorseShoePad(horseShoePadId);
-
-                                    if (horse.getHorseHooves() != null)
-                                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                                    else
-                                        horseHooves = new ArrayList<>();
-
-                                    horseHooves.add(horseHoof);
-                                    horse.setHorseHooves(horseHooves);
-                                    String horseshoePadAssignment = "Left Hind: " + ((RadioButton)
-                                            view.findViewById(selectedId)).getText();
-                                    if (TextUtils.isEmpty(textView1.getText().toString()))
-                                    {
-                                        textView1.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
-                                    {
-                                        textView2.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
-                                    {
-                                        textView3.setText(horseshoePadAssignment);
-                                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
-                                    {
-                                        textView4.setText(horseshoePadAssignment);
-                                    }
-                                    ((RadioButton) view.findViewById(selectedId)).setEnabled(false);
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                    horseshoePadSelected = false;
-                    leftHind.setEnabled(false);
-                } else
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
-        activatePadsButton = (Button) view.findViewById(R.id.buttonActivatePads);
-        activatePadsButton.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // CHANGED FROM 2 & 4 TO 1 & 4 FOR TESTING.
-                if (horse.getHorseHooves().size() == 1 || horse.getHorseHooves().size() == 4)
-                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
-                else
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
-                            //materialDialog.setBackgroundResource(R.drawable.background);
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
+        this.horseArray = horseList.toArray(new Horse[horseList.size()]);
         BeanManager.getInstance().startDiscovery(this);
+
+
 
         return view;
     }
@@ -696,8 +152,92 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     @Override
     public void onDiscoveryComplete()
     {
+        ArrayList<String> activatedPadIds;
+        ArrayList<String> padIds = new ArrayList<>();
+
         System.out.println("Total beans discovered: " + beans.size());
         Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
+
+        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
+
+        final SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                horseArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectHorseSpinner.setAdapter(adapter);
+
+        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            // boolean variable that is used so that the onItemSelected method is not executed
+            // on the first initializing round that happens when the class is created.
+            boolean initializing = true;
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if (initializing == false)
+                {
+                    horseSelected = true;
+                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+                    horse = spinnerAdapter.getHorse(position);
+
+                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                }
+                initializing = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
+
+        textView1 = (EditText) view.findViewById(R.id.textView1);
+        textView2 = (EditText) view.findViewById(R.id.textView2);
+        textView3 = (EditText) view.findViewById(R.id.textView3);
+        textView4 = (EditText) view.findViewById(R.id.textView4);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+
+        activatePadsButton = (Button) view.findViewById(R.id.buttonActivatePads);
+        activatePadsButton.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // CHANGED FROM 2 & 4 TO 1 & 4 FOR TESTING.
+                if (horse.getHorseHooves().size() == 1 || horse.getHorseHooves().size() == 4)
+                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                else
+                {
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_all_horseshoe_pads))
+                            //materialDialog.setBackgroundResource(R.drawable.background);
+                            .setPositiveButton("OK", new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
+                }
+            }
+        });
+
+        LinearLayout padIdLayout = (LinearLayout) view.findViewById(R.id.pad_id_Layout);
 
         if (beans.size() == 0)
         {
@@ -719,51 +259,28 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                     materialDialog.dismiss();
                 }
             }).show();
-        } else if (beans.size() == 1)
+        } else
         {
-            radioButton1.setVisibility(View.VISIBLE);
-        } else if (beans.size() == 2)
-        {
-            radioButton1.setVisibility(View.VISIBLE);
-            radioButton2.setVisibility(View.VISIBLE);
-        } else if (beans.size() == 3)
-        {
-            radioButton1.setVisibility(View.VISIBLE);
-            radioButton2.setVisibility(View.VISIBLE);
-            radioButton3.setVisibility(View.VISIBLE);
-        } else if (beans.size() == 4)
-        {
-            radioButton1.setVisibility(View.VISIBLE);
-            radioButton2.setVisibility(View.VISIBLE);
-            radioButton3.setVisibility(View.VISIBLE);
-            radioButton4.setVisibility(View.VISIBLE);
-        }
+            activatedPadIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.ACTIVATED_PAD_IDS);
 
-        for (int i = 0; i < beans.size(); i++)
-        {
-            ((RadioButton) radioGroup.getChildAt(i)).setText(beans.get(i).getDevice().getName());
-        }
-
-        if (beans.size() % 2 != 0)
-        {
-            final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-            materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.short_one_horseshoe_pad))
-                    //materialDialog.setBackgroundResource(R.drawable.background);
-                    .setPositiveButton("OK", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).setNegativeButton("CANCEL", new View.OnClickListener()
+            for (int i = 0; i < beans.size(); i++)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    materialDialog.dismiss();
-                }
-            }).show();
+                CheckBox checkBox = new CheckBox(getActivity());
+                checkBox.setId(i);
+                checkBox.setText(beans.get(i).getDevice().getName());
+                checkBox.setTextSize(getResources().getDimension(R.dimen.text_20sp));
+                checkBox.setTextColor(getResources().getColor(R.color.black));
+                checkBox.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                checkBox.setOnClickListener(this);
+
+                LinearLayout.LayoutParams checkParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                checkParams.setMargins(15, 15, 0, 0);
+
+                checkBox.setLayoutParams(checkParams);
+                padIdLayout.addView(checkBox);
+                dialog.dismiss();
+            }
         }
     }
 
@@ -801,6 +318,16 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     public void onError(BeanError error)
     {
 
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (((CheckBox) v).isChecked())
+        {
+            Toast.makeText(getActivity(),
+                    "Bro, try Android :)", Toast.LENGTH_LONG).show();
+        }
     }
 
     public interface OnFragmentInteractionListener

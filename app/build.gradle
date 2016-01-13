@@ -30,6 +30,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'me.drakeet.materialdialog:library:1.2.8'
+    compile 'com.github.d-max:spots-dialog:0.4@aar'
     compile 'com.nbarraille.loom:loom:0.1-alpha'
 
     compile('com.mikepenz:materialdrawer:4.6.3@aar') {

@@ -6,10 +6,7 @@ package com.sporthorsetech.horseshoepad.utility;
 public final class Constant
 {
     // FRAGMENT BUNDLE CONSTANTS.
-    public static final String ACTIVATE_PAD_ARG_PARAM1 = "activatePadArgParam1";
-    public static final String ACTIVATE_PAD_ARG_PARAM2 = "activatePadArgParam2";
-    public static final String NEW_HORSE_ARG_PARAM1 = "newHorseArgParam1";
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM_ID = "argItemId";
     public static final String BEANS = "*beans*";
     public static final String COMMAND = "command";
 
@@ -22,6 +19,7 @@ public final class Constant
     public static final String GAIT_IDS = "gaitIds";
     public static final String STEP_IDS = "stepIds";
     public static final String HORSE_NAMES = "horseNames";
+    public static final String ACTIVATED_PAD_IDS = "activatedPadIds";
 
     public static final int MAX_HORSES = 20;
 
