@@ -47,6 +47,7 @@ import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -205,27 +206,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 gait = new Gait(gaitId, selectGaitSpinner.getSelectedItem().toString());
                 System.out.println("GAIT: " + gait.getName());
-
-                String stepId = "-1";
-                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
-
-                if (stepIds == null || stepIds.size() == 0)
-                {
-                    stepId = "1";
-                    stepIds.add("1");
-                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
-                } else if (stepIds != null && stepIds.size() > 0)
-                {
-                    String lastId = stepIds.get(stepIds.size() - 1);
-                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
-                    stepIds.add(lastId);
-                    stepIds.add(stepId);
-                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
-                }
-
-                step = new Step(stepId);
-                System.out.println("STEP: " + step.getStoredObjectId());
-
 
             }
 
@@ -463,6 +443,31 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         System.out.println("-->Scratch value changed<--");
 
+        String stepId = "-1";
+        ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+        if (stepIds == null || stepIds.size() == 0)
+        {
+            stepId = "1";
+            stepIds.add("1");
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+        } else if (stepIds != null && stepIds.size() > 0)
+        {
+            String lastId = stepIds.get(stepIds.size() - 1);
+            stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+            stepIds.add(lastId);
+            stepIds.add(stepId);
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+        }
+
+        step = new Step(stepId);
+        System.out.println("STEP: " + step.getStoredObjectId());
+
+        HashMap<Long, Long> accelerationsX = step.getAccelerationsX();
+        HashMap<Long, Long> accelerationsY = step.getAccelerationsY();
+        HashMap<Long, Long> accelerationsZ = step.getAccelerationsZ();
+        HashMap<Long, Long> forceReadings = step.getForceReadings();
+
         String s = null;
         try
         {
@@ -473,19 +478,35 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             if (bankNumber == 0)
             {
                 System.out.println("BANK 1: " + s);
+
+                forceReadings.put(System.currentTimeMillis(), Long.parseLong(s));
             } else if (bankNumber == 1)
             {
                 System.out.println("BANK 2: " + s);
+                accelerationsX.put(System.currentTimeMillis(), Long.parseLong(s));
             } else if (bankNumber == 2)
             {
                 System.out.println("BANK 3: " + s);
+                accelerationsY.put(System.currentTimeMillis(), Long.parseLong(s));
             } else if (bankNumber == 3)
             {
                 System.out.println("BANK 4: " + s);
+                accelerationsZ.put(System.currentTimeMillis(), Long.parseLong(s));
             } else if (bankNumber == 4)
             {
                 System.out.println("BANK 5: " + s);
+                String[] hoof = s.split("-");
+                step.setHoof(hoof[0]);
             }
+
+            step.setForceReadings(forceReadings);
+            step.setAccelerationsX(accelerationsX);
+            step.setAccelerationsY(accelerationsY);
+            step.setAccelerationsZ(accelerationsZ);
+
+            List<Step> steps = gait.getSteps();
+            steps.add(step);
+            gait.setSteps(steps);
 
         } catch (UnsupportedEncodingException e)
         {
