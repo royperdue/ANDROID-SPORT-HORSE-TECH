@@ -351,21 +351,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuItem detectHorseshoePads = menu.add(Menu.NONE, Constant.DETECT_HORSESHOE_PADS, 0, getString(R.string.detect_horseshoe_pads));
-        detectHorseshoePads.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-
-        // TEMPORARY...
-        MenuItem bankData = menu.add(Menu.NONE, 200, 0, "Bank Data");
-        bankData.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        inflater.inflate(R.menu.menu_monitor, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
+        if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
             BeanManager.getInstance().startDiscovery(this);
-        } else if (item.getItemId() == 200)
+        }
+        else if (item.getItemId() == R.id.bank_data)
         {
             CommandTask commandTask = new CommandTask();
             commandTask.setBeans(beans);

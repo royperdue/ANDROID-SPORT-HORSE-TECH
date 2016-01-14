@@ -51,9 +51,11 @@
     <string name="average_acceleration_y">Average acceleration y axis</string>
     <string name="average_acceleration_z">Average acceleration z axis</string>
     <string name="average_stride_length">Average stride length</string>
+    <string name="horseshoe_pads_detected">Horseshoe Pads Detected</string>
 
     <!-- Menu items. -->
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>
+    <string name="bank_data">Bank Data</string>
 
     <!--Dialog titles-->
     <string name="confirm_pad_assignment">Please Confirm</string>

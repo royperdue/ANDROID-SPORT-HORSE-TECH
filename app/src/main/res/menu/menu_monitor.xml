@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.sporthorsetech.horseshoepad.MainActivity">
+    <item
+        android:id="@+id/detect_horseshoe_pads"
+        android:orderInCategory="100"
+        android:title="@string/detect_horseshoe_pads"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/bank_data"
+        android:orderInCategory="100"
+        android:title="@string/bank_data"
+        app:showAsAction="never"/>
+</menu>

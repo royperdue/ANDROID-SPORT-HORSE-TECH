@@ -138,14 +138,13 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     {
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuItem detectHorseshoePads = menu.add(Menu.NONE, Constant.DETECT_HORSESHOE_PADS, 0, getString(R.string.detect_horseshoe_pads));
-        detectHorseshoePads.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        inflater.inflate(R.menu.menu_activate, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == Constant.DETECT_HORSESHOE_PADS)
+        if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
             BeanManager.getInstance().startDiscovery(this);
         }
@@ -209,6 +208,17 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
+                horseSelected = true;
+
+                SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+
+                horse = spinnerAdapter.getItem(0);
+                Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                if (horse.getHorseHooves() != null)
+                    horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                else
+                    horseHooves = new ArrayList<>();
             }
         });
 
