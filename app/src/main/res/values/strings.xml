@@ -39,6 +39,7 @@
     <string name="begin_monitoring">Begin Monitoring</string>
     <string name="pause_monitoring">Pause Monitoring</string>
     <string name="change_gait">Change Gait</string>
+    <string name="view_x_acceleration">View X Acceleration</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>
@@ -52,6 +53,10 @@
     <string name="average_acceleration_z">Average acceleration z axis</string>
     <string name="average_stride_length">Average stride length</string>
     <string name="horseshoe_pads_detected">Horseshoe Pads Detected</string>
+    <string name="average_acceleration_left_hind">Average Acceleration Left Hind</string>
+    <string name="average_acceleration_left_front">Average Acceleration Left Front</string>
+    <string name="average_acceleration_right_hind">Average Acceleration Right Hind</string>
+    <string name="average_acceleration_right_front">Average Acceleration Right Front</string>
 
     <!-- Menu items. -->
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>
@@ -115,4 +120,5 @@
         <item>Lope</item>
         <item>Gallop</item>
     </string-array>
+    <string name="title_activity_acceleration_chart_x">AccelerationChartX</string>
 </resources>

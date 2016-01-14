@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/bank_data"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/bank_data"
         app:showAsAction="never"/>
 </menu>

@@ -1,10 +1,13 @@
 package com.sporthorsetech.horseshoepad;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +41,7 @@ import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.Gait;
 import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.equine.Step;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
@@ -45,19 +49,23 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
     private OnFragmentInteractionListener mListener;
     private List<Bean> beans = new ArrayList<>();
+    private EditText textView1;
+    private EditText textView2;
+    private EditText textView3;
+    private EditText textView4;
     private EditText gaitDetected;
     private EditText averageStrideLength;
     private EditText averageForce;
-    private EditText averageAccelerationX;
-    private EditText averageAccelerationY;
-    private EditText averageAccelerationZ;
     private Spinner selectHorseSpinner;
     private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
+    private Button viewAccelerationX;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
     private Button changeGaitButton;
@@ -66,6 +74,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Gait gait;
     private Step step;
     private ProgressBar progressBar;
+    private AlertDialog dialog;
 
     public GaitMonitorFragment()
     {
@@ -86,13 +95,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
-        averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
-        averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
-        averageAccelerationX = (EditText) view.findViewById(R.id.average_acceleration_x_edittext);
-        averageAccelerationY = (EditText) view.findViewById(R.id.average_acceleration_y_edittext);
-        averageAccelerationZ = (EditText) view.findViewById(R.id.average_acceleration_z_edittext);
-
+        textView1 = (EditText) view.findViewById(R.id.textView1);
+        textView2 = (EditText) view.findViewById(R.id.textView2);
+        textView3 = (EditText) view.findViewById(R.id.textView3);
+        textView4 = (EditText) view.findViewById(R.id.textView4);
 
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
         List<Horse> horseList = Database.with(getActivity().getApplicationContext())
@@ -117,6 +123,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (initializing == false)
                 {
+                    startBeanDiscovery();
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
                     horse = spinnerAdapter.getItem(position);
 
@@ -153,11 +160,27 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
+        viewAccelerationX = (Button) view.findViewById(R.id.view_x_acceleration_button);
+        viewAccelerationX.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+              startActivity(new Intent(getActivity(), AccelerationChartX.class));
+            }
+        });
+
+        gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
+        averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
+
+        averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
+
         selectGaitSpinner = (Spinner) view.findViewById(R.id.spinnerSelectGait);
         ArrayAdapter<CharSequence> adapterGait = ArrayAdapter.createFromResource(getActivity(),
                 R.array.gaits_array, android.R.layout.simple_spinner_item);
         adapterGait.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectGaitSpinner.setAdapter(adapterGait);
+
         selectGaitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -202,6 +225,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 step = new Step(stepId);
                 System.out.println("STEP: " + step.getStoredObjectId());
+
+
             }
 
             @Override
@@ -296,8 +321,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        BeanManager.getInstance().startDiscovery(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -383,8 +406,32 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onDiscoveryComplete()
     {
+        ArrayList<HorseHoof> horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
 
+        for (Bean bean :beans)
+        {
+            for (HorseHoof horseHoof : horseHooves)
+            {
+                if(bean.getDevice().getName().equals(horseHoof.getCurrentHorseShoePad()))
+                {
+                    if (TextUtils.isEmpty(textView1.getText().toString()))
+                    {
+                        textView1.setText(horseHoof.getCurrentHorseShoePad());
+                    } else if (TextUtils.isEmpty(textView2.getText().toString()))
+                    {
+                        textView2.setText(horseHoof.getCurrentHorseShoePad());
+                    } else if (TextUtils.isEmpty(textView3.getText().toString()))
+                    {
+                        textView3.setText(horseHoof.getCurrentHorseShoePad());
+                    } else if (TextUtils.isEmpty(textView4.getText().toString()))
+                    {
+                        textView4.setText(horseHoof.getCurrentHorseShoePad());
+                    }
+                }
 
+            }
+        }
+        dialog.dismiss();
     }
 
     @Override
@@ -451,7 +498,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
 
     }
-
 
     public interface OnFragmentInteractionListener
     {
@@ -521,5 +567,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         {
             this.beans = beans;
         }
+    }
+
+    private void startBeanDiscovery()
+    {
+        BeanManager.getInstance().startDiscovery(this);
+        this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+        dialog.show();
     }
 }
