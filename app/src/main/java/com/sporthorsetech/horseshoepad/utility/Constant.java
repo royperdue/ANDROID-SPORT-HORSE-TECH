@@ -28,4 +28,5 @@ public final class Constant
 
     public final static String TASK_NAME_COMMAND = "taskNameCommand";
     public final static String TASK_NAME_SET_BEAN_NAME = "taskNameSetBeanName";
+    public final static String TASK_NAME_QUERY = "taskNameQuery";
 }

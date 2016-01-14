@@ -14,6 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nbarraille.loom.Loom;
+import com.nbarraille.loom.Task;
+import com.nbarraille.loom.events.FailureEvent;
+import com.nbarraille.loom.events.ProgressEvent;
+import com.nbarraille.loom.events.SuccessEvent;
+import com.nbarraille.loom.listeners.GenericUiThreadListener;
+import com.nbarraille.loom.listeners.LoomListener;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
@@ -33,6 +40,7 @@ public class ItemListActivity extends AppCompatActivity
     public static List<Horse> horses;
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
+    private View recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,9 +63,12 @@ public class ItemListActivity extends AppCompatActivity
             }
         });
 
-        View recyclerView = findViewById(R.id.item_list);
+        recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        QueryTask queryTask = new QueryTask();
+        queryTask.setContext(this);
+        Loom.execute(queryTask);
 
         if (findViewById(R.id.item_detail_container) != null)
         {
@@ -71,7 +82,6 @@ public class ItemListActivity extends AppCompatActivity
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView)
     {
-        horses = Database.with(getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(horses));
     }
 
@@ -156,5 +166,69 @@ public class ItemListActivity extends AppCompatActivity
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
+    }
+
+    public static class QueryTask extends Task
+    {
+        Context context;
+
+        @Override
+        protected String name()
+        {
+            return Constant.TASK_NAME_QUERY;
+        }
+
+        @Override
+        protected void runTask() throws Exception
+        {
+            horses = Database.with(context).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        }
+
+        public void setContext(Context context)
+        {
+            this.context = context;
+        }
+    }
+
+    private LoomListener queryListener = new GenericUiThreadListener()
+    {
+        @Override
+        public void onSuccess(SuccessEvent event)
+        {
+            setupRecyclerView((RecyclerView) recyclerView);
+        }
+
+        @Override
+        public void onFailure(FailureEvent event)
+        {
+        }
+
+        @Override
+        public void onProgress(ProgressEvent event)
+        {
+        }
+
+        @NonNull
+        @Override
+        public String taskName()
+        {
+            return Constant.TASK_NAME_QUERY;
+        }
+    };
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        Loom.registerListener(queryListener);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        Loom.unregisterListener(queryListener);
     }
 }

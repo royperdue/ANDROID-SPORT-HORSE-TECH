@@ -1,10 +1,10 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,9 +73,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
     public static Fragment newInstance()
     {
-        GaitMonitorFragment fragment = new GaitMonitorFragment();
-
-        return fragment;
+        return new GaitMonitorFragment();
     }
 
     @Override
@@ -120,8 +118,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 if (initializing == false)
                 {
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
-                    horse = spinnerAdapter.getHorse(position);
-                    horse = spinnerAdapter.getHorse(position);
+                    horse = spinnerAdapter.getItem(position);
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
 

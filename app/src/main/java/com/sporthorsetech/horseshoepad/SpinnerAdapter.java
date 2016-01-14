@@ -21,6 +21,7 @@ public class SpinnerAdapter extends ArrayAdapter<Horse>
 {
     private Context context;
     private List<Horse> horseList;
+    private Horse[] horses;
 
     public SpinnerAdapter(Context context, int simple_spinner_item, Horse[] horses)
     {
@@ -28,14 +29,24 @@ public class SpinnerAdapter extends ArrayAdapter<Horse>
 
         this.context = context;
         horseList = new ArrayList<>();
+        this.horses = horses;
 
         horseList.addAll(Arrays.asList(horses));
+    }
+
+    public int getCount(){
+        return horses.length;
     }
 
     public long getItemId(int position)
     {
         return position;
     }
+
+    public Horse getItem(int position){
+        return horses[position];
+    }
+
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
@@ -60,11 +71,6 @@ public class SpinnerAdapter extends ArrayAdapter<Horse>
         textView.setText(horseList.get(position).getName());
 
         return textView;
-    }
-
-    public Horse getHorse(int position)
-    {
-        return horseList.get(position);
     }
 
     private float getTextSize()
