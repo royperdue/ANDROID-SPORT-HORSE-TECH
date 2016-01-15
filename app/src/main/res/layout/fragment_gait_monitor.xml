@@ -455,7 +455,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/pad_10dp"
                             android:singleLine="true"
-                            android:text="@string/left_hind"
+                            android:text="@string/left_front"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_16sp"/>
 
@@ -474,12 +474,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_x"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_x_lf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -504,12 +504,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_y"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_y_lf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -534,12 +534,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_z"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_z_lf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -587,7 +587,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/pad_10dp"
                             android:singleLine="true"
-                            android:text="@string/left_hind"
+                            android:text="@string/right_hind"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_16sp"/>
 
@@ -606,12 +606,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_x"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_x_rh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -636,12 +636,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_y"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_y_rh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -666,12 +666,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_z"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_z_rh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -710,7 +710,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/pad_10dp"
                             android:singleLine="true"
-                            android:text="@string/left_hind"
+                            android:text="@string/right_front"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_16sp"/>
 
@@ -729,12 +729,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_x"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_x_rf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -759,12 +759,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_y"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_y_rf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -789,12 +789,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_z"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_z_rf_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
