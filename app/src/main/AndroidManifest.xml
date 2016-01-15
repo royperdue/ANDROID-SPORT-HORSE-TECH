@@ -37,8 +37,7 @@
         </activity>
         <activity
             android:name=".AccelerationChartX"
-            android:label="@string/title_activity_acceleration_chart_x"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_acceleration_chart_x">
         </activity>
     </application>
 

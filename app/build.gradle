@@ -21,9 +21,6 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
-    maven { // this is for realm-db
-        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-    }
 }
 
 dependencies {
@@ -50,6 +47,5 @@ dependencies {
     compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
     compile 'com.mikepenz:octicons-typeface:3.2.0.1@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
-    compile 'io.realm:realm-android:0.84.0-SNAPSHOT'
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

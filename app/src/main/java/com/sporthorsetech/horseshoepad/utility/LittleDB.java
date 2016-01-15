@@ -6,6 +6,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +16,7 @@ import java.util.Map;
 public class LittleDB
 {
     private SharedPreferences preferences;
+    private static Gson GSON = new Gson();
     static LittleDB instance = null;
 
     public static LittleDB getInstance(Context appContext)
@@ -208,6 +211,32 @@ public class LittleDB
         }
 
         putListString(key, newList);
+    }
+
+    public void putObject(String key, Object object) {
+        if(object == null){
+            throw new IllegalArgumentException("object is null");
+        }
+
+        if(key.equals("") || key == null){
+            throw new IllegalArgumentException("key is empty or null");
+        }
+
+        preferences.edit().putString(key, GSON.toJson(object)).commit();
+    }
+
+    public <T> T getObject(String key, Class<T> a) {
+
+        String gson = preferences.getString(key, null);
+        if (gson == null) {
+            return null;
+        } else {
+            try{
+                return GSON.fromJson(gson, a);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Object stored with key " + key + " is instance of other class");
+            }
+        }
     }
 
     // Remove SharedPreferences item with 'key'.

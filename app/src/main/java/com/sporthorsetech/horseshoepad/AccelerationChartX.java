@@ -25,9 +25,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.filter.Approximator;
 import com.github.mikephil.charting.data.filter.Approximator.ApproximatorType;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.highlight.Highlight;
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.equine.AccelerationX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
     private LineChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
+    private ArrayList<Long> xAccelerationValuesRH = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,6 +50,16 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_acceleration_chart_x);
+
+        ArrayList<AccelerationX> xAccelerations = getIntent().getExtras()
+                .getParcelableArrayList(Constant.RIGHT_HIND_ACCELERATION_X_VALUES);
+
+        xAccelerationValuesRH = new ArrayList<>();
+
+        for (AccelerationX accelerationX : xAccelerations)
+        {
+            xAccelerationValuesRH.add(accelerationX.getAccelerationX());
+        }
 
         tvX = (TextView) findViewById(R.id.tvXMax);
         tvY = (TextView) findViewById(R.id.tvYMax);
@@ -61,30 +74,26 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
 
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
-
         // no description text
         mChart.setDescription("");
         mChart.setNoDataTextDescription("You need to provide data for the chart.");
-
         // enable touch gestures
         mChart.setTouchEnabled(true);
-
         mChart.setDragDecelerationFrictionCoef(0.9f);
-
         // enable scaling and dragging
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
         mChart.setDrawGridBackground(false);
         mChart.setHighlightPerDragEnabled(true);
-
         // if disabled, scaling can be done on x- and y-axis separately
         mChart.setPinchZoom(true);
-
         // set an alternative background color
         mChart.setBackgroundColor(Color.LTGRAY);
 
+
         // add data
         setData(20, 30);
+
 
         mChart.animateX(2500);
 
@@ -113,16 +122,8 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(ColorTemplate.getHoloBlue());
-        leftAxis.setAxisMaxValue(200f);
+        leftAxis.setAxisMaxValue(1200f);
         leftAxis.setDrawGridLines(true);
-
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setTypeface(tf);
-        rightAxis.setTextColor(Color.RED);
-        rightAxis.setAxisMaxValue(900);
-        rightAxis.setStartAtZero(false);
-        rightAxis.setAxisMinValue(-200);
-        rightAxis.setDrawGridLines(false);
     }
 
     @Override
@@ -300,9 +301,9 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
 
     private void setData(int count, float range)
     {
-
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count * 4; i++) {
+        for (int i = 0; i < count * 4; i++)
+        {
             xVals.add((i) + "");
         }
 
@@ -320,7 +321,7 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals1, "Left Hind");
         set1.setAxisDependency(AxisDependency.LEFT);
-        set1.setColor(ColorTemplate.getHoloBlue());
+        set1.setColors(ColorTemplate.COLORFUL_COLORS);
         set1.setCircleColor(Color.WHITE);
         set1.setLineWidth(2f);
         set1.setCircleSize(3f);
@@ -346,36 +347,32 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
 
         // create a dataset and give it a type
         LineDataSet set2 = new LineDataSet(yVals2, "Left Front");
-        set2.setAxisDependency(AxisDependency.RIGHT);
-        set2.setColor(Color.RED);
+        set2.setAxisDependency(AxisDependency.LEFT);
+        set2.setColors(ColorTemplate.JOYFUL_COLORS);
         set2.setCircleColor(Color.WHITE);
         set2.setLineWidth(2f);
         set2.setCircleSize(3f);
         set2.setFillAlpha(65);
-        set2.setFillColor(Color.RED);
+        set2.setFillColor(ColorTemplate.getHoloBlue());
         set2.setDrawCircleHole(false);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
 
         ArrayList<Entry> yVals3 = new ArrayList<Entry>();
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < xAccelerationValuesRH.size(); i++)
         {
-            float mult = range;
-            float val = (float) (Math.random() * mult) + 200;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            yVals3.add(new Entry(val, i));
+            yVals3.add(new Entry(xAccelerationValuesRH.get(i), i));
         }
 
         // create a dataset and give it a type
         LineDataSet set3 = new LineDataSet(yVals3, "Right Hind");
-        set2.setAxisDependency(AxisDependency.RIGHT);
-        set2.setColor(Color.GREEN);
+        set2.setAxisDependency(AxisDependency.LEFT);
+        set2.setColors(ColorTemplate.VORDIPLOM_COLORS);
         set2.setCircleColor(Color.WHITE);
         set2.setLineWidth(2f);
         set2.setCircleSize(3f);
         set2.setFillAlpha(65);
-        set2.setFillColor(Color.GREEN);
+        set2.setFillColor(ColorTemplate.getHoloBlue());
         set2.setDrawCircleHole(false);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
 
@@ -392,13 +389,13 @@ public class AccelerationChartX extends AppCompatActivity implements OnSeekBarCh
 
         // create a dataset and give it a type
         LineDataSet set4 = new LineDataSet(yVals4, "Right Front");
-        set2.setAxisDependency(AxisDependency.RIGHT);
-        set2.setColor(Color.YELLOW);
+        set2.setAxisDependency(AxisDependency.LEFT);
+        set2.setColors(ColorTemplate.LIBERTY_COLORS);
         set2.setCircleColor(Color.WHITE);
         set2.setLineWidth(2f);
         set2.setCircleSize(3f);
         set2.setFillAlpha(65);
-        set2.setFillColor(Color.YELLOW);
+        set2.setFillColor(ColorTemplate.getHoloBlue());
         set2.setDrawCircleHole(false);
         set2.setHighLightColor(Color.rgb(244, 117, 117));
 

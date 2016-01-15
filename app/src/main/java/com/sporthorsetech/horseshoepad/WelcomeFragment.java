@@ -86,7 +86,7 @@ public class WelcomeFragment extends Fragment
 
                                 for (Step step : gait.getSteps())
                                 {
-                                    stringBuilder.append("STEP: " + step.getStoredObjectId() + " ");
+                                    stringBuilder.append("STEP: " + step.getStoredObjectId() + " " + "STEP HOOF: " + step.getHoof());
                                 }
                             }
                         }

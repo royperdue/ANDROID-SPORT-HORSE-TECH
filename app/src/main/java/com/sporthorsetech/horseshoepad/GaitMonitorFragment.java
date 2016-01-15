@@ -38,6 +38,10 @@ import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.equine.AccelerationX;
+import com.sporthorsetech.horseshoepad.utility.equine.AccelerationY;
+import com.sporthorsetech.horseshoepad.utility.equine.AccelerationZ;
+import com.sporthorsetech.horseshoepad.utility.equine.Force;
 import com.sporthorsetech.horseshoepad.utility.equine.Gait;
 import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
@@ -47,7 +51,6 @@ import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -72,8 +75,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Button changeGaitButton;
     private Horse horse;
     private GaitActivity gaitActivity;
-    private Gait gait;
-    private Step step;
     private ProgressBar progressBar;
     private AlertDialog dialog;
 
@@ -124,7 +125,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (initializing == false)
                 {
-                    startBeanDiscovery();
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
                     horse = spinnerAdapter.getItem(position);
 
@@ -151,6 +151,43 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                     System.out.println("GAIT ACTIVITY ID: " + gaitActivity.getStoredObjectId());
 
+                    // NEED TO CHANGE WHEN ADD CALIBRATE GAITS FUNCTIONALITY.
+                    String gaitId = "-1";
+                    ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
+
+                    if (gaitIds == null || gaitIds.size() == 0)
+                    {
+                        gaitId = "1";
+                        gaitIds.add("1");
+                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+                    } else if (gaitIds != null && gaitIds.size() > 0)
+                    {
+                        String lastId = gaitIds.get(gaitIds.size() - 1);
+                        gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
+                        gaitIds.add(lastId);
+                        gaitIds.add(gaitId);
+                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+                    }
+
+                    Gait gait = new Gait(gaitId, "Trot");
+                    System.out.println("GAIT: " + gait.getName());
+
+                    List<Step> steps = new ArrayList<Step>();
+                    gait.setSteps(steps);
+
+                    List<Gait> gaits = new ArrayList<Gait>();
+                    gaits.add(gait);
+                    gaitActivity.setGaits(gaits);
+
+                    List<GaitActivity> gaitActivities = new ArrayList<GaitActivity>();
+                    gaitActivities.add(gaitActivity);
+
+                    horse.setGaitActivities(gaitActivities);
+
+                    //Database.with(getActivity().getApplicationContext()).saveObject(horse);
+
+                    startBeanDiscovery();
+
                 }
                 initializing = false;
             }
@@ -158,16 +195,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-            }
-        });
-
-        viewAccelerationX = (Button) view.findViewById(R.id.view_x_acceleration_button);
-        viewAccelerationX.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-              startActivity(new Intent(getActivity(), AccelerationChartX.class));
             }
         });
 
@@ -187,7 +214,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                String gaitId = "-1";
+                /*String gaitId = "-1";
                 ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
 
                 if (gaitIds == null || gaitIds.size() == 0)
@@ -205,7 +232,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 }
 
                 gait = new Gait(gaitId, selectGaitSpinner.getSelectedItem().toString());
-                System.out.println("GAIT: " + gait.getName());
+                System.out.println("GAIT: " + gait.getName());*/
 
             }
 
@@ -263,6 +290,16 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
+                /*ArrayList<Gait> gaits = (ArrayList<Gait>) gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                ArrayList<GaitActivity> gaitActivities = (ArrayList<GaitActivity>) horse.getGaitActivities();
+                gaitActivities.add(gaitActivity);
+                horse.setGaitActivities(gaitActivities);
+
+                Database.with(getActivity().getApplicationContext()).saveObject(horse);*/
+
                 CommandTask commandTask = new CommandTask();
                 commandTask.setBeans(beans);
                 commandTask.setCommand("PAUSE_READINGS");
@@ -278,11 +315,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                ArrayList<Step> steps = (ArrayList<Step>) gait.getSteps();
-                steps.add(step);
-                gait.setSteps(steps);
 
-                ArrayList<Gait> gaits = (ArrayList<Gait>) gaitActivity.getGaits();
+                /*ArrayList<Gait> gaits = (ArrayList<Gait>) gaitActivity.getGaits();
                 gaits.add(gait);
                 gaitActivity.setGaits(gaits);
 
@@ -290,7 +324,45 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 gaitActivities.add(gaitActivity);
                 horse.setGaitActivities(gaitActivities);
 
+                Database.with(getActivity().getApplicationContext()).saveObject(horse);*/
+            }
+        });
+
+        viewAccelerationX = (Button) view.findViewById(R.id.view_x_acceleration_button);
+        viewAccelerationX.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                GaitActivity gaitActivity = gaitActivities.get(0);
+                List<Gait> gaits = gaitActivity.getGaits();
+                Gait gait = gaits.get(0);
+                ArrayList<AccelerationX> rightHindAccelerationXvalues = new ArrayList<>();
+
+                for (Step step : gait.getSteps())
+                {
+                    if(step.getHoof().equals("RH"))
+                    {
+                        rightHindAccelerationXvalues.add(step.getAccelerationX());
+                    }
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(Constant.RIGHT_HIND_ACCELERATION_X_VALUES, rightHindAccelerationXvalues);
+
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                gaitActivities.add(gaitActivity);
+                horse.setGaitActivities(gaitActivities);
+
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);
+
+                Intent intent = new Intent(getActivity(), AccelerationChartX.class);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
             }
         });
 
@@ -363,8 +435,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
             BeanManager.getInstance().startDiscovery(this);
-        }
-        else if (item.getItemId() == R.id.bank_data)
+        } else if (item.getItemId() == R.id.bank_data)
         {
             CommandTask commandTask = new CommandTask();
             commandTask.setBeans(beans);
@@ -388,11 +459,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         ArrayList<HorseHoof> horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
 
-        for (Bean bean :beans)
+        for (Bean bean : beans)
         {
             for (HorseHoof horseHoof : horseHooves)
             {
-                if(bean.getDevice().getName().equals(horseHoof.getCurrentHorseShoePad()))
+                if (bean.getDevice().getName().equals(horseHoof.getCurrentHorseShoePad()))
                 {
                     if (TextUtils.isEmpty(textView1.getText().toString()))
                     {
@@ -443,31 +514,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         System.out.println("-->Scratch value changed<--");
 
-        String stepId = "-1";
-        ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
-
-        if (stepIds == null || stepIds.size() == 0)
-        {
-            stepId = "1";
-            stepIds.add("1");
-            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
-        } else if (stepIds != null && stepIds.size() > 0)
-        {
-            String lastId = stepIds.get(stepIds.size() - 1);
-            stepId = String.valueOf(Integer.parseInt(lastId) + 1);
-            stepIds.add(lastId);
-            stepIds.add(stepId);
-            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
-        }
-
-        step = new Step(stepId);
-        System.out.println("STEP: " + step.getStoredObjectId());
-
-        HashMap<Long, Long> accelerationsX = step.getAccelerationsX();
-        HashMap<Long, Long> accelerationsY = step.getAccelerationsY();
-        HashMap<Long, Long> accelerationsZ = step.getAccelerationsZ();
-        HashMap<Long, Long> forceReadings = step.getForceReadings();
-
         String s = null;
         try
         {
@@ -478,35 +524,97 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             if (bankNumber == 0)
             {
                 System.out.println("BANK 1: " + s);
-
-                forceReadings.put(System.currentTimeMillis(), Long.parseLong(s));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putObject(Constant.FORCE_READING, new
+                        Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s)))));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.FORCE_READING_BOOLEAN, true);
             } else if (bankNumber == 1)
             {
                 System.out.println("BANK 2: " + s);
-                accelerationsX.put(System.currentTimeMillis(), Long.parseLong(s));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putObject(Constant.ACCELERATION_X_READING, new
+                        AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s)))));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_X_READING_BOOLEAN, true);
             } else if (bankNumber == 2)
             {
                 System.out.println("BANK 3: " + s);
-                accelerationsY.put(System.currentTimeMillis(), Long.parseLong(s));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putObject(Constant.ACCELERATION_Y_READING,
+                        new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s)))));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_Y_READING_BOOLEAN, true);
             } else if (bankNumber == 3)
             {
                 System.out.println("BANK 4: " + s);
-                accelerationsZ.put(System.currentTimeMillis(), Long.parseLong(s));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putObject(Constant.ACCELERATION_Z_READING,
+                        new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s)))));
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_Z_READING_BOOLEAN, true);
             } else if (bankNumber == 4)
             {
                 System.out.println("BANK 5: " + s);
                 String[] hoof = s.split("-");
-                step.setHoof(hoof[0]);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putString(Constant.PAD_ID_READING, hoof[0]);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.PAD_ID_READING_BOOLEAN, true);
+                System.out.println("HOOF: " + hoof[0]);
             }
 
-            step.setForceReadings(forceReadings);
-            step.setAccelerationsX(accelerationsX);
-            step.setAccelerationsY(accelerationsY);
-            step.setAccelerationsZ(accelerationsZ);
+            if (LittleDB.getInstance(getActivity().getApplicationContext()).getBoolean(Constant.FORCE_READING_BOOLEAN, false) &&
+                    LittleDB.getInstance(getActivity().getApplicationContext()).getBoolean(Constant.ACCELERATION_X_READING_BOOLEAN, false) &&
+                    LittleDB.getInstance(getActivity().getApplicationContext()).getBoolean(Constant.ACCELERATION_Y_READING_BOOLEAN, false) &&
+                LittleDB.getInstance(getActivity().getApplicationContext()).getBoolean(Constant.ACCELERATION_Z_READING_BOOLEAN, false) &&
+                        LittleDB.getInstance(getActivity().getApplicationContext()).getBoolean(Constant.PAD_ID_READING_BOOLEAN, false))
 
-            List<Step> steps = gait.getSteps();
-            steps.add(step);
-            gait.setSteps(steps);
+            {
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                GaitActivity gaitActivity = gaitActivities.get(0);
+                List<Gait> gaits = gaitActivity.getGaits();
+                Gait gait = gaits.get(0);
+
+                String stepId = "-1";
+                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+                if (stepIds == null || stepIds.size() == 0)
+                {
+                    stepId = "1";
+                    stepIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                } else if (stepIds != null && stepIds.size() > 0)
+                {
+                    String lastId = stepIds.get(stepIds.size() - 1);
+                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    stepIds.add(lastId);
+                    stepIds.add(stepId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+
+                Step step = new Step(stepId);
+                System.out.println("STEP: " + step.getStoredObjectId());
+
+                Force force = LittleDB.getInstance(getActivity().getApplicationContext()).getObject(Constant.FORCE_READING, Force.class);
+                AccelerationX accelerationX = LittleDB.getInstance(getActivity().getApplicationContext()).getObject(Constant.ACCELERATION_X_READING, AccelerationX.class);
+                AccelerationY accelerationY = LittleDB.getInstance(getActivity().getApplicationContext()).getObject(Constant.ACCELERATION_Y_READING, AccelerationY.class);
+                AccelerationZ accelerationZ = LittleDB.getInstance(getActivity().getApplicationContext()).getObject(Constant.ACCELERATION_Z_READING, AccelerationZ.class);
+                String padId = LittleDB.getInstance(getActivity().getApplicationContext()).getString(Constant.PAD_ID_READING);
+
+                step.setForce(force);
+                step.setAccelerationX(accelerationX);
+                step.setAccelerationY(accelerationY);
+                step.setAccelerationZ(accelerationZ);
+                step.setHoof(padId);
+
+                List<Step> steps = gait.getSteps();
+                steps.add(step);
+                gait.setSteps(steps);
+
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                gaitActivities.add(gaitActivity);
+
+                horse.setGaitActivities(gaitActivities);
+
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.FORCE_READING_BOOLEAN, false);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_X_READING_BOOLEAN, false);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_Y_READING_BOOLEAN, false);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.ACCELERATION_Z_READING_BOOLEAN, false);
+                LittleDB.getInstance(getActivity().getApplicationContext()).putBoolean(Constant.PAD_ID_READING_BOOLEAN, false);
+            }
 
         } catch (UnsupportedEncodingException e)
         {

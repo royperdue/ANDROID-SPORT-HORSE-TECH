@@ -3,7 +3,6 @@ package com.sporthorsetech.horseshoepad.utility.equine;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import com.sporthorsetech.horseshoepad.utility.persist.SearchableTagValuePair;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,10 +14,10 @@ public class Step implements Database.StoredObject
     String id;
     String hoof;
     Long timeCreated;
-    HashMap<Long, Long> accelerationsX;
-    HashMap<Long, Long> accelerationsY;
-    HashMap<Long, Long> accelerationsZ;
-    HashMap<Long, Long> forceReadings;
+    private AccelerationX accelerationX;
+    private AccelerationY accelerationY;
+    private AccelerationZ accelerationZ;
+    private Force force;
 
     public enum TYPE implements Database.StoredObject.TYPE
     {
@@ -44,21 +43,10 @@ public class Step implements Database.StoredObject
         }
     }
 
-    public Step(String id, String hoof, HashMap<Long, Long> accelerationsX, HashMap<Long, Long> accelerationsY,
-                HashMap<Long, Long> accelerationsZ, HashMap<Long, Long> forceReadings)
-    {
-        this.id = id;
-        this.hoof = hoof;
-        this.timeCreated = System.currentTimeMillis();
-        this.accelerationsX = accelerationsX;
-        this.accelerationsY = accelerationsY;
-        this.accelerationsZ = accelerationsZ;
-        this.forceReadings = forceReadings;
-    }
-
     public Step(String id)
     {
         this.id = id;
+        this.timeCreated = System.currentTimeMillis();
     }
 
     public TYPE getStoredObjectType()
@@ -102,44 +90,44 @@ public class Step implements Database.StoredObject
         this.timeCreated = timeCreated;
     }
 
-    public HashMap<Long, Long> getAccelerationsX()
+    public AccelerationX getAccelerationX()
     {
-        return accelerationsX;
+        return accelerationX;
     }
 
-    public void setAccelerationsX(HashMap<Long, Long> accelerationsX)
+    public void setAccelerationX(AccelerationX accelerationX)
     {
-        this.accelerationsX = accelerationsX;
+        this.accelerationX = accelerationX;
     }
 
-    public HashMap<Long, Long> getAccelerationsY()
+    public AccelerationY getAccelerationY()
     {
-        return accelerationsY;
+        return accelerationY;
     }
 
-    public void setAccelerationsY(HashMap<Long, Long> accelerationsY)
+    public void setAccelerationY(AccelerationY accelerationY)
     {
-        this.accelerationsY = accelerationsY;
+        this.accelerationY = accelerationY;
     }
 
-    public HashMap<Long, Long> getAccelerationsZ()
+    public AccelerationZ getAccelerationZ()
     {
-        return accelerationsZ;
+        return accelerationZ;
     }
 
-    public void setAccelerationsZ(HashMap<Long, Long> accelerationsZ)
+    public void setAccelerationZ(AccelerationZ accelerationZ)
     {
-        this.accelerationsZ = accelerationsZ;
+        this.accelerationZ = accelerationZ;
     }
 
-    public HashMap<Long, Long> getForceReadings()
+    public Force getForce()
     {
-        return forceReadings;
+        return force;
     }
 
-    public void setForceReadings(HashMap<Long, Long> forceReadings)
+    public void setForce(Force force)
     {
-        this.forceReadings = forceReadings;
+        this.force = force;
     }
 
     // Return a list of tags that you want to be able to search for this object by.

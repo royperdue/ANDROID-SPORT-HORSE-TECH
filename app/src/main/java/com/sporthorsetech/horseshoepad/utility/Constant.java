@@ -10,6 +10,9 @@ public final class Constant
     public static final String BEANS = "*beans*";
     public static final String COMMAND = "command";
 
+    // ACTIVITY BUNDLE CONSTANTS.
+    public static final String RIGHT_HIND_ACCELERATION_X_VALUES = "rightHindAccelerationXValues";
+
     public static final String ARG_COLUMN_COUNT = "column-count";
 
     // LittleDB CONSTANTS.
@@ -20,6 +23,16 @@ public final class Constant
     public static final String STEP_IDS = "stepIds";
     public static final String HORSE_NAMES = "horseNames";
     public static final String ACTIVATED_PAD_IDS = "activatedPadIds";
+    public static final String FORCE_READING = "forceReading";
+    public static final String ACCELERATION_X_READING = "xAccelerationReading";
+    public static final String ACCELERATION_Y_READING = "yAccelerationReading";
+    public static final String ACCELERATION_Z_READING = "zAccelerationReading";
+    public static final String PAD_ID_READING = "padIdReading";
+    public static final String FORCE_READING_BOOLEAN = "forceReadingBoolean";
+    public static final String ACCELERATION_X_READING_BOOLEAN = "xAccelerationReadingBoolean";
+    public static final String ACCELERATION_Y_READING_BOOLEAN = "yAccelerationReadingBoolean";
+    public static final String ACCELERATION_Z_READING_BOOLEAN = "zAccelerationReadingBoolean";
+    public static final String PAD_ID_READING_BOOLEAN = "padIdReadingBoolean";
 
     public static final int MAX_HORSES = 20;
 
