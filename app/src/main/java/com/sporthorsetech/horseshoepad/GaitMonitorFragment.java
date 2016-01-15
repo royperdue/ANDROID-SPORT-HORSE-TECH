@@ -98,16 +98,51 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private GaitActivity gaitActivity;
     private Gait gait;
     private Step step;
-    private Force forceReading;
-    private boolean forceRead = false;
-    private AccelerationX xAccelerationReading;
-    private boolean xAccelerationRead = false;
-    private AccelerationY yAccelerationReading;
-    private boolean yAccelerationRead = false;
-    private AccelerationZ zAccelerationReading;
-    private boolean zAccelerationRead = false;
-    private String padIdReading = "";
-    private boolean padIdRead = false;
+    
+    private Force forceReadingLH;
+    private boolean forceReadLH = false;
+    private AccelerationX xAccelerationReadingLH;
+    private boolean xAccelerationReadLH = false;
+    private AccelerationY yAccelerationReadingLH;
+    private boolean yAccelerationReadLH = false;
+    private AccelerationZ zAccelerationReadingLH;
+    private boolean zAccelerationReadLH = false;
+    private String padIdReadingLH = "";
+    private boolean padIdReadLH = false;
+
+    private Force forceReadingLF;
+    private boolean forceReadLF = false;
+    private AccelerationX xAccelerationReadingLF;
+    private boolean xAccelerationReadLF = false;
+    private AccelerationY yAccelerationReadingLF;
+    private boolean yAccelerationReadLF = false;
+    private AccelerationZ zAccelerationReadingLF;
+    private boolean zAccelerationReadLF = false;
+    private String padIdReadingLF = "";
+    private boolean padIdReadLF = false;
+
+    private Force forceReadingRH;
+    private boolean forceReadRH = false;
+    private AccelerationX xAccelerationReadingRH;
+    private boolean xAccelerationReadRH = false;
+    private AccelerationY yAccelerationReadingRH;
+    private boolean yAccelerationReadRH = false;
+    private AccelerationZ zAccelerationReadingRH;
+    private boolean zAccelerationReadRH = false;
+    private String padIdReadingRH = "";
+    private boolean padIdReadRH = false;
+
+    private Force forceReadingRF;
+    private boolean forceReadRF = false;
+    private AccelerationX xAccelerationReadingRF;
+    private boolean xAccelerationReadRF = false;
+    private AccelerationY yAccelerationReadingRF;
+    private boolean yAccelerationReadRF = false;
+    private AccelerationZ zAccelerationReadingRF;
+    private boolean zAccelerationReadRF = false;
+    private String padIdReadingRF = "";
+    private boolean padIdReadRF = false;
+    
     private ProgressBar progressBar;
     private AlertDialog dialog;
 
@@ -575,40 +610,130 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
             int bankNumber = bank.getRawValue();
 
-            if (bankNumber == 0 && forceRead == false)
+            if (bankNumber == 0)
             {
-                System.out.println("BANK 1: " + s);
-                forceReading = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s))));
-                forceRead = true;
-            } else if (bankNumber == 1 && xAccelerationRead == false)
+                String[] pad = s.split("-");
+                System.out.println("BANK 1 PAD ID: " + pad[0]);
+                
+                if (pad[0].equals("LH"))
+                {
+                    System.out.println("BANK 1: " + s);
+                    forceReadingLH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    forceReadLH = true;
+                }
+                else if (pad[0].equals("LF"))
+                {
+                    System.out.println("BANK 1: " + s);
+                    forceReadingLF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    forceReadLF = true;
+                }
+                else if (pad[0].equals("RH"))
+                {
+                    System.out.println("BANK 1: " + s);
+                    forceReadingRH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    forceReadRH = true;
+                }
+                else if (pad[0].equals("RF"))
+                {
+                    System.out.println("BANK 1: " + s);
+                    forceReadingRF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    forceReadRF = true;
+                }
+            } else if (bankNumber == 1)
             {
-                System.out.println("BANK 2: " + s);
-                xAccelerationReading = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s))));
-                xAccelerationRead = true;
-            } else if (bankNumber == 2 && yAccelerationRead == false)
-            {
-                System.out.println("BANK 3: " + s);
-                yAccelerationReading = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s))));
-                yAccelerationRead = true;
-            } else if (bankNumber == 3 && zAccelerationRead == false)
-            {
-                System.out.println("BANK 4: " + s);
-                zAccelerationReading = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(s))));
-                zAccelerationRead = true;
-            } else if (bankNumber == 4 && padIdRead == false)
-            {
-                System.out.println("BANK 5: " + s);
-                String[] hoof = s.split("-");
-                padIdReading = hoof[0];
-                padIdRead = true;
-                System.out.println("HOOF: " + hoof[0]);
-            }
+                String[] pad = s.split("-");
+                System.out.println("BANK 2 PAD ID: " + pad[0]);
 
-            if (forceRead == true && xAccelerationRead == true && yAccelerationRead == true
-                    && zAccelerationRead == true && padIdRead == true)
+                if (pad[0].equals("LH"))
+                {
+                    System.out.println("BANK 2: " + s);
+                    xAccelerationReadingLH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    xAccelerationReadLH = true;
+                }
+                else if (pad[0].equals("LF"))
+                {
+                    System.out.println("BANK 2: " + s);
+                    xAccelerationReadingLF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    xAccelerationReadLF = true;
+                }
+                else if (pad[0].equals("RH"))
+                {
+                    System.out.println("BANK 2: " + s);
+                    xAccelerationReadingRH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    xAccelerationReadRH = true;
+                }
+                else if (pad[0].equals("RF"))
+                {
+                    System.out.println("BANK 2: " + s);
+                    xAccelerationReadingRF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    xAccelerationReadRF = true;
+                }
+            } else if (bankNumber == 2)
             {
+                String[] pad = s.split("-");
+                System.out.println("BANK 3 PAD ID: " + pad[0]);
+
+                if (pad[0].equals("LH"))
+                {
+                    System.out.println("BANK 3: " + s);
+                    yAccelerationReadingLH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    yAccelerationReadLH = true;
+                }
+                else if (pad[0].equals("LF"))
+                {
+                    System.out.println("BANK 3: " + s);
+                    yAccelerationReadingLF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    yAccelerationReadLF = true;
+                }
+                else if (pad[0].equals("RH"))
+                {
+                    System.out.println("BANK 3: " + s);
+                    yAccelerationReadingRH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    yAccelerationReadRH = true;
+                }
+                else if (pad[0].equals("RF"))
+                {
+                    System.out.println("BANK 3: " + s);
+                    yAccelerationReadingRF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    yAccelerationReadRF = true;
+                }
+            } else if (bankNumber == 3)
+            {
+                String[] pad = s.split("-");
+                System.out.println("BANK 4 PAD ID: " + pad[0]);
+
+                if (pad[0].equals("LH"))
+                {
+                    System.out.println("BANK 4: " + s);
+                    zAccelerationReadingLH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    zAccelerationReadLH = true;
+                }
+                else if (pad[0].equals("LF"))
+                {
+                    System.out.println("BANK 4: " + s);
+                    zAccelerationReadingLF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    zAccelerationReadLF = true;
+                }
+                else if (pad[0].equals("RH"))
+                {
+                    System.out.println("BANK 4: " + s);
+                    zAccelerationReadingRH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    zAccelerationReadRH = true;
+                }
+                else if (pad[0].equals("RF"))
+                {
+                    System.out.println("BANK 4: " + s);
+                    zAccelerationReadingRF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
+                    zAccelerationReadRF = true;
+                }
+            } 
+
+            if (forceReadLH == true && xAccelerationReadLH == true && yAccelerationReadLH == true
+                    && zAccelerationReadLH == true)
+            {
+                System.out.println("-->ALL READINGS HAVE BEEN READ LH<--");
                 List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                GaitActivity gaitActivity = gaitActivities.get(0);
+                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
                 List<Gait> gaits = gaitActivity.getGaits();
                 gait = gaits.get(gaits.size() - 1);
 
@@ -632,54 +757,204 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 step = new Step(stepId);
                 System.out.println("STEP: " + step.getStoredObjectId());
 
-                step.setForce(forceReading);
-                step.setAccelerationX(xAccelerationReading);
-                step.setAccelerationY(yAccelerationReading);
-                step.setAccelerationZ(zAccelerationReading);
-                step.setHoof(padIdReading);
+                step.setForce(forceReadingLH);
+                step.setAccelerationX(xAccelerationReadingLH);
+                step.setAccelerationY(yAccelerationReadingLH);
+                step.setAccelerationZ(zAccelerationReadingLH);
+                step.setHoof("LH");
 
-                if (padIdReading.equals("LH"))
-                {
-                    forceLH.setText(String.valueOf(forceReading.getForce()));
-                    xAxisAccelerationLH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
-                    yAxisAccelerationLH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
-                    zAxisAccelerationLH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                } else if (padIdReading.equals("LF"))
-                {
-                    forceLF.setText(String.valueOf(forceReading.getForce()));
-                    xAxisAccelerationLF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
-                    yAxisAccelerationLF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
-                    zAxisAccelerationLF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                } else if (padIdReading.equals("RH"))
-                {
-                    forceRH.setText(String.valueOf(forceReading.getForce()));
-                    xAxisAccelerationRH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
-                    yAxisAccelerationRH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
-                    zAxisAccelerationRH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                } else if (padIdReading.equals("RF"))
-                {
-                    forceRF.setText(String.valueOf(forceReading.getForce()));
-                    xAxisAccelerationRF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
-                    yAxisAccelerationRF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
-                    zAxisAccelerationRF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                }
+                forceLH.setText(String.valueOf(forceReadingLH.getForce()));
+                xAxisAccelerationLH.setText(String.valueOf(xAccelerationReadingLH.getAccelerationX()));
+                yAxisAccelerationLH.setText(String.valueOf(yAccelerationReadingLH.getAccelerationY()));
+                zAxisAccelerationLH.setText(String.valueOf(zAccelerationReadingLH.getAccelerationZ()));
 
                 List<Step> steps = gait.getSteps();
                 steps.add(step);
                 gait.setSteps(steps);
 
-                gaits.add(gait);
-                gaitActivity.setGaits(gaits);
+                //gaits.add(gait);
+                //gaitActivity.setGaits(gaits);
 
-                gaitActivities.add(gaitActivity);
+                //gaitActivities.add(gaitActivity);
 
-                horse.setGaitActivities(gaitActivities);
+                //horse.setGaitActivities(gaitActivities);
 
-                forceRead = false;
-                xAccelerationRead = false;
-                yAccelerationRead = false;
-                zAccelerationRead = false;
-                padIdRead = false;
+                forceReadLH = false;
+                xAccelerationReadLH = false;
+                yAccelerationReadLH = false;
+                zAccelerationReadLH = false;
+                padIdReadLH = false;
+            }
+            else if (forceReadLF == true && xAccelerationReadLF == true && yAccelerationReadLF == true
+                    && zAccelerationReadLF == true)
+            {
+                System.out.println("-->ALL READINGS HAVE BEEN READ LF<--");
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
+                List<Gait> gaits = gaitActivity.getGaits();
+                gait = gaits.get(gaits.size() - 1);
+
+                String stepId = "-1";
+                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+                if (stepIds == null || stepIds.size() == 0)
+                {
+                    stepId = "1";
+                    stepIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                } else if (stepIds != null && stepIds.size() > 0)
+                {
+                    String lastId = stepIds.get(stepIds.size() - 1);
+                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    stepIds.add(lastId);
+                    stepIds.add(stepId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+
+                step = new Step(stepId);
+                System.out.println("STEP: " + step.getStoredObjectId());
+
+                step.setForce(forceReadingLF);
+                step.setAccelerationX(xAccelerationReadingLF);
+                step.setAccelerationY(yAccelerationReadingLF);
+                step.setAccelerationZ(zAccelerationReadingLF);
+                step.setHoof("LF");
+
+                forceLF.setText(String.valueOf(forceReadingLF.getForce()));
+                xAxisAccelerationLF.setText(String.valueOf(xAccelerationReadingLF.getAccelerationX()));
+                yAxisAccelerationLF.setText(String.valueOf(yAccelerationReadingLF.getAccelerationY()));
+                zAxisAccelerationLF.setText(String.valueOf(zAccelerationReadingLF.getAccelerationZ()));
+
+                List<Step> steps = gait.getSteps();
+                steps.add(step);
+                gait.setSteps(steps);
+
+                //gaits.add(gait);
+                //gaitActivity.setGaits(gaits);
+
+                //gaitActivities.add(gaitActivity);
+
+                //horse.setGaitActivities(gaitActivities);
+
+                forceReadLF = false;
+                xAccelerationReadLF = false;
+                yAccelerationReadLF = false;
+                zAccelerationReadLF = false;
+                padIdReadLF = false;
+            }
+            else if (forceReadRH == true && xAccelerationReadRH == true && yAccelerationReadRH == true
+                    && zAccelerationReadRH == true)
+            {
+                System.out.println("-->ALL READINGS HAVE BEEN READ RH<--");
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
+                List<Gait> gaits = gaitActivity.getGaits();
+                gait = gaits.get(gaits.size() - 1);
+
+                String stepId = "-1";
+                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+                if (stepIds == null || stepIds.size() == 0)
+                {
+                    stepId = "1";
+                    stepIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                } else if (stepIds != null && stepIds.size() > 0)
+                {
+                    String lastId = stepIds.get(stepIds.size() - 1);
+                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    stepIds.add(lastId);
+                    stepIds.add(stepId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+
+                step = new Step(stepId);
+                System.out.println("STEP: " + step.getStoredObjectId());
+
+                step.setForce(forceReadingRH);
+                step.setAccelerationX(xAccelerationReadingRH);
+                step.setAccelerationY(yAccelerationReadingRH);
+                step.setAccelerationZ(zAccelerationReadingRH);
+                step.setHoof("RH");
+
+                forceRH.setText(String.valueOf(forceReadingRH.getForce()));
+                xAxisAccelerationRH.setText(String.valueOf(xAccelerationReadingRH.getAccelerationX()));
+                yAxisAccelerationRH.setText(String.valueOf(yAccelerationReadingRH.getAccelerationY()));
+                zAxisAccelerationRH.setText(String.valueOf(zAccelerationReadingRH.getAccelerationZ()));
+
+                List<Step> steps = gait.getSteps();
+                steps.add(step);
+                gait.setSteps(steps);
+
+                //gaits.add(gait);
+                //gaitActivity.setGaits(gaits);
+
+                //gaitActivities.add(gaitActivity);
+
+                //horse.setGaitActivities(gaitActivities);
+
+                forceReadRH = false;
+                xAccelerationReadRH = false;
+                yAccelerationReadRH = false;
+                zAccelerationReadRH = false;
+                padIdReadRH = false;
+            }
+            else if (forceReadRF == true && xAccelerationReadRF == true && yAccelerationReadRF == true
+                    && zAccelerationReadRF == true)
+            {
+                System.out.println("-->ALL READINGS HAVE BEEN READ RF<--");
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
+                List<Gait> gaits = gaitActivity.getGaits();
+                gait = gaits.get(gaits.size() - 1);
+
+                String stepId = "-1";
+                ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
+
+                if (stepIds == null || stepIds.size() == 0)
+                {
+                    stepId = "1";
+                    stepIds.add("1");
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                } else if (stepIds != null && stepIds.size() > 0)
+                {
+                    String lastId = stepIds.get(stepIds.size() - 1);
+                    stepId = String.valueOf(Integer.parseInt(lastId) + 1);
+                    stepIds.add(lastId);
+                    stepIds.add(stepId);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.STEP_IDS, stepIds);
+                }
+
+                step = new Step(stepId);
+                System.out.println("STEP: " + step.getStoredObjectId());
+
+                step.setForce(forceReadingRF);
+                step.setAccelerationX(xAccelerationReadingRF);
+                step.setAccelerationY(yAccelerationReadingRF);
+                step.setAccelerationZ(zAccelerationReadingRF);
+                step.setHoof("RF");
+
+                forceRF.setText(String.valueOf(forceReadingRF.getForce()));
+                xAxisAccelerationRF.setText(String.valueOf(xAccelerationReadingRF.getAccelerationX()));
+                yAxisAccelerationRF.setText(String.valueOf(yAccelerationReadingRF.getAccelerationY()));
+                zAxisAccelerationRF.setText(String.valueOf(zAccelerationReadingRF.getAccelerationZ()));
+
+                List<Step> steps = gait.getSteps();
+                steps.add(step);
+                gait.setSteps(steps);
+
+                //gaits.add(gait);
+                //gaitActivity.setGaits(gaits);
+
+                //gaitActivities.add(gaitActivity);
+
+                //horse.setGaitActivities(gaitActivities);
+
+                forceReadRF = false;
+                xAccelerationReadRF = false;
+                yAccelerationReadRF = false;
+                zAccelerationReadRF = false;
+                padIdReadRF = false;
             }
 
         } catch (UnsupportedEncodingException e)
