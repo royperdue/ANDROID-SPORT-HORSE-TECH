@@ -63,6 +63,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private EditText textView3;
     private EditText textView4;
 
+    private EditText forceLH;
+    private EditText forceLF;
+    private EditText forceRH;
+    private EditText forceRF;
+
     private EditText xAxisAccelerationLH;
     private EditText yAxisAccelerationLH;
     private EditText zAxisAccelerationLH;
@@ -129,6 +134,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         textView2 = (EditText) view.findViewById(R.id.textView2);
         textView3 = (EditText) view.findViewById(R.id.textView3);
         textView4 = (EditText) view.findViewById(R.id.textView4);
+
+        forceLH = (EditText) view.findViewById(R.id.force_lh_edittext);
+        forceLF = (EditText) view.findViewById(R.id.force_lf_edittext);
+        forceRH = (EditText) view.findViewById(R.id.force_rh_edittext);
+        forceRF = (EditText) view.findViewById(R.id.force_rf_edittext);
 
         xAxisAccelerationLH = (EditText) view.findViewById(R.id.axis_x_lh_edittext);
         yAxisAccelerationLH = (EditText) view.findViewById(R.id.axis_y_lh_edittext);
@@ -627,27 +637,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 step.setAccelerationY(yAccelerationReading);
                 step.setAccelerationZ(zAccelerationReading);
                 step.setHoof(padIdReading);
-                
+
                 if (padIdReading.equals("LH"))
                 {
-                     xAxisAccelerationLH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
-                     yAxisAccelerationLH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
-                     zAxisAccelerationLH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                }
-                else if (padIdReading.equals("LF"))
+                    forceLH.setText(String.valueOf(forceReading.getForce()));
+                    xAxisAccelerationLH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
+                    yAxisAccelerationLH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
+                    zAxisAccelerationLH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
+                } else if (padIdReading.equals("LF"))
                 {
+                    forceLF.setText(String.valueOf(forceReading.getForce()));
                     xAxisAccelerationLF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
                     yAxisAccelerationLF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
                     zAxisAccelerationLF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                }
-                else if (padIdReading.equals("RH"))
+                } else if (padIdReading.equals("RH"))
                 {
+                    forceRH.setText(String.valueOf(forceReading.getForce()));
                     xAxisAccelerationRH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
                     yAxisAccelerationRH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
                     zAxisAccelerationRH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
-                }
-                else if (padIdReading.equals("RF"))
+                } else if (padIdReading.equals("RF"))
                 {
+                    forceRF.setText(String.valueOf(forceReading.getForce()));
                     xAxisAccelerationRF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
                     yAxisAccelerationRF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
                     zAxisAccelerationRF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
