@@ -53,10 +53,14 @@
     <string name="average_acceleration_z">Average acceleration z axis</string>
     <string name="average_stride_length">Average stride length</string>
     <string name="horseshoe_pads_detected">Horseshoe Pads Detected</string>
-    <string name="average_acceleration_left_hind">Average Acceleration Left Hind</string>
-    <string name="average_acceleration_left_front">Average Acceleration Left Front</string>
-    <string name="average_acceleration_right_hind">Average Acceleration Right Hind</string>
-    <string name="average_acceleration_right_front">Average Acceleration Right Front</string>
+    <string name="average_acceleration_left_hind">Avg. Acceleration Left Hind</string>
+    <string name="average_acceleration_left_front">Avg. Acceleration Left Front</string>
+    <string name="average_acceleration_right_hind">Avg. Acceleration Right Hind</string>
+    <string name="average_acceleration_right_front">Avg. Acceleration Right Front</string>
+    <string name="average_accelerations">Average Accelerations:</string>
+    <string name="axis_x">X Axis:</string>
+    <string name="axis_y">Y Axis:</string>
+    <string name="axis_z">Z Axis:</string>
 
     <!-- Menu items. -->
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>

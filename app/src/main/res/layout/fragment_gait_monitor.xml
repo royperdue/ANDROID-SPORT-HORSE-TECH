@@ -293,12 +293,24 @@
             android:background="@drawable/border"
             android:cropToPadding="true"
             android:orientation="vertical"
-            android:padding="1dp">
+            android:padding="1dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_accelerations"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
                 <!--holds 2 that hold 3-->
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -306,7 +318,7 @@
                     android:orientation="vertical">
                     <!--holds 3-->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/pad_5dp"
                         android:background="@drawable/border"
@@ -325,7 +337,7 @@
                             android:textSize="@dimen/text_16sp"/>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/pad_5dp"
                             android:background="@drawable/border"
@@ -339,12 +351,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_x"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_x_lh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -369,12 +381,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_y"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_y_lh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -399,12 +411,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/pad_10dp"
                                 android:singleLine="true"
-                                android:text="@string/average_force"
+                                android:text="@string/axis_z"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
                             <EditText
-                                android:id="@+id/average_force_edittext"
+                                android:id="@+id/axis_z_lh_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -425,11 +437,11 @@
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
-                        
+
                     </LinearLayout>
                     <!--holds 3-->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/pad_5dp"
                         android:background="@drawable/border"
@@ -561,7 +573,7 @@
                     android:orientation="vertical">
                     <!--holds 3-->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/pad_5dp"
                         android:background="@drawable/border"
@@ -684,7 +696,7 @@
                     </LinearLayout>
                     <!--holds 3-->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/pad_5dp"
                         android:background="@drawable/border"
