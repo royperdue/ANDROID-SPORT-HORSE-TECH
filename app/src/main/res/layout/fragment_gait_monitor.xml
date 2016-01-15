@@ -301,7 +301,314 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/pad_10dp"
                 android:singleLine="true"
-                android:text="@string/average_accelerations"
+                android:text="@string/average_force_readings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_16sp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <!--holds 2 that hold 3-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/force_lh_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_front"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/force_lf_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                </LinearLayout>
+                <!--holds 2 that hold 3-->
+
+                <!--holds 2 that hold 3-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/right_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/force_rh_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/right_front"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/force_rf_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                </LinearLayout>
+                <!--holds 2 that hold 3-->
+
+            </LinearLayout>
+            <!--horizontal-->
+        </LinearLayout>
+        <!--start-->
+
+        <!--Start acceleration readings.-->
+
+        <!--start-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad_5dp"
+            android:layout_marginTop="@dimen/pad_30dp"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:orientation="vertical"
+            android:padding="1dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/pad_10dp"
+                android:singleLine="true"
+                android:text="@string/average_acceleration_readings"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_16sp"
                 android:textStyle="bold"/>
