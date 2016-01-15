@@ -627,6 +627,31 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 step.setAccelerationY(yAccelerationReading);
                 step.setAccelerationZ(zAccelerationReading);
                 step.setHoof(padIdReading);
+                
+                if (padIdReading.equals("LH"))
+                {
+                     xAxisAccelerationLH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
+                     yAxisAccelerationLH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
+                     zAxisAccelerationLH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
+                }
+                else if (padIdReading.equals("LF"))
+                {
+                    xAxisAccelerationLF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
+                    yAxisAccelerationLF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
+                    zAxisAccelerationLF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
+                }
+                else if (padIdReading.equals("RH"))
+                {
+                    xAxisAccelerationRH.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
+                    yAxisAccelerationRH.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
+                    zAxisAccelerationRH.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
+                }
+                else if (padIdReading.equals("RF"))
+                {
+                    xAxisAccelerationRF.setText(String.valueOf(xAccelerationReading.getAccelerationX()));
+                    yAxisAccelerationRF.setText(String.valueOf(yAccelerationReading.getAccelerationY()));
+                    zAxisAccelerationRF.setText(String.valueOf(zAccelerationReading.getAccelerationZ()));
+                }
 
                 List<Step> steps = gait.getSteps();
                 steps.add(step);
