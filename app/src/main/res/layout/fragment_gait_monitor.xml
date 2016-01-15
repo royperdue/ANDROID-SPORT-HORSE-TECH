@@ -186,6 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/pad_5dp"
+            android:layout_marginBottom="@dimen/pad_10dp"
             android:layout_marginTop="@dimen/pad_30dp"
             android:background="@drawable/border"
             android:cropToPadding="true"
@@ -264,6 +265,7 @@
                 android:id="@+id/average_force_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/pad_10dp"
                 android:layout_marginLeft="@dimen/pad_10dp"
                 android:layout_marginRight="@dimen/pad_10dp"
                 android:layout_marginTop="@dimen/pad_5dp"
@@ -280,75 +282,606 @@
                 android:singleLine="true"
                 android:textSize="@dimen/text_22sp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/pad_5dp"
-                android:layout_marginTop="@dimen/pad_30dp"
-                android:layout_marginBottom="@dimen/pad_30dp"
-                android:background="@drawable/border"
-                android:cropToPadding="true"
-                android:orientation="vertical"
-                android:padding="1dp">
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/view_x_acceleration_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_20dp"
-                    android:paddingLeft="@dimen/pad_15dp"
-                    android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_20dp"
-                    android:text="@string/view_x_acceleration"/>
-
-            </LinearLayout>
+        <!--start-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad_5dp"
+            android:layout_marginTop="@dimen/pad_30dp"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:orientation="vertical"
+            android:padding="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pad_40dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/begin_monitoring_button"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal">
+                <!--holds 2 that hold 3-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_20dp"
-                    android:paddingLeft="@dimen/pad_15dp"
-                    android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_20dp"
-                    android:text="@string/begin_monitoring"/>
+                    android:orientation="vertical">
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
 
-                <Button
-                    android:id="@+id/pause_monitoring_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_20dp"
-                    android:paddingLeft="@dimen/pad_15dp"
-                    android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_20dp"
-                    android:text="@string/pause_monitoring"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
 
-                <Button
-                    android:id="@+id/change_gait_button"
-                    android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+                        
+                    </LinearLayout>
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                </LinearLayout>
+                <!--holds 2 that hold 3-->
+
+                <!--holds 2 that hold 3-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"
-                    android:paddingBottom="@dimen/pad_20dp"
-                    android:paddingLeft="@dimen/pad_15dp"
-                    android:paddingRight="@dimen/pad_15dp"
-                    android:paddingTop="@dimen/pad_20dp"
-                    android:text="@string/change_gait"/>
+                    android:orientation="vertical">
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/pad_5dp"
+                        android:background="@drawable/border"
+                        android:cropToPadding="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_10dp"
+                            android:singleLine="true"
+                            android:text="@string/left_hind"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16sp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad_5dp"
+                            android:background="@drawable/border"
+                            android:cropToPadding="true"
+                            android:orientation="vertical"
+                            android:padding="1dp">
+
+                            <!--This is where the text boxes for x, y, z, accelerations go.-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:singleLine="true"
+                                android:text="@string/average_force"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_16sp"/>
+
+                            <EditText
+                                android:id="@+id/average_force_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/pad_10dp"
+                                android:layout_marginLeft="@dimen/pad_10dp"
+                                android:layout_marginRight="@dimen/pad_10dp"
+                                android:layout_marginTop="@dimen/pad_5dp"
+                                android:background="@drawable/border"
+                                android:clickable="false"
+                                android:cropToPadding="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:padding="1dp"
+                                android:paddingLeft="@dimen/pad_15dp"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_22sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--holds 3-->
+                </LinearLayout>
+                <!--holds 2 that hold 3-->
 
             </LinearLayout>
+            <!--horizontal-->
+        </LinearLayout>
+        <!--start-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad_5dp"
+            android:layout_marginBottom="@dimen/pad_30dp"
+            android:layout_marginTop="@dimen/pad_30dp"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:orientation="vertical"
+            android:padding="1dp">
+
+            <Button
+                android:id="@+id/view_x_acceleration_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:text="@string/view_x_acceleration"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pad_40dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/begin_monitoring_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:text="@string/begin_monitoring"/>
+
+            <Button
+                android:id="@+id/pause_monitoring_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:text="@string/pause_monitoring"/>
+
+            <Button
+                android:id="@+id/change_gait_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:text="@string/change_gait"/>
 
         </LinearLayout>
     </LinearLayout>
