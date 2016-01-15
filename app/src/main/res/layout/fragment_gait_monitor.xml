@@ -303,7 +303,8 @@
                 android:singleLine="true"
                 android:text="@string/average_accelerations"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_16sp"/>
+                android:textSize="@dimen/text_16sp"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
