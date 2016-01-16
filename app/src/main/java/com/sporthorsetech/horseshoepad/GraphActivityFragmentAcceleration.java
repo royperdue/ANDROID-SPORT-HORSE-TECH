@@ -1,6 +1,7 @@
 package com.sporthorsetech.horseshoepad;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sporthorsetech.horseshoepad.custom.CustomMarkerView;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
@@ -188,16 +188,26 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
         tvX.setText("" + (mSeekBarX.getProgress() * 3));
         tvY.setText("" + (mSeekBarY.getProgress()));
 
-        List<GaitActivity> gaitActivities = horse.getGaitActivities();
-        GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
-        List<Gait> gaits = gaitActivity.getGaits();
-        Gait gait = gaits.get(gaits.size() - 1);
-        List<Step> steps = gait.getSteps();
-
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
+
+        List<GaitActivity> gaitActivities = horse.getGaitActivities();
+        GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
+        List<Gait> gaits = gaitActivity.getGaits();
+        List<Step> steps = new ArrayList<>();
+        //Gait gait = gaits.get(gaits.size() - 1);
+
+        for (Gait gait : gaits)
+        {
+            List<Step> s = gait.getSteps();
+
+            for (int i = 0; i < s.size(); i++)
+            {
+                steps.add(s.get(i));
+            }
+        }
 
         for (int i = 0; i < mSeekBarX.getProgress(); i++)
         {
@@ -210,17 +220,18 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
             }
         }
 
+
         float mult = mSeekBarY.getProgress() * 1000f;
 
         // create 3 datasets with different types
         BarDataSet set1 = new BarDataSet(yVals1, "Acceleration X");
-        set1.setColors(ColorTemplate.COLORFUL_COLORS);
+        set1.setColor(Color.rgb(255, 0, 102));
 
         BarDataSet set2 = new BarDataSet(yVals2, "Acceleration Y");
-        set2.setColors(ColorTemplate.COLORFUL_COLORS);
+        set2.setColor(Color.rgb(0, 102, 255));
 
         BarDataSet set3 = new BarDataSet(yVals3, "Acceleration Z");
-        set3.setColors(ColorTemplate.COLORFUL_COLORS);
+        set3.setColor(Color.rgb(153, 0, 255));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set1);

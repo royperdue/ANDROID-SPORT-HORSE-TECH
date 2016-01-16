@@ -254,17 +254,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     gait = new Gait(gaitId, "Trot");
                     System.out.println("GAIT: " + gait.getName());
 
-                    BeanManager.getInstance().cancelDiscovery();
-
-                    for (Bean bean : beans)
-                    {
-                        if (bean.isConnected())
-                        {
-                            bean.disconnect();
-                        }
-                    }
-
-                    startBeanDiscovery();
+                    //startBeanDiscovery();
 
                 }
                 initializing = false;
@@ -424,16 +414,19 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
-                    List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                    List<Gait> gaits = gaitActivity.getGaits();
-                    gaits.add(gait);
-                    gaitActivity.setGaits(gaits);
+                    if (gait.getSteps().size() > 0)
+                    {
+                        List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                        List<Gait> gaits = gaitActivity.getGaits();
+                        gaits.add(gait);
+                        gaitActivity.setGaits(gaits);
 
-                    gaitActivities.add(gaitActivity);
+                        gaitActivities.add(gaitActivity);
 
-                    horse.setGaitActivities(gaitActivities);
+                        horse.setGaitActivities(gaitActivities);
 
-                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                        Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                    }
 
                     Bundle bundle = new Bundle();
                     bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_ACCELERATION);
@@ -473,16 +466,19 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
-                    List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                    List<Gait> gaits = gaitActivity.getGaits();
-                    gaits.add(gait);
-                    gaitActivity.setGaits(gaits);
+                    if (gait.getSteps().size() > 0)
+                    {
+                        List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                        List<Gait> gaits = gaitActivity.getGaits();
+                        gaits.add(gait);
+                        gaitActivity.setGaits(gaits);
 
-                    gaitActivities.add(gaitActivity);
+                        gaitActivities.add(gaitActivity);
 
-                    horse.setGaitActivities(gaitActivities);
+                        horse.setGaitActivities(gaitActivities);
 
-                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                        Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                    }
 
                     Bundle bundle = new Bundle();
                     bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
@@ -577,10 +573,31 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
-            BeanManager.getInstance().cancelDiscovery();
-            BeanManager.getInstance().startDiscovery(this);
-            this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
-            dialog.show();
+            if (horseSelected == true)
+            {
+                BeanManager.getInstance().startDiscovery(this);
+                this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+                dialog.show();
+            } else if (horseSelected == false)
+            {
+                final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                        .setPositiveButton("OK", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                materialDialog.dismiss();
+                            }
+                        }).setNegativeButton("CANCEL", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        materialDialog.dismiss();
+                    }
+                }).show();
+            }
         } else if (item.getItemId() == R.id.bank_data)
         {
             new CommandThread(beans, Constant.BANK_DATA);

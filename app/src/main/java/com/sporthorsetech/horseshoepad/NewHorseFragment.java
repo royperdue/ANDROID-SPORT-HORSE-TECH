@@ -30,6 +30,7 @@ public class NewHorseFragment extends Fragment
     private Spinner horseBreedSpinner;
     private Spinner equestrianSportSpinner;
     private Button createHorseProfileButton;
+    private Button activateHorseshoePadsButton;
     private EditText horseNameEditText;
     private EditText horseAgeEditText;
     private EditText horseHeightEditText;
@@ -131,6 +132,15 @@ public class NewHorseFragment extends Fragment
             public void onClick(View v)
             {
                 createHorseProfile();
+            }
+        });
+
+        activateHorseshoePadsButton = (Button) view.findViewById(R.id.activate_horseshoe_pads_button);
+        activateHorseshoePadsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 String title = getString(R.string.activate_horseshoe_pads);

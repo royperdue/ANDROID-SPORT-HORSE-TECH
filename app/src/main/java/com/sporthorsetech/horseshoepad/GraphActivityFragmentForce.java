@@ -1,6 +1,7 @@
 package com.sporthorsetech.horseshoepad;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sporthorsetech.horseshoepad.custom.CustomMarkerView;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
@@ -210,7 +210,7 @@ public class GraphActivityFragmentForce extends Fragment implements SeekBar.OnSe
 
         // create 3 datasets with different types
         BarDataSet set1 = new BarDataSet(yVals1, "Force");
-        set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        set1.setColor(Color.rgb(0, 0, 255));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set1);

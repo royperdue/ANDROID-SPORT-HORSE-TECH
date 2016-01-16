@@ -6,7 +6,7 @@
         android:id="@+id/detect_horseshoe_pads"
         android:orderInCategory="100"
         android:title="@string/detect_horseshoe_pads"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/bank_data"

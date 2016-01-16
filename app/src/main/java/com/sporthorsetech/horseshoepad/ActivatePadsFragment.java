@@ -310,6 +310,17 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             @Override
             public void onClick(View v)
             {
+
+                BeanManager.getInstance().cancelDiscovery();
+
+                for (Bean bean : beans)
+                {
+                    if (bean.isConnected())
+                    {
+                        bean.disconnect();
+                    }
+                }
+
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 String title = getString(R.string.monitor_gait_activity);

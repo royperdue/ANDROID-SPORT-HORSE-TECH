@@ -186,6 +186,18 @@
                 android:paddingTop="@dimen/pad_20dp"
                 android:paddingBottom="@dimen/pad_20dp"
                 android:gravity="center"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_20dp"
+                android:text="@string/activate_pads"
+                android:id="@+id/activate_horseshoe_pads_button"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:paddingRight="@dimen/pad_10dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:gravity="center"/>
         </LinearLayout>
 
     </LinearLayout>
