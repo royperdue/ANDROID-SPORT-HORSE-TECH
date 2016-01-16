@@ -50,6 +50,7 @@ import com.sporthorsetech.horseshoepad.utility.equine.Step;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,25 +66,25 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private EditText textView4;
 
     private TextView forceLH;
-    private EditText forceLF;
-    private EditText forceRH;
-    private EditText forceRF;
+    private TextView forceLF;
+    private TextView forceRH;
+    private TextView forceRF;
 
-    private EditText xAxisAccelerationLH;
-    private EditText yAxisAccelerationLH;
-    private EditText zAxisAccelerationLH;
+    private TextView xAxisAccelerationLH;
+    private TextView yAxisAccelerationLH;
+    private TextView zAxisAccelerationLH;
 
-    private EditText xAxisAccelerationLF;
-    private EditText yAxisAccelerationLF;
-    private EditText zAxisAccelerationLF;
+    private TextView xAxisAccelerationLF;
+    private TextView yAxisAccelerationLF;
+    private TextView zAxisAccelerationLF;
 
-    private EditText xAxisAccelerationRH;
-    private EditText yAxisAccelerationRH;
-    private EditText zAxisAccelerationRH;
+    private TextView xAxisAccelerationRH;
+    private TextView yAxisAccelerationRH;
+    private TextView zAxisAccelerationRH;
 
-    private EditText xAxisAccelerationRF;
-    private EditText yAxisAccelerationRF;
-    private EditText zAxisAccelerationRF;
+    private TextView xAxisAccelerationRF;
+    private TextView yAxisAccelerationRF;
+    private TextView zAxisAccelerationRF;
 
     private EditText gaitDetected;
     private EditText averageStrideLength;
@@ -163,26 +164,25 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         textView4 = (EditText) view.findViewById(R.id.textView4);
 
         forceLH = (TextView) view.findViewById(R.id.force_lh_textview);
-        forceLH.setText("Text...");
-        forceLF = (EditText) view.findViewById(R.id.force_lf_edittext);
-        forceRH = (EditText) view.findViewById(R.id.force_rh_edittext);
-        forceRF = (EditText) view.findViewById(R.id.force_rf_edittext);
+        forceLF = (TextView) view.findViewById(R.id.force_lf_textview);
+        forceRH = (TextView) view.findViewById(R.id.force_rh_textview);
+        forceRF = (TextView) view.findViewById(R.id.force_rf_textview);
 
-        xAxisAccelerationLH = (EditText) view.findViewById(R.id.axis_x_lh_edittext);
-        yAxisAccelerationLH = (EditText) view.findViewById(R.id.axis_y_lh_edittext);
-        zAxisAccelerationLH = (EditText) view.findViewById(R.id.axis_z_lh_edittext);
+        xAxisAccelerationLH = (TextView) view.findViewById(R.id.axis_x_lh_textview);
+        yAxisAccelerationLH = (TextView) view.findViewById(R.id.axis_y_lh_textview);
+        zAxisAccelerationLH = (TextView) view.findViewById(R.id.axis_z_lh_textview);
 
-        xAxisAccelerationLF = (EditText) view.findViewById(R.id.axis_x_lf_edittext);
-        yAxisAccelerationLF = (EditText) view.findViewById(R.id.axis_y_lf_edittext);
-        zAxisAccelerationLF = (EditText) view.findViewById(R.id.axis_z_lf_edittext);
+        xAxisAccelerationLF = (TextView) view.findViewById(R.id.axis_x_lf_textview);
+        yAxisAccelerationLF = (TextView) view.findViewById(R.id.axis_y_lf_textview);
+        zAxisAccelerationLF = (TextView) view.findViewById(R.id.axis_z_lf_textview);
 
-        xAxisAccelerationRH = (EditText) view.findViewById(R.id.axis_x_rh_edittext);
-        yAxisAccelerationRH = (EditText) view.findViewById(R.id.axis_y_rh_edittext);
-        zAxisAccelerationRH = (EditText) view.findViewById(R.id.axis_z_rh_edittext);
+        xAxisAccelerationRH = (TextView) view.findViewById(R.id.axis_x_rh_textview);
+        yAxisAccelerationRH = (TextView) view.findViewById(R.id.axis_y_rh_textview);
+        zAxisAccelerationRH = (TextView) view.findViewById(R.id.axis_z_rh_textview);
 
-        xAxisAccelerationRF = (EditText) view.findViewById(R.id.axis_x_rf_edittext);
-        yAxisAccelerationRF = (EditText) view.findViewById(R.id.axis_y_rf_edittext);
-        zAxisAccelerationRF = (EditText) view.findViewById(R.id.axis_z_rf_edittext);
+        xAxisAccelerationRF = (TextView) view.findViewById(R.id.axis_x_rf_textview);
+        yAxisAccelerationRF = (TextView) view.findViewById(R.id.axis_y_rf_textview);
+        zAxisAccelerationRF = (TextView) view.findViewById(R.id.axis_z_rf_textview);
 
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
         List<Horse> horseList = Database.with(getActivity().getApplicationContext())
@@ -594,6 +594,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         System.out.println("-->Scratch value changed<--");
 
+        DecimalFormat decimalFormat = new DecimalFormat("#.####");
         String s = null;
         try
         {
@@ -610,28 +611,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    forceLH.setText(pad[1]);
+                    forceLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    forceLF.setText(pad[1]);
+                    forceLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    forceRH.setText(pad[1]);
+                    forceRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    forceRF.setText(pad[1]);
+                    forceRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadRF = true;
                 }
             } else if (bankNumber == 1)
@@ -643,28 +644,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    xAxisAccelerationLH.setText(pad[1]);
+                    xAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    xAxisAccelerationLF.setText(pad[1]);
+                    xAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    xAxisAccelerationRH.setText(pad[1]);
+                    xAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    xAxisAccelerationRF.setText(pad[1]);
+                    xAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadRF = true;
                 }
             } else if (bankNumber == 2)
@@ -676,28 +677,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    yAxisAccelerationLH.setText(pad[1]);
+                    yAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    yAxisAccelerationLF.setText(pad[1]);
+                    yAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    yAxisAccelerationRH.setText(pad[1]);
+                    yAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    yAxisAccelerationRF.setText(pad[1]);
+                    yAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadRF = true;
                 }
             } else if (bankNumber == 3)
@@ -709,28 +710,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    zAxisAccelerationLH.setText(pad[1]);
+                    zAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    zAxisAccelerationLF.setText(pad[1]);
+                    zAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    zAxisAccelerationRH.setText(pad[1]);
+                    zAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    zAxisAccelerationRF.setText(pad[1]);
+                    zAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadRF = true;
                 }
             } 
