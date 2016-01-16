@@ -147,6 +147,14 @@
                 android:layout_marginTop="@dimen/pad_30dp"
                 android:text="@string/activate_pads"
                 />
+
+            <Button
+                android:id="@+id/monitor_gait_activity_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_30dp"
+                android:text="@string/monitor_gait_activity"
+                />
         </LinearLayout>
 
     </LinearLayout>

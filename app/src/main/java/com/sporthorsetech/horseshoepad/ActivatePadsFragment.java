@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,6 +62,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     private EditText textView4;
     private Spinner selectHorseSpinner;
     private Button activatePadsButton;
+    private Button monitorGaitActivityButton;
     private Horse horse;
     private ArrayList<String> padIdsToDisplay;
     private ArrayList<Integer> isCheckedList = new ArrayList<>();
@@ -297,6 +300,23 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                     }).show();
                 }
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);
+            }
+        });
+
+        monitorGaitActivityButton = (Button) view.findViewById(R.id.monitor_gait_activity_button);
+        monitorGaitActivityButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                String title = getString(R.string.monitor_gait_activity);
+                Fragment fragment = GaitMonitorFragment.newInstance();
+
+                transaction.addToBackStack(title);
+                transaction.replace(R.id.container, fragment, title);
+                transaction.commit();
             }
         });
 
