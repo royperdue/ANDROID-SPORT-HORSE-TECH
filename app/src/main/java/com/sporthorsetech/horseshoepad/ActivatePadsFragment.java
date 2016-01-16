@@ -31,7 +31,6 @@ import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.utility.Constant;
-import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
@@ -60,7 +59,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     private ArrayList<Integer> isCheckedList = new ArrayList<>();
     private final List<Bean> beans = new ArrayList<>();
     private LinearLayout padIdLayout;
-    private  ArrayList<HorseHoof> horseHooves;
+    private ArrayList<HorseHoof> horseHooves;
     private boolean horseSelected = false;
     private List<Horse> horseList;
     private boolean horseshoePadSelected = false;
@@ -126,6 +125,17 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     public void onDetach()
     {
         super.onDetach();
+
+        BeanManager.getInstance().cancelDiscovery();
+
+        for (Bean bean : beans)
+        {
+            if (bean.isConnected())
+            {
+                bean.disconnect();
+            }
+        }
+
         mListener = null;
     }
 
@@ -161,7 +171,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     @Override
     public void onDiscoveryComplete()
     {
-        final ArrayList<String> activatedPadIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.ACTIVATED_PAD_IDS);
         ArrayList<Bean> beansToActivate = new ArrayList<>();
         this.padIdsToDisplay = new ArrayList<>();
 
@@ -249,13 +258,10 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                             horseHoof.setCurrentHorseShoePad(padId);
                             horseHooves.add(horseHoof);
                             horse.setHorseHooves(horseHooves);
-                            activatedPadIds.add(padId);
                             ((CheckBox) view).setEnabled(false);
                         }
                     }
-                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.ACTIVATED_PAD_IDS, activatedPadIds);
-                }
-                else if (horseSelected == false)
+                } else if (horseSelected == false)
                 {
                     final MaterialDialog materialDialog = new MaterialDialog(getActivity());
                     materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
@@ -274,8 +280,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                             materialDialog.dismiss();
                         }
                     }).show();
-                }
-                else if (isCheckedList.size() == 0)
+                } else if (isCheckedList.size() == 0)
                 {
                     final MaterialDialog materialDialog = new MaterialDialog(getActivity());
                     materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
@@ -339,19 +344,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         {
             for (Bean bean : beans)
             {
-                String beanId = bean.getDevice().getName();
-
-                if(activatedPadIds != null && activatedPadIds.size() > 0)
-                {
-                    if (!activatedPadIds.contains(beanId))
-                    {
-                        padIdsToDisplay.add(beanId);
-                    }
-                }
-                else
-                {
-                    padIdsToDisplay.add(beanId);
-                }
+                padIdsToDisplay.add(bean.getDevice().getName());
             }
 
             for (int i = 0; i < beans.size(); i++)
@@ -418,13 +411,13 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         {
             if (!((CheckBox) v).isChecked())
             {
-                if(textView1.getText().toString().equals(((CheckBox) v).getText().toString()))
+                if (textView1.getText().toString().equals(((CheckBox) v).getText().toString()))
                     textView1.setText("");
-                else if(textView2.getText().toString().equals(((CheckBox) v).getText().toString()))
+                else if (textView2.getText().toString().equals(((CheckBox) v).getText().toString()))
                     textView2.setText("");
-                else if(textView3.getText().toString().equals(((CheckBox) v).getText().toString()))
+                else if (textView3.getText().toString().equals(((CheckBox) v).getText().toString()))
                     textView3.setText("");
-                else if(textView4.getText().toString().equals(((CheckBox) v).getText().toString()))
+                else if (textView4.getText().toString().equals(((CheckBox) v).getText().toString()))
                     textView4.setText("");
 
                 isCheckedList.remove(((CheckBox) v).getId());

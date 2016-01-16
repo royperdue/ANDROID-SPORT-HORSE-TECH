@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,19 +21,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nbarraille.loom.Loom;
-import com.nbarraille.loom.Task;
-import com.nbarraille.loom.events.FailureEvent;
-import com.nbarraille.loom.events.ProgressEvent;
-import com.nbarraille.loom.events.SuccessEvent;
-import com.nbarraille.loom.listeners.GenericUiThreadListener;
-import com.nbarraille.loom.listeners.LoomListener;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
+import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationX;
@@ -190,21 +182,16 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         horseList = Database.with(getActivity().getApplicationContext())
                 .load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-        //Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
+        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
 
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
-        List<String> list = new ArrayList<String>();
 
-        for (Horse horse : horseList)
-        {
-            list.add(horse.getName());
-        }
+        final ArrayAdapter adapter = new SpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                horseArray);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectHorseSpinner.setAdapter(dataAdapter);
-
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectHorseSpinner.setAdapter(adapter);
         selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             // boolean variable that is used so that the onItemSelected method is not executed
@@ -216,8 +203,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (initializing == false)
                 {
-                    horse = horseList.get(position);
                     horseSelected = true;
+
+                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+
+                    horse = spinnerAdapter.getItem(position);
                     LittleDB.getInstance(getActivity().getApplicationContext()).putString(Constant.HORSE_NAME, horse.getName());
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
@@ -263,6 +253,16 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                     gait = new Gait(gaitId, "Trot");
                     System.out.println("GAIT: " + gait.getName());
+
+                    BeanManager.getInstance().cancelDiscovery();
+
+                    for (Bean bean : beans)
+                    {
+                        if (bean.isConnected())
+                        {
+                            bean.disconnect();
+                        }
+                    }
 
                     startBeanDiscovery();
 
@@ -351,11 +351,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
-                    CommandTask commandTask = new CommandTask();
-                    commandTask.setBeans(beans);
-                    commandTask.setCommand("TAKE_READINGS");
-
-                    Loom.execute(commandTask);
+                    new CommandThread(beans, Constant.TAKE_READINGS);
                 } else if (horseSelected == false)
                 {
                     final MaterialDialog materialDialog = new MaterialDialog(getActivity());
@@ -396,11 +392,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);*/
 
-                CommandTask commandTask = new CommandTask();
-                commandTask.setBeans(beans);
-                commandTask.setCommand("PAUSE_READINGS");
-
-                Loom.execute(commandTask);
+                new CommandThread(beans, Constant.PAUSE_READINGS);
             }
         });
 
@@ -558,23 +550,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     public void onDetach()
     {
         super.onDetach();
+
+        BeanManager.getInstance().cancelDiscovery();
+
+        for (Bean bean : beans)
+        {
+            if (bean.isConnected())
+            {
+                bean.disconnect();
+            }
+        }
+
         mListener = null;
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        Loom.registerListener(commandListener);
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-
-        Loom.unregisterListener(commandListener);
     }
 
     @Override
@@ -596,11 +583,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             dialog.show();
         } else if (item.getItemId() == R.id.bank_data)
         {
-            CommandTask commandTask = new CommandTask();
-            commandTask.setBeans(beans);
-            commandTask.setCommand("BANK_DATA");
-
-            Loom.execute(commandTask);
+            new CommandThread(beans, Constant.BANK_DATA);
         }
 
         return super.onOptionsItemSelected(item);
@@ -1048,67 +1031,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     public interface OnFragmentInteractionListener
     {
         void onFragmentInteraction(String title);
-    }
-
-    private LoomListener commandListener = new GenericUiThreadListener()
-    {
-        @Override
-        public void onSuccess(SuccessEvent event)
-        {
-            Log.i("CommandTask", "Success Received for task Progress");
-        }
-
-        @Override
-        public void onFailure(FailureEvent event)
-        {
-            Log.i("CommandTask", "Failure Received for task Progress");
-        }
-
-        @Override
-        public void onProgress(ProgressEvent event)
-        {
-            Log.i("CommandTask", "Progress Received for task Progress: " + event.getProgress());
-        }
-
-        @NonNull
-        @Override
-        public String taskName()
-        {
-            return Constant.TASK_NAME_COMMAND;
-        }
-    };
-
-    public static class CommandTask extends Task
-    {
-        private String command;
-        private List<Bean> beans = new ArrayList<>();
-
-        @Override
-        protected String name()
-        {
-            return Constant.TASK_NAME_COMMAND;
-        }
-
-        @Override
-        protected void runTask() throws Exception
-        {
-            for (Bean bean : beans)
-            {
-                bean.setScratchData(ScratchBank.BANK_5, command);
-                postProgress(100 / beans.size());
-                Thread.sleep(50);
-            }
-        }
-
-        public void setCommand(String command)
-        {
-            this.command = command;
-        }
-
-        public void setBeans(List<Bean> beans)
-        {
-            this.beans = beans;
-        }
     }
 
     private void startBeanDiscovery()

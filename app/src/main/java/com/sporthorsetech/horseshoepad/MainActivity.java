@@ -1,6 +1,5 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,10 +22,13 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.punchthrough.bean.sdk.BeanManager;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
         WelcomeFragment.OnFragmentInteractionListener, GaitMonitorFragment.OnFragmentInteractionListener,
-        ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener
+        ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener,
+        HorseProfileListFragment.OnListFragmentInteractionListener
 {
     private Toolbar toolbar;
     private String title = "";
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                                 break;
                             case 4:
                                 title = getString(R.string.view_gait_data);
-                                startActivity(new Intent(MainActivity.this, ItemListActivity.class));
+                                fragment = HorseProfileListFragment.newInstance(1);
                                 break;
                             case 5:
                                 title = getString(R.string.delete_all_horse_profiles);
@@ -141,12 +143,14 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     {
         if (keyCode == KeyEvent.KEYCODE_BACK)
         {
-           if(getSupportFragmentManager().getBackStackEntryCount() > 0)
-           {
-               Fragment fragment = getSupportFragmentManager().getFragments()
-                       .get(getSupportFragmentManager().getBackStackEntryCount() - 1);
-               fragment.onResume();
-           }
+            BeanManager.getInstance().cancelDiscovery();
+
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            {
+                Fragment fragment = getSupportFragmentManager().getFragments()
+                        .get(getSupportFragmentManager().getBackStackEntryCount() - 1);
+                fragment.onResume();
+            }
         }
 
         return (super.onKeyDown(keyCode, event));
@@ -156,5 +160,11 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     public void onFragmentInteraction(String title)
     {
         //getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Horse item)
+    {
+
     }
 }

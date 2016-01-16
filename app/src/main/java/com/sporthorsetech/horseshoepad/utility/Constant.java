@@ -31,7 +31,8 @@ public final class Constant
     // MENU ITEM CONSTANTS.
     public static final int DETECT_HORSESHOE_PADS = 100;
 
-    public final static String TASK_NAME_COMMAND = "taskNameCommand";
-    public final static String TASK_NAME_SET_BEAN_NAME = "taskNameSetBeanName";
-    public final static String TASK_NAME_QUERY = "taskNameQuery";
+    // COMMANDS FOR COMMAND THREAD.
+    public static final String BANK_DATA = "BANK_DATA";
+    public static final String PAUSE_READINGS = "PAUSE_READINGS";
+    public static final String TAKE_READINGS = "TAKE_READINGS";
 }
