@@ -91,7 +91,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Spinner selectHorseSpinner;
     private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
-    private Button viewAccelerationX;
+    private Button viewDataGraphs;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
     private Button changeGaitButton;
@@ -408,8 +408,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
-        viewAccelerationX = (Button) view.findViewById(R.id.view_x_acceleration_button);
-        viewAccelerationX.setOnClickListener(new View.OnClickListener()
+        viewDataGraphs = (Button) view.findViewById(R.id.view_data_graphs_button);
+        viewDataGraphs.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

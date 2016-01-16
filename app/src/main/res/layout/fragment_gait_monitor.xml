@@ -1106,36 +1106,11 @@
         </LinearLayout>
         <!--start-->
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/pad_5dp"
-            android:layout_marginBottom="@dimen/pad_30dp"
-            android:layout_marginTop="@dimen/pad_30dp"
-            android:background="@drawable/border"
-            android:cropToPadding="true"
-            android:orientation="vertical"
-            android:padding="1dp">
-
-            <Button
-                android:id="@+id/view_x_acceleration_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pad_10dp"
-                android:layout_marginRight="@dimen/pad_10dp"
-                android:paddingBottom="@dimen/pad_20dp"
-                android:paddingLeft="@dimen/pad_15dp"
-                android:paddingRight="@dimen/pad_15dp"
-                android:paddingTop="@dimen/pad_20dp"
-                android:text="@string/view_x_acceleration"/>
-
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/pad_40dp"
+            android:layout_marginBottom="@dimen/pad_10dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -1145,6 +1120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
                 android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="@dimen/pad_20dp"
                 android:paddingBottom="@dimen/pad_20dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:paddingRight="@dimen/pad_15dp"
@@ -1157,6 +1133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
                 android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="@dimen/pad_20dp"
                 android:paddingBottom="@dimen/pad_20dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:paddingRight="@dimen/pad_15dp"
@@ -1169,11 +1146,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
                 android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="@dimen/pad_20dp"
                 android:paddingBottom="@dimen/pad_20dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:paddingRight="@dimen/pad_15dp"
                 android:paddingTop="@dimen/pad_20dp"
                 android:text="@string/change_gait"/>
+
+            <Button
+                android:id="@+id/view_data_graphs_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="@dimen/pad_20dp"
+                android:paddingBottom="@dimen/pad_20dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_20dp"
+                android:text="@string/view_data_graphs"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -36,8 +36,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AccelerationChartX"
-            android:label="@string/title_activity_acceleration_chart_x">
+            android:name=".GraphActivity"
+            android:label="@string/title_activity_graph"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

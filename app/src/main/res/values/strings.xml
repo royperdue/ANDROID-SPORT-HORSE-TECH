@@ -40,6 +40,7 @@
     <string name="pause_monitoring">Pause Monitoring</string>
     <string name="change_gait">Change Gait</string>
     <string name="view_x_acceleration">View X Acceleration</string>
+    <string name="view_data_graphs">View Data Graphs</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>
@@ -127,4 +128,5 @@
         <item>Gallop</item>
     </string-array>
     <string name="title_activity_acceleration_chart_x">AccelerationChartX</string>
+    <string name="title_activity_graph">GraphActivity</string>
 </resources>
