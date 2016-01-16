@@ -252,36 +252,6 @@
                 android:singleLine="true"
                 android:textSize="@dimen/text_22sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pad_10dp"
-                android:singleLine="true"
-                android:text="@string/average_force"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_16sp"/>
-
-            <EditText
-                android:id="@+id/average_force_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/pad_10dp"
-                android:layout_marginLeft="@dimen/pad_10dp"
-                android:layout_marginRight="@dimen/pad_10dp"
-                android:layout_marginTop="@dimen/pad_5dp"
-                android:background="@drawable/border"
-                android:clickable="false"
-                android:cropToPadding="true"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="center"
-                android:inputType="text"
-                android:padding="1dp"
-                android:paddingLeft="@dimen/pad_15dp"
-                android:singleLine="true"
-                android:textSize="@dimen/text_22sp"/>
-
         </LinearLayout>
 
         <!--start-->
@@ -357,8 +327,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/force_lh_edittext"
+                            <TextView
+                                android:id="@+id/force_lh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -374,8 +344,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -420,8 +390,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/force_lf_edittext"
+                            <TextView
+                                android:id="@+id/force_lf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -437,8 +407,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -493,8 +463,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/force_rh_edittext"
+                            <TextView
+                                android:id="@+id/force_rh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -510,8 +480,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -556,8 +526,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/force_rf_edittext"
+                            <TextView
+                                android:id="@+id/force_rf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -573,8 +543,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -664,8 +634,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_x_lh_edittext"
+                            <TextView
+                                android:id="@+id/axis_x_lh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -681,8 +651,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -694,8 +664,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_y_lh_edittext"
+                            <TextView
+                                android:id="@+id/axis_y_lh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -711,8 +681,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -724,8 +694,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_z_lh_edittext"
+                            <TextView
+                                android:id="@+id/axis_z_lh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -741,8 +711,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -787,8 +757,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_x_lf_edittext"
+                            <TextView
+                                android:id="@+id/axis_x_lf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -804,8 +774,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -817,8 +787,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_y_lf_edittext"
+                            <TextView
+                                android:id="@+id/axis_y_lf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -834,8 +804,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -847,8 +817,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_z_lf_edittext"
+                            <TextView
+                                android:id="@+id/axis_z_lf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -864,8 +834,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -920,8 +890,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_x_rh_edittext"
+                            <TextView
+                                android:id="@+id/axis_x_rh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -937,8 +907,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -950,8 +920,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_y_rh_edittext"
+                            <TextView
+                                android:id="@+id/axis_y_rh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -967,8 +937,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -980,8 +950,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_z_rh_edittext"
+                            <TextView
+                                android:id="@+id/axis_z_rh_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -997,8 +967,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>
@@ -1043,8 +1013,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_x_rf_edittext"
+                            <TextView
+                                android:id="@+id/axis_x_rf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -1060,8 +1030,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -1073,8 +1043,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_y_rf_edittext"
+                            <TextView
+                                android:id="@+id/axis_y_rf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -1090,8 +1060,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                             <TextView
@@ -1103,8 +1073,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_16sp"/>
 
-                            <EditText
-                                android:id="@+id/axis_z_rf_edittext"
+                            <TextView
+                                android:id="@+id/axis_z_rf_textview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/pad_10dp"
@@ -1120,8 +1090,8 @@
                                 android:gravity="center"
                                 android:inputType="text"
                                 android:padding="1dp"
-                                android:paddingLeft="@dimen/pad_15dp"
                                 android:singleLine="true"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/text_22sp"/>
 
                         </LinearLayout>

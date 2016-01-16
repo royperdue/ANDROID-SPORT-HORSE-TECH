@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbarraille.loom.Loom;
@@ -63,7 +64,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private EditText textView3;
     private EditText textView4;
 
-    private EditText forceLH;
+    private TextView forceLH;
     private EditText forceLF;
     private EditText forceRH;
     private EditText forceRF;
@@ -86,7 +87,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
     private EditText gaitDetected;
     private EditText averageStrideLength;
-    private EditText averageForce;
     private Spinner selectHorseSpinner;
     private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
@@ -162,7 +162,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         textView3 = (EditText) view.findViewById(R.id.textView3);
         textView4 = (EditText) view.findViewById(R.id.textView4);
 
-        forceLH = (EditText) view.findViewById(R.id.force_lh_edittext);
+        forceLH = (TextView) view.findViewById(R.id.force_lh_textview);
+        forceLH.setText("Text...");
         forceLF = (EditText) view.findViewById(R.id.force_lf_edittext);
         forceRH = (EditText) view.findViewById(R.id.force_rh_edittext);
         forceRF = (EditText) view.findViewById(R.id.force_rf_edittext);
@@ -281,8 +282,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
         averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
-
-        averageForce = (EditText) view.findViewById(R.id.average_force_edittext);
 
         selectGaitSpinner = (Spinner) view.findViewById(R.id.spinnerSelectGait);
         ArrayAdapter<CharSequence> adapterGait = ArrayAdapter.createFromResource(getActivity(),
