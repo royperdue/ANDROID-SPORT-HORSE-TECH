@@ -64,13 +64,10 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
 
         tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);
-
         mSeekBarX = (SeekBar) view.findViewById(R.id.seekBar1);
         mSeekBarX.setOnSeekBarChangeListener(this);
-
         mSeekBarY = (SeekBar) view.findViewById(R.id.seekBar2);
         mSeekBarY.setOnSeekBarChangeListener(this);
-
         mChart = (BarChart) view.findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setDescription("");
@@ -79,9 +76,7 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
 
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
-
         mChart.setDrawBarShadow(false);
-
         mChart.setDrawGridBackground(false);
 
         // create a custom MarkerView (extend MarkerView) and specify the layout
@@ -94,7 +89,6 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
 
         // set the marker to the chart
         mChart.setMarkerView(mv);
-
         mSeekBarX.setProgress(10);
         mSeekBarY.setProgress(100);
 
@@ -118,7 +112,6 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
 
         mChart.getAxisRight().setEnabled(false);
 
-
         return view;
     }
 
@@ -135,6 +128,7 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
     public void onAttach(Context context)
     {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener)
         {
             mListener = (OnFragmentInteractionListener) context;
@@ -260,6 +254,7 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
         tvY.setText("" + (mSeekBarY.getProgress()));
 
         ArrayList<String> xVals = new ArrayList<String>();
+
         for (int i = 0; i < mSeekBarX.getProgress(); i++)
         {
             xVals.add((i + 1990) + "");
