@@ -459,7 +459,13 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
 
+                Intent intent = new Intent(getActivity(), GraphActivity.class);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
             }
         });
 

@@ -7,9 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -99,7 +96,7 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
         l.setTypeface(tf);
         l.setYOffset(0f);
         l.setYEntrySpace(0f);
-        l.setTextSize(8f);
+        l.setTextSize(6f);
 
         XAxis xl = mChart.getXAxis();
         xl.setTypeface(tf);
@@ -144,95 +141,6 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
     {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
-    {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        inflater.inflate(R.menu.bar, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-
-        switch (item.getItemId())
-        {
-            case R.id.actionToggleValues:
-            {
-                for (BarDataSet set : mChart.getData().getDataSets())
-                    set.setDrawValues(!set.isDrawValuesEnabled());
-
-                mChart.invalidate();
-                break;
-            }
-            case R.id.actionTogglePinch:
-            {
-                if (mChart.isPinchZoomEnabled())
-                    mChart.setPinchZoom(false);
-                else
-                    mChart.setPinchZoom(true);
-
-                mChart.invalidate();
-                break;
-            }
-            case R.id.actionToggleAutoScaleMinMax:
-            {
-                mChart.setAutoScaleMinMaxEnabled(!mChart.isAutoScaleMinMaxEnabled());
-                mChart.notifyDataSetChanged();
-                break;
-            }
-            case R.id.actionToggleHighlight:
-            {
-                if (mChart.getData() != null)
-                {
-                    mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
-                    mChart.invalidate();
-                }
-                break;
-            }
-            case R.id.actionToggleHighlightArrow:
-            {
-                if (mChart.isDrawHighlightArrowEnabled())
-                    mChart.setDrawHighlightArrow(false);
-                else
-                    mChart.setDrawHighlightArrow(true);
-                mChart.invalidate();
-                break;
-            }
-            case R.id.actionToggleStartzero:
-            {
-                mChart.getAxisLeft().setStartAtZero(!mChart.getAxisLeft().isStartAtZeroEnabled());
-                mChart.getAxisRight().setStartAtZero(!mChart.getAxisRight().isStartAtZeroEnabled());
-                mChart.invalidate();
-                break;
-            }
-            case R.id.actionSave:
-            {
-                // mChart.saveToGallery("title"+System.currentTimeMillis());
-                mChart.saveToPath("title" + System.currentTimeMillis(), "");
-                break;
-            }
-            case R.id.animateX:
-            {
-                mChart.animateX(3000);
-                break;
-            }
-            case R.id.animateY:
-            {
-                mChart.animateY(3000);
-                break;
-            }
-            case R.id.animateXY:
-            {
-
-                mChart.animateXY(3000, 3000);
-                break;
-            }
-        }
-        return true;
     }
 
     @Override
