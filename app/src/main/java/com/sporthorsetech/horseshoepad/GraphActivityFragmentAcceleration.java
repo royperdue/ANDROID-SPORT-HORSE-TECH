@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -62,8 +61,6 @@ public class GraphActivityFragmentAcceleration extends Fragment implements SeekB
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_graph_acceleration, container, false);
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);

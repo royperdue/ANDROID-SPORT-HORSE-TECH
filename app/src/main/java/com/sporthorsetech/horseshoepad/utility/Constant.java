@@ -12,6 +12,9 @@ public final class Constant
 
     // ACTIVITY BUNDLE CONSTANTS.
     public static final String RIGHT_HIND_ACCELERATION_X_VALUES = "rightHindAccelerationXValues";
+    public static final String GRAPH_FRAGMENT_INDICATOR = "graphFragmentIndicator";
+    public static final int GRAPH_FRAGMENT_ACCELERATION = 100;
+    public static final int GRAPH_FRAGMENT_FORCE = 200;
 
     public static final String ARG_COLUMN_COUNT = "column-count";
 

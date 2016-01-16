@@ -22,17 +22,20 @@
     <string name="left_hind">Left Hind</string>
     <string name="left_front">Left Front</string>
 
+    <!-- Activity titles. -->
     <string name="welcome">Welcome</string>
     <string name="new_horse_profile">New Horse Profile</string>
     <string name="view_gait_data">View Gait Data</string>
     <string name="activate_horseshoe_pads">Activate Horseshoe Pads</string>
     <string name="monitor_gait_activity">Monitor Gait Activity</string>
+    <string name="acceleration_graph_data">Acceleration Graphs:</string>
+    <string name="force_graph_data">Force Graphs:</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="title_confirm">Confirm</string>
 
-    <!-- Button labels -->
+    <!-- Button labels. -->
     <string name="create_horse_profile">Create Horse Profile</string>
     <string name="delete_all_horse_profiles">Delete All Horse Profiles</string>
     <string name="activate_pads">Activate Pads</string>
@@ -40,7 +43,8 @@
     <string name="pause_monitoring">Pause Monitoring</string>
     <string name="change_gait">Change Gait</string>
     <string name="view_x_acceleration">View X Acceleration</string>
-    <string name="view_data_graphs">View Data Graphs</string>
+    <string name="view_acceleration_data_graphs">View Acceleration Data Graphs</string>
+    <string name="view_force_data_graphs">View Force Data Graphs</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>

@@ -2,6 +2,7 @@ package com.sporthorsetech.horseshoepad;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -91,7 +92,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Spinner selectHorseSpinner;
     private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
-    private Button viewDataGraphs;
+    private Button viewAccelerationDataGraphs;
+    private Button viewForceDataGraphs;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
     private Button changeGaitButton;
@@ -408,8 +410,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
-        viewDataGraphs = (Button) view.findViewById(R.id.view_data_graphs_button);
-        viewDataGraphs.setOnClickListener(new View.OnClickListener()
+        viewAccelerationDataGraphs = (Button) view.findViewById(R.id.view_acceleration_data_graphs_button);
+        viewAccelerationDataGraphs.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -439,10 +441,25 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);
 
-                Intent intent = new Intent(getActivity(), AccelerationChartX.class);
+                */
+
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_ACCELERATION);
+
+                Intent intent = new Intent(getActivity(), GraphActivity.class);
                 intent.putExtras(bundle);
 
-                startActivity(intent);*/
+                startActivity(intent);
+            }
+        });
+
+        viewForceDataGraphs = (Button) view.findViewById(R.id.view_force_data_graphs_button);
+        viewForceDataGraphs.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
             }
         });
 
