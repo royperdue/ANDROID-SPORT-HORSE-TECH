@@ -3,6 +3,7 @@ package com.sporthorsetech.horseshoepad.utility.equine;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import com.sporthorsetech.horseshoepad.utility.persist.SearchableTagValuePair;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class HorseHoof implements Database.StoredObject
     String foot;
     Long timeCreated;
     String currentHorseShoePad;
-    List<String> previousHorseshoePads;
+    List<String> previousHorseshoePads = new ArrayList<>();
 
     public enum TYPE implements Database.StoredObject.TYPE
     {

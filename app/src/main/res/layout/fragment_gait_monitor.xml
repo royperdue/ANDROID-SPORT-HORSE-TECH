@@ -126,6 +126,7 @@
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
                 android:textSize="@dimen/text_14sp"/>
+
         </LinearLayout>
 
         <LinearLayout

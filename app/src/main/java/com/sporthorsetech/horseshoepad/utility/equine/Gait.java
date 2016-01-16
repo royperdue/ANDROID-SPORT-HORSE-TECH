@@ -3,6 +3,7 @@ package com.sporthorsetech.horseshoepad.utility.equine;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import com.sporthorsetech.horseshoepad.utility.persist.SearchableTagValuePair;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Gait implements Database.StoredObject
     String id;
     String name;
     Long timeCreated;
-    List<Step> steps;
+    List<Step> steps = new ArrayList<>();
 
     public enum TYPE implements Database.StoredObject.TYPE
     {

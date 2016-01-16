@@ -11,7 +11,6 @@ public final class Constant
     public static final String COMMAND = "command";
 
     // ACTIVITY BUNDLE CONSTANTS.
-    public static final String RIGHT_HIND_ACCELERATION_X_VALUES = "rightHindAccelerationXValues";
     public static final String GRAPH_FRAGMENT_INDICATOR = "graphFragmentIndicator";
     public static final int GRAPH_FRAGMENT_ACCELERATION = 100;
     public static final int GRAPH_FRAGMENT_FORCE = 200;
@@ -24,7 +23,7 @@ public final class Constant
     public static final String HORSE_HOOF_IDS = "horseHoofIds";
     public static final String GAIT_IDS = "gaitIds";
     public static final String STEP_IDS = "stepIds";
-    public static final String HORSE_NAMES = "horseNames";
+    public static final String HORSE_NAME = "horseName";
     public static final String ACTIVATED_PAD_IDS = "activatedPadIds";
 
     public static final int MAX_HORSES = 20;
