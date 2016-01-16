@@ -440,6 +440,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                gaitActivities.add(gaitActivity);
+
+                horse.setGaitActivities(gaitActivities);
+
+                Database.with(getActivity().getApplicationContext()).saveObject(horse);
+
                 Bundle bundle = new Bundle();
                 bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
 
@@ -615,28 +626,24 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //forceLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //forceLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //forceRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //forceRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     forceReadRF = true;
                 }
             } else if (bankNumber == 1)
@@ -648,28 +655,24 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //xAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //xAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //xAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //xAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     xAccelerationReadRF = true;
                 }
             } else if (bankNumber == 2)
@@ -681,28 +684,24 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //yAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //yAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //yAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //yAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     yAccelerationReadRF = true;
                 }
             } else if (bankNumber == 3)
@@ -714,28 +713,24 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //zAxisAccelerationLH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadLH = true;
                 }
                 else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //zAxisAccelerationLF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadLF = true;
                 }
                 else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //zAxisAccelerationRH.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadRH = true;
                 }
                 else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
-                    //zAxisAccelerationRF.setText(decimalFormat.format(Double.parseDouble(pad[1])));
                     zAccelerationReadRF = true;
                 }
             } 
@@ -744,10 +739,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     && zAccelerationReadLH == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ LH<--");
-                //List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                //gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
-                //List<Gait> gaits = gaitActivity.getGaits();
-                //gait = gaits.get(gaits.size() - 1);
 
                 String stepId = "-1";
                 ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
@@ -807,10 +798,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     && zAccelerationReadLF == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ LF<--");
-                List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
-                List<Gait> gaits = gaitActivity.getGaits();
-                gait = gaits.get(gaits.size() - 1);
 
                 String stepId = "-1";
                 ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
@@ -861,13 +848,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 gait.setSteps(steps);
 
-                //gaits.add(gait);
-                //gaitActivity.setGaits(gaits);
-
-                //gaitActivities.add(gaitActivity);
-
-                //horse.setGaitActivities(gaitActivities);
-
                 forceReadLF = false;
                 xAccelerationReadLF = false;
                 yAccelerationReadLF = false;
@@ -877,10 +857,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     && zAccelerationReadRH == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ RH<--");
-                //List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                //GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
-                //List<Gait> gaits = gaitActivity.getGaits();
-                //gait = gaits.get(gaits.size() - 1);
 
                 String stepId = "-1";
                 ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
@@ -931,13 +907,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                 gait.setSteps(steps);
 
-                //gaits.add(gait);
-                //gaitActivity.setGaits(gaits);
-
-                //gaitActivities.add(gaitActivity);
-
-                //horse.setGaitActivities(gaitActivities);
-
                 forceReadRH = false;
                 xAccelerationReadRH = false;
                 yAccelerationReadRH = false;
@@ -947,10 +916,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     && zAccelerationReadRF == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ RF<--");
-                List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
-                List<Gait> gaits = gaitActivity.getGaits();
-                gait = gaits.get(gaits.size() - 1);
 
                 String stepId = "-1";
                 ArrayList<String> stepIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.STEP_IDS);
@@ -1000,13 +965,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 zAxisAccelerationRF.setText(decimalFormat.format(calculateAverage(zAccelerationValues)));
 
                 gait.setSteps(steps);
-
-                //gaits.add(gait);
-                //gaitActivity.setGaits(gaits);
-
-                //gaitActivities.add(gaitActivity);
-
-                //horse.setGaitActivities(gaitActivities);
 
                 forceReadRF = false;
                 xAccelerationReadRF = false;
