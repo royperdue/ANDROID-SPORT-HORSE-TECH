@@ -131,6 +131,14 @@ public class NewHorseFragment extends Fragment
             public void onClick(View v)
             {
                 createHorseProfile();
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                String title = getString(R.string.activate_horseshoe_pads);
+                Fragment fragment = ActivatePadsFragment.newInstance();
+
+                transaction.addToBackStack(title);
+                transaction.replace(R.id.container, fragment, title);
+                transaction.commit();
             }
         });
 
@@ -141,7 +149,7 @@ public class NewHorseFragment extends Fragment
     {
         String id = "-1";
         String name = "name";
-        Integer age = -1;
+        Long age = -1L;
         String sex = "sex";
         String breed = "breed";
         String discipline = "discipline";
@@ -170,12 +178,12 @@ public class NewHorseFragment extends Fragment
 
         if (!TextUtils.isEmpty(this.horseAgeEditText.getText().toString()))
         {
-            age = Integer.parseInt(this.horseAgeEditText.getText().toString());
+            age = Long.parseLong(String.valueOf((long) Double.parseDouble(this.horseAgeEditText.getText().toString())));
         }
 
         if (!TextUtils.isEmpty(this.horseHeightEditText.getText().toString()))
         {
-            height = Long.parseLong(this.horseHeightEditText.getText().toString());
+            height = Long.parseLong(String.valueOf((long) Double.parseDouble(this.horseHeightEditText.getText().toString())));
         }
 
         if (this.horseSex != null)
@@ -188,15 +196,6 @@ public class NewHorseFragment extends Fragment
             discipline = this.horseDiscipline;
 
         Database.with(getActivity().getApplicationContext()).saveObject(new Horse(id, name, sex, age, breed, height, discipline));
-
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        String title = getString(R.string.activate_horseshoe_pads);
-        Fragment fragment = ActivatePadsFragment.newInstance();
-
-        transaction.addToBackStack(title);
-        transaction.replace(R.id.container, fragment, title);
-        transaction.commit();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

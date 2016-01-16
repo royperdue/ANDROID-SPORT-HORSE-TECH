@@ -16,7 +16,7 @@ public class Horse implements Database.StoredObject
     String name;
     Long timeCreated;
     String sex;
-    Integer age;
+    Long age;
     String breed;
     Long height;
     String discipline;
@@ -47,7 +47,7 @@ public class Horse implements Database.StoredObject
         }
     }
 
-    public Horse(String id, String name, String sex, Integer age, String breed, Long height, String discipline)
+    public Horse(String id, String name, String sex, Long age, String breed, Long height, String discipline)
     {
         this.id = id;
         this.name = name;
@@ -95,12 +95,12 @@ public class Horse implements Database.StoredObject
         this.sex = sex;
     }
 
-    public Integer getAge()
+    public Long getAge()
     {
         return age;
     }
 
-    public void setAge(Integer age)
+    public void setAge(Long age)
     {
         this.age = age;
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,13 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.nbarraille.loom.Loom;
-import com.nbarraille.loom.Task;
-import com.nbarraille.loom.events.FailureEvent;
-import com.nbarraille.loom.events.ProgressEvent;
-import com.nbarraille.loom.events.SuccessEvent;
-import com.nbarraille.loom.listeners.GenericUiThreadListener;
-import com.nbarraille.loom.listeners.LoomListener;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
@@ -55,7 +47,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     private OnFragmentInteractionListener mListener;
     private View view;
     private AlertDialog dialog;
-    private static Horse[] horseArray;
+    private Horse[] horseArray;
     private EditText textView1;
     private EditText textView2;
     private EditText textView3;
@@ -70,7 +62,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     private LinearLayout padIdLayout;
     private  ArrayList<HorseHoof> horseHooves;
     private boolean horseSelected = false;
-    private static List<Horse> horseList;
+    private List<Horse> horseList;
     private boolean horseshoePadSelected = false;
 
     public ActivatePadsFragment()
@@ -89,12 +81,13 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         this.view = inflater.inflate(R.layout.fragment_activate_pads, container, false);
         setHasOptionsMenu(true);
 
+        horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+        horseArray = horseList.toArray(new Horse[horseList.size()]);
+
         this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
         dialog.show();
 
-        QueryTask queryTask = new QueryTask();
-        queryTask.setContext(getActivity());
-        Loom.execute(queryTask);
+        BeanManager.getInstance().startDiscovery(this);
 
         return view;
     }
@@ -149,7 +142,10 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     {
         if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
+            BeanManager.getInstance().cancelDiscovery();
             BeanManager.getInstance().startDiscovery(this);
+            this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -374,9 +370,9 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
 
                 checkBox.setLayoutParams(checkParams);
                 padIdLayout.addView(checkBox);
-                dialog.dismiss();
             }
         }
+        dialog.dismiss();
     }
 
     @Override
@@ -461,75 +457,5 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title);
-    }
-
-    private void startBeanDiscovery()
-    {
-        BeanManager.getInstance().startDiscovery(this);
-    }
-
-    public static class QueryTask extends Task
-    {
-        Context context;
-
-        @Override
-        protected String name()
-        {
-            return Constant.TASK_NAME_QUERY;
-        }
-
-        @Override
-        protected void runTask() throws Exception
-        {
-             horseList = Database.with(context).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-            horseArray = horseList.toArray(new Horse[horseList.size()]);
-        }
-
-        public void setContext(Context context)
-        {
-            this.context = context;
-        }
-    }
-
-    private LoomListener queryListener = new GenericUiThreadListener()
-    {
-        @Override
-        public void onSuccess(SuccessEvent event)
-        {
-            startBeanDiscovery();
-        }
-
-        @Override
-        public void onFailure(FailureEvent event)
-        {
-        }
-
-        @Override
-        public void onProgress(ProgressEvent event)
-        {
-        }
-
-        @NonNull
-        @Override
-        public String taskName()
-        {
-            return Constant.TASK_NAME_QUERY;
-        }
-    };
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        Loom.registerListener(queryListener);
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-
-        Loom.unregisterListener(queryListener);
     }
 }

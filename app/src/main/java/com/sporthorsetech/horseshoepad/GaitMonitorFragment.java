@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -144,7 +143,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private AccelerationZ zAccelerationReadingRF;
     private boolean zAccelerationReadRF = false;
 
-    private ProgressBar progressBar;
     private AlertDialog dialog;
     private boolean horseSelected = false;
 
@@ -163,9 +161,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         View view = inflater.inflate(R.layout.fragment_gait_monitor, container, false);
         setHasOptionsMenu(true);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.INVISIBLE);
 
         textView1 = (EditText) view.findViewById(R.id.textView1);
         textView2 = (EditText) view.findViewById(R.id.textView2);
@@ -359,8 +354,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     CommandTask commandTask = new CommandTask();
                     commandTask.setBeans(beans);
                     commandTask.setCommand("TAKE_READINGS");
-
-                    progressBar.setVisibility(View.VISIBLE);
 
                     Loom.execute(commandTask);
                 } else if (horseSelected == false)
@@ -597,7 +590,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         if (item.getItemId() == R.id.detect_horseshoe_pads)
         {
+            BeanManager.getInstance().cancelDiscovery();
             BeanManager.getInstance().startDiscovery(this);
+            this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+            dialog.show();
         } else if (item.getItemId() == R.id.bank_data)
         {
             CommandTask commandTask = new CommandTask();
@@ -1060,22 +1056,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         public void onSuccess(SuccessEvent event)
         {
             Log.i("CommandTask", "Success Received for task Progress");
-            progressBar.setProgress(100);
-            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
         public void onFailure(FailureEvent event)
         {
             Log.i("CommandTask", "Failure Received for task Progress");
-            progressBar.setProgress(0);
         }
 
         @Override
         public void onProgress(ProgressEvent event)
         {
             Log.i("CommandTask", "Progress Received for task Progress: " + event.getProgress());
-            progressBar.setProgress(event.getProgress());
         }
 
         @NonNull
