@@ -1,10 +1,11 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +43,7 @@ public class NewHorseFragment extends Fragment
 
     public static Fragment newInstance()
     {
-        NewHorseFragment fragment = new NewHorseFragment();
-
-        return fragment;
+        return new NewHorseFragment();
     }
 
     @Override
@@ -190,7 +189,14 @@ public class NewHorseFragment extends Fragment
 
         Database.with(getActivity().getApplicationContext()).saveObject(new Horse(id, name, sex, age, breed, height, discipline));
 
-        startActivity(new Intent(getActivity(), ItemListActivity.class));
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        String title = getString(R.string.activate_horseshoe_pads);
+        Fragment fragment = ActivatePadsFragment.newInstance();
+
+        transaction.addToBackStack(title);
+        transaction.replace(R.id.container, fragment, title);
+        transaction.commit();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

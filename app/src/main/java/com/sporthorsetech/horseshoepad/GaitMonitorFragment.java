@@ -56,6 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
+import me.drakeet.materialdialog.MaterialDialog;
 
 public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener
 {
@@ -106,7 +107,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private GaitActivity gaitActivity;
     private Gait gait;
     private Step step;
-    
+
     private Force forceReadingLH;
     private boolean forceReadLH = false;
     private AccelerationX xAccelerationReadingLH;
@@ -142,9 +143,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private boolean yAccelerationReadRF = false;
     private AccelerationZ zAccelerationReadingRF;
     private boolean zAccelerationReadRF = false;
-    
+
     private ProgressBar progressBar;
     private AlertDialog dialog;
+    private boolean horseSelected = false;
 
     public GaitMonitorFragment()
     {
@@ -220,7 +222,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 if (initializing == false)
                 {
                     horse = horseList.get(position);
-
+                    horseSelected = true;
                     LittleDB.getInstance(getActivity().getApplicationContext()).putString(Constant.HORSE_NAME, horse.getName());
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
@@ -352,13 +354,35 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                CommandTask commandTask = new CommandTask();
-                commandTask.setBeans(beans);
-                commandTask.setCommand("TAKE_READINGS");
+                if (horseSelected == true)
+                {
+                    CommandTask commandTask = new CommandTask();
+                    commandTask.setBeans(beans);
+                    commandTask.setCommand("TAKE_READINGS");
 
-                progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                Loom.execute(commandTask);
+                    Loom.execute(commandTask);
+                } else if (horseSelected == false)
+                {
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            .setPositiveButton("OK", new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
+                }
             }
         });
 
@@ -413,24 +437,46 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                List<Gait> gaits = gaitActivity.getGaits();
-                gaits.add(gait);
-                gaitActivity.setGaits(gaits);
+                if (horseSelected == true)
+                {
+                    List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                    List<Gait> gaits = gaitActivity.getGaits();
+                    gaits.add(gait);
+                    gaitActivity.setGaits(gaits);
 
-                gaitActivities.add(gaitActivity);
+                    gaitActivities.add(gaitActivity);
 
-                horse.setGaitActivities(gaitActivities);
+                    horse.setGaitActivities(gaitActivities);
 
-                Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
 
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_ACCELERATION);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_ACCELERATION);
 
-                Intent intent = new Intent(getActivity(), GraphActivity.class);
-                intent.putExtras(bundle);
+                    Intent intent = new Intent(getActivity(), GraphActivity.class);
+                    intent.putExtras(bundle);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } else if (horseSelected == false)
+                {
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            .setPositiveButton("OK", new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
+                }
             }
         });
 
@@ -440,24 +486,46 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             @Override
             public void onClick(View v)
             {
-                List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                List<Gait> gaits = gaitActivity.getGaits();
-                gaits.add(gait);
-                gaitActivity.setGaits(gaits);
+                if (horseSelected == true)
+                {
+                    List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                    List<Gait> gaits = gaitActivity.getGaits();
+                    gaits.add(gait);
+                    gaitActivity.setGaits(gaits);
 
-                gaitActivities.add(gaitActivity);
+                    gaitActivities.add(gaitActivity);
 
-                horse.setGaitActivities(gaitActivities);
+                    horse.setGaitActivities(gaitActivities);
 
-                Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                    Database.with(getActivity().getApplicationContext()).saveObject(horse);
 
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
 
-                Intent intent = new Intent(getActivity(), GraphActivity.class);
-                intent.putExtras(bundle);
+                    Intent intent = new Intent(getActivity(), GraphActivity.class);
+                    intent.putExtras(bundle);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } else if (horseSelected == false)
+                {
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
+                            .setPositiveButton("OK", new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
+                }
             }
         });
 
@@ -621,26 +689,23 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 String[] pad = s.split("-");
                 System.out.println("BANK 1 PAD ID: " + pad[0]);
-                
+
                 if (pad[0].equals("LH"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     forceReadLH = true;
-                }
-                else if (pad[0].equals("LF"))
+                } else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingLF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     forceReadLF = true;
-                }
-                else if (pad[0].equals("RH"))
+                } else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRH = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     forceReadRH = true;
-                }
-                else if (pad[0].equals("RF"))
+                } else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 1: " + s);
                     forceReadingRF = new Force(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
@@ -656,20 +721,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     xAccelerationReadLH = true;
-                }
-                else if (pad[0].equals("LF"))
+                } else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingLF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     xAccelerationReadLF = true;
-                }
-                else if (pad[0].equals("RH"))
+                } else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRH = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     xAccelerationReadRH = true;
-                }
-                else if (pad[0].equals("RF"))
+                } else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 2: " + s);
                     xAccelerationReadingRF = new AccelerationX(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
@@ -685,20 +747,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     yAccelerationReadLH = true;
-                }
-                else if (pad[0].equals("LF"))
+                } else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingLF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     yAccelerationReadLF = true;
-                }
-                else if (pad[0].equals("RH"))
+                } else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRH = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     yAccelerationReadRH = true;
-                }
-                else if (pad[0].equals("RF"))
+                } else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 3: " + s);
                     yAccelerationReadingRF = new AccelerationY(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
@@ -714,26 +773,23 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     zAccelerationReadLH = true;
-                }
-                else if (pad[0].equals("LF"))
+                } else if (pad[0].equals("LF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingLF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     zAccelerationReadLF = true;
-                }
-                else if (pad[0].equals("RH"))
+                } else if (pad[0].equals("RH"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRH = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     zAccelerationReadRH = true;
-                }
-                else if (pad[0].equals("RF"))
+                } else if (pad[0].equals("RF"))
                 {
                     System.out.println("BANK 4: " + s);
                     zAccelerationReadingRF = new AccelerationZ(String.valueOf(System.currentTimeMillis()), Long.parseLong(String.valueOf((long) Double.parseDouble(pad[1]))));
                     zAccelerationReadRF = true;
                 }
-            } 
+            }
 
             if (forceReadLH == true && xAccelerationReadLH == true && yAccelerationReadLH == true
                     && zAccelerationReadLH == true)
@@ -793,8 +849,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadLH = false;
                 yAccelerationReadLH = false;
                 zAccelerationReadLH = false;
-            }
-            else if (forceReadLF == true && xAccelerationReadLF == true && yAccelerationReadLF == true
+            } else if (forceReadLF == true && xAccelerationReadLF == true && yAccelerationReadLF == true
                     && zAccelerationReadLF == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ LF<--");
@@ -852,8 +907,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadLF = false;
                 yAccelerationReadLF = false;
                 zAccelerationReadLF = false;
-            }
-            else if (forceReadRH == true && xAccelerationReadRH == true && yAccelerationReadRH == true
+            } else if (forceReadRH == true && xAccelerationReadRH == true && yAccelerationReadRH == true
                     && zAccelerationReadRH == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ RH<--");
@@ -911,8 +965,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadRH = false;
                 yAccelerationReadRH = false;
                 zAccelerationReadRH = false;
-            }
-            else if (forceReadRF == true && xAccelerationReadRF == true && yAccelerationReadRF == true
+            } else if (forceReadRF == true && xAccelerationReadRF == true && yAccelerationReadRF == true
                     && zAccelerationReadRF == true)
             {
                 System.out.println("-->ALL READINGS HAVE BEEN READ RF<--");

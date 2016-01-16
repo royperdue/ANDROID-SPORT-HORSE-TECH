@@ -1,7 +1,6 @@
 package com.sporthorsetech.horseshoepad;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,9 +22,18 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sporthorsetech.horseshoepad.custom.CustomMarkerView;
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.equine.Gait;
+import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.Step;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GraphActivityFragmentForce extends Fragment implements SeekBar.OnSeekBarChangeListener,
         OnChartValueSelectedListener
@@ -35,6 +43,8 @@ public class GraphActivityFragmentForce extends Fragment implements SeekBar.OnSe
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
     private Typeface tf;
+    private List<Horse> horseList;
+    private Horse horse;
 
     public GraphActivityFragmentForce()
     {
@@ -58,6 +68,23 @@ public class GraphActivityFragmentForce extends Fragment implements SeekBar.OnSe
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_graph_activity_fragment_force, container, false);
+
+        horseList = Database.with(getActivity().getApplicationContext())
+                .load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+
+        String horseName = LittleDB.getInstance(getActivity().getApplicationContext()).getString(Constant.HORSE_NAME);
+
+        if (horseName != null)
+        {
+            for (Horse horse : horseList)
+            {
+                if (horse.getName().equals(horseName))
+                {
+                    this.horse = horse;
+                    break;
+                }
+            }
+        }
 
         tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);
@@ -161,51 +188,32 @@ public class GraphActivityFragmentForce extends Fragment implements SeekBar.OnSe
         tvX.setText("" + (mSeekBarX.getProgress() * 3));
         tvY.setText("" + (mSeekBarY.getProgress()));
 
+        List<GaitActivity> gaitActivities = horse.getGaitActivities();
+        GaitActivity gaitActivity = gaitActivities.get(gaitActivities.size() - 1);
+        List<Gait> gaits = gaitActivity.getGaits();
+        Gait gait = gaits.get(gaits.size() - 1);
+        List<Step> steps = gait.getSteps();
+
         ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
         for (int i = 0; i < mSeekBarX.getProgress(); i++)
         {
-            xVals.add((i + 1990) + "");
+            if (i < steps.size())
+            {
+                xVals.add(steps.get(i).getHoof());
+                yVals1.add(new BarEntry(steps.get(i).getForce().getForce(), i));
+            }
         }
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
 
         float mult = mSeekBarY.getProgress() * 1000f;
 
-        for (int i = 0; i < mSeekBarX.getProgress(); i++)
-        {
-            float val = (float) (Math.random() * mult) + 3;
-            yVals1.add(new BarEntry(val, i));
-        }
-
-        for (int i = 0; i < mSeekBarX.getProgress(); i++)
-        {
-            float val = (float) (Math.random() * mult) + 3;
-            yVals2.add(new BarEntry(val, i));
-        }
-
-        for (int i = 0; i < mSeekBarX.getProgress(); i++)
-        {
-            float val = (float) (Math.random() * mult) + 3;
-            yVals3.add(new BarEntry(val, i));
-        }
-
         // create 3 datasets with different types
-        BarDataSet set1 = new BarDataSet(yVals1, "Company A");
-        // set1.setColors(ColorTemplate.createColors(getApplicationContext(),
-        // ColorTemplate.FRESH_COLORS));
-        set1.setColor(Color.rgb(104, 241, 175));
-        BarDataSet set2 = new BarDataSet(yVals2, "Company B");
-        set2.setColor(Color.rgb(164, 228, 251));
-        BarDataSet set3 = new BarDataSet(yVals3, "Company C");
-        set3.setColor(Color.rgb(242, 247, 158));
+        BarDataSet set1 = new BarDataSet(yVals1, "Force");
+        set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set1);
-        dataSets.add(set2);
-        dataSets.add(set3);
 
         BarData data = new BarData(xVals, dataSets);
 //        data.setValueFormatter(new LargeValueFormatter());
