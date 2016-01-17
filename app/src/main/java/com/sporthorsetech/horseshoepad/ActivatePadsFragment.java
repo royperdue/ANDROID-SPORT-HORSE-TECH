@@ -31,6 +31,7 @@ import com.punchthrough.bean.sdk.BeanManager;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.LittleDB;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
@@ -246,6 +247,8 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             {
                 if (horseSelected == true && isCheckedList.size() > 0)
                 {
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putInt(Constant.NUMBER_OF_HORSESHOE_PADS_ACTIVATED, isCheckedList.size());
+
                     for (int i = 0; i < padIdLayout.getChildCount(); i++)
                     {
                         View view = padIdLayout.getChildAt(i);

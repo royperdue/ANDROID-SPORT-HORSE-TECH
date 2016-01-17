@@ -428,12 +428,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         Database.with(getActivity().getApplicationContext()).saveObject(horse);
                     }
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_ACCELERATION);
-
-                    Intent intent = new Intent(getActivity(), GraphActivity.class);
-                    intent.putExtras(bundle);
-
+                    Intent intent = new Intent(getActivity(), GraphActivityAcceleration.class);
                     startActivity(intent);
                 } else if (horseSelected == false)
                 {
@@ -480,12 +475,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         Database.with(getActivity().getApplicationContext()).saveObject(horse);
                     }
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constant.GRAPH_FRAGMENT_INDICATOR, Constant.GRAPH_FRAGMENT_FORCE);
-
-                    Intent intent = new Intent(getActivity(), GraphActivity.class);
-                    intent.putExtras(bundle);
-
+                    Intent intent = new Intent(getActivity(), GraphActivityForce.class);
                     startActivity(intent);
                 } else if (horseSelected == false)
                 {
