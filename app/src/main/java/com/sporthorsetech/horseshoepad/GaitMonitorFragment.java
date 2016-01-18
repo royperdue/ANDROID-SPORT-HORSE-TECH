@@ -81,17 +81,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private TextView yAxisAccelerationRF;
     private TextView zAxisAccelerationRF;
 
-    private EditText gaitDetected;
+    private TextView gaitDetectedTextView;
+
+    private EditText gaitDetectedEditText;
     private EditText averageStrideLength;
 
     private Spinner selectHorseSpinner;
-    private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
 
     private Button viewDataGraphs;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
-    private Button changeGaitButton;
 
     private Horse horse;
     private GaitActivity gaitActivity;
@@ -265,48 +265,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
-        gaitDetected = (EditText) view.findViewById(R.id.gait_detected_edittext);
+        gaitDetectedTextView = (TextView) view.findViewById(R.id.gait_detected_textview);
+        gaitDetectedEditText = (EditText) view.findViewById(R.id.gait_detected_edittext);
         averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
-
-        selectGaitSpinner = (Spinner) view.findViewById(R.id.spinnerSelectGait);
-        ArrayAdapter<CharSequence> adapterGait = ArrayAdapter.createFromResource(getActivity(),
-                R.array.gaits_array, android.R.layout.simple_spinner_item);
-        adapterGait.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectGaitSpinner.setAdapter(adapterGait);
-
-        selectGaitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                /*String gaitId = "-1";
-                ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
-
-                if (gaitIds == null || gaitIds.size() == 0)
-                {
-                    gaitId = "1";
-                    gaitIds.add("1");
-                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
-                } else if (gaitIds != null && gaitIds.size() > 0)
-                {
-                    String lastId = gaitIds.get(gaitIds.size() - 1);
-                    gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
-                    gaitIds.add(lastId);
-                    gaitIds.add(gaitId);
-                    LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
-                }
-
-                gait = new Gait(gaitId, selectGaitSpinner.getSelectedItem().toString());
-                System.out.println("GAIT: " + gait.getName());*/
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-        });
 
         selectFootingSpinner = (Spinner) view.findViewById(R.id.spinnerSelectFooting);
         ArrayAdapter<CharSequence> adapterFooting = ArrayAdapter.createFromResource(getActivity(),
@@ -382,26 +343,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);*/
 
                 new CommandThread(beans, Constant.PAUSE_READINGS);
-            }
-        });
-
-        changeGaitButton = (Button) view.findViewById(R.id.change_gait_button);
-        changeGaitButton.setEnabled(false);
-        changeGaitButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                /*ArrayList<Gait> gaits = (ArrayList<Gait>) gaitActivity.getGaits();
-                gaits.add(gait);
-                gaitActivity.setGaits(gaits);
-
-                ArrayList<GaitActivity> gaitActivities = (ArrayList<GaitActivity>) horse.getGaitActivities();
-                gaitActivities.add(gaitActivity);
-                horse.setGaitActivities(gaitActivities);
-
-                Database.with(getActivity().getApplicationContext()).saveObject(horse);*/
             }
         });
 
