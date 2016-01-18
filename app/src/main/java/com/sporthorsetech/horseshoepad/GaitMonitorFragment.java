@@ -1144,7 +1144,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                                 public void onResult(BatteryLevel result)
                                 {
                                     stringBuilder.append(bean.getDevice().getName());
+                                    stringBuilder.append(" Battery level = ");
                                     stringBuilder.append(result.getPercentage());
+                                    stringBuilder.append("%");
                                     stringBuilder.append("\n");
                                     count++;
                                 }
