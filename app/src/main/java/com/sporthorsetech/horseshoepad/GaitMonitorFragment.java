@@ -216,46 +216,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
 
-                    String gaitActivityId = "-1";
-                    ArrayList<String> gaitActivityIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_ACTIVITY_IDS);
-
-                    if (gaitActivityIds == null || gaitActivityIds.size() == 0)
-                    {
-                        gaitActivityId = "1";
-                        gaitActivityIds.add("1");
-                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
-                    } else if (gaitActivityIds != null && gaitActivityIds.size() > 0)
-                    {
-                        String lastId = gaitActivityIds.get(gaitActivityIds.size() - 1);
-                        gaitActivityId = String.valueOf(Integer.parseInt(lastId) + 1);
-                        gaitActivityIds.add(lastId);
-                        gaitActivityIds.add(gaitActivityId);
-                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
-                    }
-
-                    gaitActivity = new GaitActivity(gaitActivityId);
+                    gaitActivity = new GaitActivity(makeGaitActivityId());
 
                     System.out.println("GAIT ACTIVITY ID: " + gaitActivity.getStoredObjectId());
 
-                    // NEED TO CHANGE WHEN ADD CALIBRATE GAITS FUNCTIONALITY.
-                    String gaitId = "-1";
-                    ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
-
-                    if (gaitIds == null || gaitIds.size() == 0)
-                    {
-                        gaitId = "1";
-                        gaitIds.add("1");
-                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
-                    } else if (gaitIds != null && gaitIds.size() > 0)
-                    {
-                        String lastId = gaitIds.get(gaitIds.size() - 1);
-                        gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
-                        gaitIds.add(lastId);
-                        gaitIds.add(gaitId);
-                        LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
-                    }
-
-                    gait = new Gait(gaitId);
+                    gait = new Gait(makeGaitId());
                     System.out.println("GAIT: " + gait.getName());
                 }
                 initializing = false;
@@ -956,6 +921,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         if (stringBuilder.toString().contains("RHRFLHLF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Walk");
+            }
+            else if (gait.getName().equals("Walk") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Walk");
             leftHind = 0;
             leftFront = 0;
@@ -965,6 +942,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
         else if (stringBuilder.toString().contains("RHSLFLHSRF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Trot");
+            }
+            else if (gait.getName().equals("Trot") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Trot");
             leftHind = 0;
             leftFront = 0;
@@ -974,6 +963,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
         else if (stringBuilder.toString().contains("LHRHSLFRF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Canter Right Lead");
+            }
+            else if (gait.getName().equals("Canter Right Lead") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Canter Right Lead");
             leftHind = 0;
             leftFront = 0;
@@ -983,6 +984,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
         else if (stringBuilder.toString().contains("RHLHSRFLF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Canter Left Lead");
+            }
+            else if (gait.getName().equals("Canter Left Lead") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Canter Left Lead");
             leftHind = 0;
             leftFront = 0;
@@ -992,6 +1005,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
         else if (stringBuilder.toString().contains("LHRHLFRF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Gallop Right Lead");
+            }
+            else if (gait.getName().equals("Gallop Right Lead") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Gallop Right Lead");
             leftHind = 0;
             leftFront = 0;
@@ -1001,6 +1026,18 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
         else if (stringBuilder.toString().contains("RHLHRFLF"))
         {
+            if (gait.getName().equals("-"))
+            {
+                gait.setName("Gallop Left Lead");
+            }
+            else if (gait.getName().equals("Gallop Left Lead") == false && gait.equals("-") == false)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+                gait = new Gait(makeGaitId());
+            }
+
             gaitDetectedTextView.setText("Gallop Left Lead");
             leftHind = 0;
             leftFront = 0;
@@ -1031,5 +1068,49 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     public interface OnFragmentInteractionListener
     {
         void onFragmentInteraction(String title);
+    }
+
+    private String makeGaitId()
+    {
+        String gaitId = "-1";
+        ArrayList<String> gaitIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_IDS);
+
+        if (gaitIds == null || gaitIds.size() == 0)
+        {
+            gaitId = "1";
+            gaitIds.add("1");
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+        } else if (gaitIds != null && gaitIds.size() > 0)
+        {
+            String lastId = gaitIds.get(gaitIds.size() - 1);
+            gaitId = String.valueOf(Integer.parseInt(lastId) + 1);
+            gaitIds.add(lastId);
+            gaitIds.add(gaitId);
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
+        }
+
+        return gaitId;
+    }
+
+    private String makeGaitActivityId()
+    {
+        String gaitActivityId = "-1";
+        ArrayList<String> gaitActivityIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.GAIT_ACTIVITY_IDS);
+
+        if (gaitActivityIds == null || gaitActivityIds.size() == 0)
+        {
+            gaitActivityId = "1";
+            gaitActivityIds.add("1");
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
+        } else if (gaitActivityIds != null && gaitActivityIds.size() > 0)
+        {
+            String lastId = gaitActivityIds.get(gaitActivityIds.size() - 1);
+            gaitActivityId = String.valueOf(Integer.parseInt(lastId) + 1);
+            gaitActivityIds.add(lastId);
+            gaitActivityIds.add(gaitActivityId);
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_ACTIVITY_IDS, gaitActivityIds);
+        }
+
+        return gaitActivityId;
     }
 }

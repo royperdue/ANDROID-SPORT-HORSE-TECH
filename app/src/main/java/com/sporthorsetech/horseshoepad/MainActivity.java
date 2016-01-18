@@ -14,20 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.Drawer.OnDrawerItemClickListener;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.punchthrough.bean.sdk.BeanManager;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
-        WelcomeFragment.OnFragmentInteractionListener, GaitMonitorFragment.OnFragmentInteractionListener,
-        ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener,
-        HorseProfileFragment.OnFragmentInteractionListener
+        GaitMonitorFragment.OnFragmentInteractionListener, ActivatePadsFragment.OnFragmentInteractionListener,
+        DeleteHorseProfileFragment.OnFragmentInteractionListener, HorseProfileFragment.OnFragmentInteractionListener
 {
     private Toolbar toolbar;
     private String title = "";
@@ -47,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_wb_sunny).withName(R.string.welcome),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_gallery).withName(R.string.new_horse_profile),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_manage).withName(R.string.activate_horseshoe_pads),
                         new SecondaryDrawerItem().withIcon(R.drawable.ic_menu_share).withName(R.string.monitor_gait_activity),
@@ -66,26 +62,22 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                         switch (position)
                         {
                             case 0:
-                                title = getString(R.string.welcome);
-                                fragment = WelcomeFragment.newInstance();
-                                break;
-                            case 1:
                                 title = getString(R.string.new_horse_profile);
                                 fragment = NewHorseFragment.newInstance();
                                 break;
-                            case 2:
+                            case 1:
                                 title = getString(R.string.activate_horseshoe_pads);
                                 fragment = ActivatePadsFragment.newInstance();
                                 break;
-                            case 3:
+                            case 2:
                                 title = getString(R.string.monitor_gait_activity);
                                 fragment = GaitMonitorFragment.newInstance();
                                 break;
-                            case 4:
+                            case 3:
                                 title = getString(R.string.view_gait_data);
                                 fragment = HorseProfileFragment.newInstance();
                                 break;
-                            case 5:
+                            case 4:
                                 title = getString(R.string.delete_all_horse_profiles);
                                 fragment = DeleteHorseProfileFragment.newInstance();
                                 break;
