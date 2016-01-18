@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -25,7 +26,9 @@ import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
+import com.punchthrough.bean.sdk.message.BatteryLevel;
 import com.punchthrough.bean.sdk.message.BeanError;
+import com.punchthrough.bean.sdk.message.Callback;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
@@ -141,6 +144,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private int leftFront = 0;
     private int rightHind = 0;
     private int rightFront = 0;
+
+    private Menu menu;
+    private int count = 0;
 
     public GaitMonitorFragment()
     {
@@ -423,6 +429,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.menu_monitor, menu);
+        this.menu = menu;
     }
 
     @Override
@@ -455,6 +462,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     }
                 }).show();
             }
+        } else if (item.getItemId() == Constant.DETECT_BATTERY_LEVELS)
+        {
+            checkBatteryLevels();
         }
 
         return super.onOptionsItemSelected(item);
@@ -495,6 +505,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
             }
         }
+        MenuItem batteryLevel = this.menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
+        batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
         dialog.dismiss();
     }
 
@@ -912,8 +925,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 // Example: RHSLFLHSRF = trot
                 stringBuilder.append(steps.get(i).getForce() + "S" + steps.get(i + 1).getForce());
-            }
-            else
+            } else
             {
                 stringBuilder.append(steps.get(i).getForce());
             }
@@ -924,8 +936,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             if (gait.getName().equals("-"))
             {
                 gait.setName("Walk");
-            }
-            else if (gait.getName().equals("Walk") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Walk") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -939,14 +950,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             rightHind = 0;
             rightFront = 0;
             stringBuilder.setLength(0);
-        }
-        else if (stringBuilder.toString().contains("RHSLFLHSRF"))
+        } else if (stringBuilder.toString().contains("RHSLFLHSRF"))
         {
             if (gait.getName().equals("-"))
             {
                 gait.setName("Trot");
-            }
-            else if (gait.getName().equals("Trot") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Trot") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -960,14 +969,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             rightHind = 0;
             rightFront = 0;
             stringBuilder.setLength(0);
-        }
-        else if (stringBuilder.toString().contains("LHRHSLFRF"))
+        } else if (stringBuilder.toString().contains("LHRHSLFRF"))
         {
             if (gait.getName().equals("-"))
             {
                 gait.setName("Canter Right Lead");
-            }
-            else if (gait.getName().equals("Canter Right Lead") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Canter Right Lead") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -981,14 +988,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             rightHind = 0;
             rightFront = 0;
             stringBuilder.setLength(0);
-        }
-        else if (stringBuilder.toString().contains("RHLHSRFLF"))
+        } else if (stringBuilder.toString().contains("RHLHSRFLF"))
         {
             if (gait.getName().equals("-"))
             {
                 gait.setName("Canter Left Lead");
-            }
-            else if (gait.getName().equals("Canter Left Lead") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Canter Left Lead") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -1002,14 +1007,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             rightHind = 0;
             rightFront = 0;
             stringBuilder.setLength(0);
-        }
-        else if (stringBuilder.toString().contains("LHRHLFRF"))
+        } else if (stringBuilder.toString().contains("LHRHLFRF"))
         {
             if (gait.getName().equals("-"))
             {
                 gait.setName("Gallop Right Lead");
-            }
-            else if (gait.getName().equals("Gallop Right Lead") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Gallop Right Lead") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -1023,14 +1026,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             rightHind = 0;
             rightFront = 0;
             stringBuilder.setLength(0);
-        }
-        else if (stringBuilder.toString().contains("RHLHRFLF"))
+        } else if (stringBuilder.toString().contains("RHLHRFLF"))
         {
             if (gait.getName().equals("-"))
             {
                 gait.setName("Gallop Left Lead");
-            }
-            else if (gait.getName().equals("Gallop Left Lead") == false && gait.equals("-") == false)
+            } else if (gait.getName().equals("Gallop Left Lead") == false && gait.equals("-") == false)
             {
                 List<Gait> gaits = gaitActivity.getGaits();
                 gaits.add(gait);
@@ -1112,5 +1113,84 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
 
         return gaitActivityId;
+    }
+
+    private void checkBatteryLevels()
+    {
+        new BatteryLevelAsync().execute();
+    }
+
+    class BatteryLevelAsync extends AsyncTask<Void, Integer, String>
+    {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        protected void onPreExecute()
+        {
+        }
+
+        protected String doInBackground(Void... arg0)
+        {
+            while (count < beans.size())
+            {
+                try
+                {
+                    for (final Bean bean : beans)
+                    {
+                        if (bean.isConnected())
+                        {
+                            bean.readBatteryLevel(new Callback<BatteryLevel>()
+                            {
+                                @Override
+                                public void onResult(BatteryLevel result)
+                                {
+                                    stringBuilder.append(bean.getDevice().getName());
+                                    stringBuilder.append(result.getPercentage());
+                                    stringBuilder.append("\n");
+                                    count++;
+                                }
+                            });
+                        }
+                    }
+                } catch (Exception e)
+                {
+                    try
+                    {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ie)
+                    {
+                    }
+                    continue;
+                }
+            }
+            return stringBuilder.toString();
+        }
+
+        protected void onPostExecute(String result)
+        {
+            super.onPostExecute(result);
+
+            if (result != null)
+            {
+                final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                materialDialog.setTitle(getString(R.string.battery_levels)).setMessage(result)
+                        .setPositiveButton("OK", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                materialDialog.dismiss();
+                            }
+                        }).setNegativeButton("CANCEL", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        materialDialog.dismiss();
+                    }
+                }).show();
+
+                count = 0;
+            }
+        }
     }
 }

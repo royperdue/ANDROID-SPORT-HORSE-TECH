@@ -26,6 +26,7 @@ public final class Constant
 
     // MENU ITEM CONSTANTS.
     public static final int DETECT_HORSESHOE_PADS = 100;
+    public static final int DETECT_BATTERY_LEVELS = 200;
 
     // COMMANDS FOR COMMAND THREAD.
     public static final String BANK_DATA = "BANK_DATA";

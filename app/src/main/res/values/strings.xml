@@ -79,12 +79,14 @@
     <!--Dialog titles-->
     <string name="confirm_pad_assignment">Please Confirm</string>
     <string name="notice">Notice</string>
+    <string name="battery_levels">Battery Levels</string>
 
     <!--Dialog messages-->
     <string name="must_select_horse">You must select a horse.</string>
     <string name="must_select_horseshoe_pad">You must select a horseshoe pad.</string>
     <string name="no_pads_detected">No horseshoe pads detected.</string>
     <string name="short_one_horseshoe_pad">You are one horseshoe pad short.</string>
+    <string name="check_battery_levels">Pad Battery Levels</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
