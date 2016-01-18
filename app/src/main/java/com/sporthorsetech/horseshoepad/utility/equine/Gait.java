@@ -13,7 +13,7 @@ import java.util.List;
 public class Gait implements Database.StoredObject
 {
     String id;
-    String name;
+    String name = "-";
     Long timeCreated;
     List<Step> steps = new ArrayList<>();
 
@@ -41,11 +41,10 @@ public class Gait implements Database.StoredObject
         }
     }
 
-    public Gait(String id, String name)
+    public Gait(String id)
     {
         setTimeCreated();
         this.id = id;
-        this.name = name;
     }
 
     public TYPE getStoredObjectType()

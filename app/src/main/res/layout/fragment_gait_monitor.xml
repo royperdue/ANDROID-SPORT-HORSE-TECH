@@ -157,7 +157,7 @@
             android:padding="1dp">
 
             <TextView
-                android:id="@+id/gait_detected_textview"
+                android:id="@+id/gait_detected_textview_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
@@ -165,16 +165,18 @@
                 android:singleLine="true"
                 android:text="@string/gait_detected"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_16sp"/>
+                android:textSize="@dimen/text_16sp"
+                android:visibility="gone"/>
 
-            <EditText
-                android:id="@+id/gait_detected_edittext"
+            <TextView
+                android:id="@+id/gait_detected_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
                 android:layout_marginRight="@dimen/pad_10dp"
                 android:layout_marginTop="@dimen/pad_5dp"
                 android:background="@drawable/border"
+                android:textColor="@color/black"
                 android:clickable="false"
                 android:cropToPadding="true"
                 android:cursorVisible="false"
@@ -185,7 +187,8 @@
                 android:padding="1dp"
                 android:paddingLeft="@dimen/pad_15dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_22sp"/>
+                android:textSize="@dimen/text_22sp"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -196,8 +199,8 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_16sp"/>
 
-            <EditText
-                android:id="@+id/average_stride_length_edittext"
+            <TextView
+                android:id="@+id/average_stride_length_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/pad_10dp"
@@ -205,6 +208,7 @@
                 android:layout_marginTop="@dimen/pad_5dp"
                 android:layout_marginBottom="@dimen/pad_10dp"
                 android:background="@drawable/border"
+                android:textColor="@color/black"
                 android:clickable="false"
                 android:cropToPadding="true"
                 android:cursorVisible="false"

@@ -81,10 +81,10 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private TextView yAxisAccelerationRF;
     private TextView zAxisAccelerationRF;
 
-    private TextView gaitDetectedTextView;
+    private TextView gaitDetectedTextViewLabel;
 
-    private EditText gaitDetectedEditText;
-    private EditText averageStrideLength;
+    private TextView gaitDetectedTextView;
+    private TextView averageStrideLength;
 
     private Spinner selectHorseSpinner;
     private Spinner selectFootingSpinner;
@@ -136,6 +136,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
     private AlertDialog dialog;
     private boolean horseSelected = false;
+
+    private int leftHind = 0;
+    private int leftFront = 0;
+    private int rightHind = 0;
+    private int rightFront = 0;
 
     public GaitMonitorFragment()
     {
@@ -250,11 +255,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.GAIT_IDS, gaitIds);
                     }
 
-                    gait = new Gait(gaitId, "Trot");
+                    gait = new Gait(gaitId);
                     System.out.println("GAIT: " + gait.getName());
-
-                    //startBeanDiscovery();
-
                 }
                 initializing = false;
             }
@@ -265,9 +267,16 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
+        gaitDetectedTextViewLabel = (TextView) view.findViewById(R.id.gait_detected_textview_label);
         gaitDetectedTextView = (TextView) view.findViewById(R.id.gait_detected_textview);
-        gaitDetectedEditText = (EditText) view.findViewById(R.id.gait_detected_edittext);
-        averageStrideLength = (EditText) view.findViewById(R.id.average_stride_length_edittext);
+
+        if (LittleDB.getInstance(getActivity().getApplicationContext()).getInt(Constant.NUMBER_OF_HORSESHOE_PADS_ACTIVATED, 0) == 4)
+        {
+            gaitDetectedTextView.setVisibility(View.VISIBLE);
+            gaitDetectedTextView.setVisibility(View.VISIBLE);
+        }
+
+        averageStrideLength = (TextView) view.findViewById(R.id.average_stride_length_textview);
 
         selectFootingSpinner = (Spinner) view.findViewById(R.id.spinnerSelectFooting);
         ArrayAdapter<CharSequence> adapterFooting = ArrayAdapter.createFromResource(getActivity(),
@@ -481,9 +490,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     }
                 }).show();
             }
-        } else if (item.getItemId() == R.id.bank_data)
-        {
-            new CommandThread(beans, Constant.BANK_DATA);
         }
 
         return super.onOptionsItemSelected(item);
@@ -728,6 +734,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadLH = false;
                 yAccelerationReadLH = false;
                 zAccelerationReadLH = false;
+                leftHind++;
             } else if (forceReadLF == true && xAccelerationReadLF == true && yAccelerationReadLF == true
                     && zAccelerationReadLF == true)
             {
@@ -786,6 +793,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadLF = false;
                 yAccelerationReadLF = false;
                 zAccelerationReadLF = false;
+                leftFront++;
             } else if (forceReadRH == true && xAccelerationReadRH == true && yAccelerationReadRH == true
                     && zAccelerationReadRH == true)
             {
@@ -844,6 +852,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadRH = false;
                 yAccelerationReadRH = false;
                 zAccelerationReadRH = false;
+                rightHind++;
             } else if (forceReadRF == true && xAccelerationReadRF == true && yAccelerationReadRF == true
                     && zAccelerationReadRF == true)
             {
@@ -902,11 +911,102 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 xAccelerationReadRF = false;
                 yAccelerationReadRF = false;
                 zAccelerationReadRF = false;
+                rightFront++;
+            }
+
+            if (LittleDB.getInstance(getActivity().getApplicationContext()).getInt(Constant.NUMBER_OF_HORSESHOE_PADS_ACTIVATED, 0) == 4)
+            {
+                if (leftHind >= 2 && leftFront >= 2 && rightHind >= 2 && rightFront >= 2)
+                {
+                    determineCurrentGait();
+                }
             }
 
         } catch (UnsupportedEncodingException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private void determineCurrentGait()
+    {
+        /*
+            WALK: RHRFLHLF
+            TROT: RHSLFLHSRF
+            CANTER RIGHT LEAD: LHRHSLFRF
+            CANTER LEFT LEAD: RHLHSRFLF
+            GALLOP RIGHT LEAD: LHRHLFRF
+            GALLOP LEFT LEAD: RHLHRFLF
+         */
+        StringBuilder stringBuilder = new StringBuilder();
+        List<Step> steps = gait.getSteps();
+
+        for (int i = 0; i < steps.size(); i++)
+        {
+            if ((Double.parseDouble(steps.get(i + 1).getForce().getStoredObjectId()) - 500) <= Double.parseDouble(steps.get(i).getForce().getStoredObjectId()))
+            {
+                // Example: RHSLFLHSRF = trot
+                stringBuilder.append(steps.get(i).getForce() + "S" + steps.get(i + 1).getForce());
+            }
+            else
+            {
+                stringBuilder.append(steps.get(i).getForce());
+            }
+        }
+
+        if (stringBuilder.toString().contains("RHRFLHLF"))
+        {
+            gaitDetectedTextView.setText("Walk");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
+        }
+        else if (stringBuilder.toString().contains("RHSLFLHSRF"))
+        {
+            gaitDetectedTextView.setText("Trot");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
+        }
+        else if (stringBuilder.toString().contains("LHRHSLFRF"))
+        {
+            gaitDetectedTextView.setText("Canter Right Lead");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
+        }
+        else if (stringBuilder.toString().contains("RHLHSRFLF"))
+        {
+            gaitDetectedTextView.setText("Canter Left Lead");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
+        }
+        else if (stringBuilder.toString().contains("LHRHLFRF"))
+        {
+            gaitDetectedTextView.setText("Gallop Right Lead");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
+        }
+        else if (stringBuilder.toString().contains("RHLHRFLF"))
+        {
+            gaitDetectedTextView.setText("Gallop Left Lead");
+            leftHind = 0;
+            leftFront = 0;
+            rightHind = 0;
+            rightFront = 0;
+            stringBuilder.setLength(0);
         }
     }
 
