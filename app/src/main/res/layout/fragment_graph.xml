@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/chart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".7">
+        </lecho.lib.hellocharts.view.ColumnChartView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/border"
+            android:cropToPadding="true"
+            android:padding="1dp">
+
+            <TextView
+                android:id="@+id/x_accel_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_5dp"
+                android:text="@string/x_acceleration"
+                android:textSize="@dimen/text_8sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/y_accel_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_5dp"
+                android:text="@string/y_acceleration"
+                android:textSize="@dimen/text_8sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/z_accel_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_5dp"
+                android:text="@string/z_acceleration"
+                android:textSize="@dimen/text_8sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/force_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_5dp"
+                android:text="@string/frc"
+                android:textSize="@dimen/text_8sp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+</LinearLayout>

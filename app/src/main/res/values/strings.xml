@@ -43,8 +43,7 @@
     <string name="pause_monitoring">Pause Monitoring</string>
     <string name="change_gait">Change Gait</string>
     <string name="view_x_acceleration">View X Acceleration</string>
-    <string name="view_acceleration_data_graphs">View Acceleration Data Graphs</string>
-    <string name="view_force_data_graphs">View Force Data Graphs</string>
+    <string name="view_data_graphs">View Data Graphs</string>
 
     <!-- Labels -->
     <string name="horseshoePadIds">Horseshoe pad ids:</string>
@@ -68,6 +67,10 @@
     <string name="axis_y">Y Axis:</string>
     <string name="axis_z">Z Axis:</string>
     <string name="force">Force:</string>
+    <string name="x_acceleration">X Acceleration</string>
+    <string name="y_acceleration">Y Acceleration</string>
+    <string name="z_acceleration">Z Acceleration</string>
+    <string name="frc">Force</string>
 
     <!-- Menu items. -->
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>

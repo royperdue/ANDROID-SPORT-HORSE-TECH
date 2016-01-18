@@ -10,11 +10,6 @@ public final class Constant
     public static final String BEANS = "*beans*";
     public static final String COMMAND = "command";
 
-    // ACTIVITY BUNDLE CONSTANTS.
-    public static final String GRAPH_FRAGMENT_INDICATOR = "graphFragmentIndicator";
-    public static final int GRAPH_FRAGMENT_ACCELERATION = 100;
-    public static final int GRAPH_FRAGMENT_FORCE = 200;
-
     public static final String ARG_COLUMN_COUNT = "column-count";
 
     // LittleDB CONSTANTS.
@@ -36,4 +31,11 @@ public final class Constant
     public static final String BANK_DATA = "BANK_DATA";
     public static final String PAUSE_READINGS = "PAUSE_READINGS";
     public static final String TAKE_READINGS = "TAKE_READINGS";
+    
+    // CHART CONSTANTS.
+    public static final int DEFAULT_DATA = 0;
+    public static final int SUBCOLUMNS_DATA = 1;
+    public static final int STACKED_DATA = 2;
+    public static final int NEGATIVE_SUBCOLUMNS_DATA = 3;
+    public static final int NEGATIVE_STACKED_DATA = 4;
 }

@@ -9,7 +9,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sporthorsetech.horseshoepad.utility.Constant;
+import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.equine.Gait;
+import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
+import com.sporthorsetech.horseshoepad.utility.equine.Horse;
+import com.sporthorsetech.horseshoepad.utility.equine.Step;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +33,7 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
-public class GraphActivityAcceleration extends ActionBarActivity
+public class GraphActivity extends ActionBarActivity
 {
 
     @Override
@@ -40,20 +49,15 @@ public class GraphActivityAcceleration extends ActionBarActivity
     
     public static class ChartFragment extends Fragment
     {
-
-        private static final int DEFAULT_DATA = 0;
-        private static final int SUBCOLUMNS_DATA = 1;
-        private static final int STACKED_DATA = 2;
-        private static final int NEGATIVE_SUBCOLUMNS_DATA = 3;
-        private static final int NEGATIVE_STACKED_DATA = 4;
-
         private ColumnChartView chart;
         private ColumnChartData data;
         private boolean hasAxes = true;
         private boolean hasAxesNames = true;
         private boolean hasLabels = false;
         private boolean hasLabelForSelected = false;
-        private int dataType = DEFAULT_DATA;
+        private int dataType = Constant.DEFAULT_DATA;
+        private List<Horse> horseList;
+        private Horse horse;
 
         public ChartFragment()
         {
@@ -63,10 +67,36 @@ public class GraphActivityAcceleration extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             setHasOptionsMenu(true);
-            View rootView = inflater.inflate(R.layout.fragment_graph_acceleration, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
+
+            horseList = Database.with(getActivity().getApplicationContext())
+                    .load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
+
+            String horseName = LittleDB.getInstance(getActivity().getApplicationContext()).getString(Constant.HORSE_NAME);
+
+            if (horseName != null)
+            {
+                for (Horse horse : horseList)
+                {
+                    if (horse.getName().equals(horseName))
+                    {
+                        this.horse = horse;
+                        break;
+                    }
+                }
+            }
 
             chart = (ColumnChartView) rootView.findViewById(R.id.chart);
             chart.setOnValueTouchListener(new ValueTouchListener());
+
+            TextView xAcceleration = (TextView) rootView.findViewById(R.id.x_accel_tv);
+            xAcceleration.setBackgroundColor(ChartUtils.COLOR_BLUE);
+            TextView yAcceleration = (TextView) rootView.findViewById(R.id.y_accel_tv);
+            yAcceleration.setBackgroundColor(ChartUtils.COLOR_GREEN);
+            TextView zAcceleration = (TextView) rootView.findViewById(R.id.z_accel_tv);
+            zAcceleration.setBackgroundColor(ChartUtils.COLOR_VIOLET);
+            TextView force = (TextView) rootView.findViewById(R.id.force_tv);
+            force.setBackgroundColor(ChartUtils.COLOR_ORANGE);
 
             generateData();
 
@@ -92,25 +122,25 @@ public class GraphActivityAcceleration extends ActionBarActivity
             }
             if (id == R.id.action_subcolumns)
             {
-                dataType = SUBCOLUMNS_DATA;
+                dataType = Constant.SUBCOLUMNS_DATA;
                 generateData();
                 return true;
             }
             if (id == R.id.action_stacked)
             {
-                dataType = STACKED_DATA;
+                dataType = Constant.STACKED_DATA;
                 generateData();
                 return true;
             }
             if (id == R.id.action_negative_subcolumns)
             {
-                dataType = NEGATIVE_SUBCOLUMNS_DATA;
+                dataType = Constant.NEGATIVE_SUBCOLUMNS_DATA;
                 generateData();
                 return true;
             }
             if (id == R.id.action_negative_stacked)
             {
-                dataType = NEGATIVE_STACKED_DATA;
+                dataType = Constant.NEGATIVE_STACKED_DATA;
                 generateData();
                 return true;
             }
@@ -174,25 +204,47 @@ public class GraphActivityAcceleration extends ActionBarActivity
             hasAxesNames = true;
             hasLabels = false;
             hasLabelForSelected = false;
-            dataType = DEFAULT_DATA;
+            dataType = Constant.DEFAULT_DATA;
             chart.setValueSelectionEnabled(hasLabelForSelected);
 
         }
 
         private void generateDefaultData()
         {
-            int numSubcolumns = 1;
-            int numColumns = 8;
-            // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
+            List<GaitActivity> gaitActivities = horse.getGaitActivities();
+            List<Step> steps = new ArrayList<>();
+
+            for (GaitActivity gaitActivity : gaitActivities)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+
+                for (Gait gait : gaits)
+                {
+                    List<Step> s = gait.getSteps();
+
+                    for (int i = 0; i < s.size(); i++)
+                    {
+                        steps.add(s.get(i));
+                    }
+                }
+            }
+
+            int numberSubColumns = 1;
+            int numberColumns = steps.size();
+            // Column can have many subcolumns, here I use 4 subcolumn in each of 8 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i)
-            {
 
+            for (int i = 0; i < numberColumns; ++i)
+            {
                 values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j)
+
+                for (int j = 0; j < numberSubColumns; ++j)
                 {
-                    values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationX().getAccelerationX(), ChartUtils.COLOR_BLUE));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationY().getAccelerationY(), ChartUtils.COLOR_GREEN));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationZ().getAccelerationZ(), ChartUtils.COLOR_VIOLET));
+                    values.add(new SubcolumnValue(steps.get(i).getForce().getForce(), ChartUtils.COLOR_ORANGE));
                 }
 
                 Column column = new Column(values);
@@ -206,6 +258,7 @@ public class GraphActivityAcceleration extends ActionBarActivity
             if (hasAxes)
             {
                 Axis axisX = new Axis();
+                axisX.setHasTiltedLabels(true);
                 Axis axisY = new Axis().setHasLines(true);
                 if (hasAxesNames)
                 {
@@ -229,18 +282,40 @@ public class GraphActivityAcceleration extends ActionBarActivity
          */
         private void generateSubcolumnsData()
         {
-            int numSubcolumns = 4;
-            int numColumns = 4;
+            List<GaitActivity> gaitActivities = horse.getGaitActivities();
+            List<Step> steps = new ArrayList<>();
+
+            for (GaitActivity gaitActivity : gaitActivities)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+
+                for (Gait gait : gaits)
+                {
+                    List<Step> s = gait.getSteps();
+
+                    for (int i = 0; i < s.size(); i++)
+                    {
+                        steps.add(s.get(i));
+                    }
+                }
+            }
+
+            int numberSubColumns = 1;
+            int numberColumns = steps.size();
             // Column can have many subcolumns, here I use 4 subcolumn in each of 8 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i)
-            {
 
+            for (int i = 0; i < numberColumns; ++i)
+            {
                 values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j)
+
+                for (int j = 0; j < numberSubColumns; ++j)
                 {
-                    values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationX().getAccelerationX(), ChartUtils.COLOR_BLUE));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationY().getAccelerationY(), ChartUtils.COLOR_GREEN));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationZ().getAccelerationZ(), ChartUtils.COLOR_VIOLET));
+                    values.add(new SubcolumnValue(steps.get(i).getForce().getForce(), ChartUtils.COLOR_ORANGE));
                 }
 
                 Column column = new Column(values);
@@ -277,18 +352,40 @@ public class GraphActivityAcceleration extends ActionBarActivity
          */
         private void generateStackedData()
         {
-            int numSubcolumns = 4;
-            int numColumns = 8;
-            // Column can have many stacked subcolumns, here I use 4 stacke subcolumn in each of 4 columns.
+            List<GaitActivity> gaitActivities = horse.getGaitActivities();
+            List<Step> steps = new ArrayList<>();
+
+            for (GaitActivity gaitActivity : gaitActivities)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+
+                for (Gait gait : gaits)
+                {
+                    List<Step> s = gait.getSteps();
+
+                    for (int i = 0; i < s.size(); i++)
+                    {
+                        steps.add(s.get(i));
+                    }
+                }
+            }
+
+            int numberSubColumns = 1;
+            int numberColumns = steps.size();
+            // Column can have many subcolumns, here I use 4 subcolumn in each of 8 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i)
-            {
 
+            for (int i = 0; i < numberColumns; ++i)
+            {
                 values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j)
+
+                for (int j = 0; j < numberSubColumns; ++j)
                 {
-                    values.add(new SubcolumnValue((float) Math.random() * 20f + 5, ChartUtils.pickColor()));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationX().getAccelerationX(), ChartUtils.COLOR_BLUE));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationY().getAccelerationY(), ChartUtils.COLOR_GREEN));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationZ().getAccelerationZ(), ChartUtils.COLOR_VIOLET));
+                    values.add(new SubcolumnValue(steps.get(i).getForce().getForce(), ChartUtils.COLOR_ORANGE));
                 }
 
                 Column column = new Column(values);
@@ -325,19 +422,40 @@ public class GraphActivityAcceleration extends ActionBarActivity
         private void generateNegativeSubcolumnsData()
         {
 
-            int numSubcolumns = 4;
-            int numColumns = 4;
+            List<GaitActivity> gaitActivities = horse.getGaitActivities();
+            List<Step> steps = new ArrayList<>();
+
+            for (GaitActivity gaitActivity : gaitActivities)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+
+                for (Gait gait : gaits)
+                {
+                    List<Step> s = gait.getSteps();
+
+                    for (int i = 0; i < s.size(); i++)
+                    {
+                        steps.add(s.get(i));
+                    }
+                }
+            }
+
+            int numberSubColumns = 1;
+            int numberColumns = steps.size();
+            // Column can have many subcolumns, here I use 4 subcolumn in each of 8 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i)
-            {
 
+            for (int i = 0; i < numberColumns; ++i)
+            {
                 values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j)
+
+                for (int j = 0; j < numberSubColumns; ++j)
                 {
-                    int sign = getSign();
-                    values.add(new SubcolumnValue((float) Math.random() * 50f * sign + 5 * sign, ChartUtils.pickColor
-                            ()));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationX().getAccelerationX(), ChartUtils.COLOR_BLUE));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationY().getAccelerationY(), ChartUtils.COLOR_GREEN));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationZ().getAccelerationZ(), ChartUtils.COLOR_VIOLET));
+                    values.add(new SubcolumnValue(steps.get(i).getForce().getForce(), ChartUtils.COLOR_ORANGE));
                 }
 
                 Column column = new Column(values);
@@ -371,19 +489,40 @@ public class GraphActivityAcceleration extends ActionBarActivity
         private void generateNegativeStackedData()
         {
 
-            int numSubcolumns = 4;
-            int numColumns = 8;
-            // Column can have many stacked subcolumns, here I use 4 stacke subcolumn in each of 4 columns.
+            List<GaitActivity> gaitActivities = horse.getGaitActivities();
+            List<Step> steps = new ArrayList<>();
+
+            for (GaitActivity gaitActivity : gaitActivities)
+            {
+                List<Gait> gaits = gaitActivity.getGaits();
+
+                for (Gait gait : gaits)
+                {
+                    List<Step> s = gait.getSteps();
+
+                    for (int i = 0; i < s.size(); i++)
+                    {
+                        steps.add(s.get(i));
+                    }
+                }
+            }
+
+            int numberSubColumns = 1;
+            int numberColumns = steps.size();
+            // Column can have many subcolumns, here I use 4 subcolumn in each of 8 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i)
-            {
 
+            for (int i = 0; i < numberColumns; ++i)
+            {
                 values = new ArrayList<SubcolumnValue>();
-                for (int j = 0; j < numSubcolumns; ++j)
+
+                for (int j = 0; j < numberSubColumns; ++j)
                 {
-                    int sign = getSign();
-                    values.add(new SubcolumnValue((float) Math.random() * 20f * sign + 5 * sign, ChartUtils.pickColor()));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationX().getAccelerationX(), ChartUtils.COLOR_BLUE));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationY().getAccelerationY(), ChartUtils.COLOR_GREEN));
+                    values.add(new SubcolumnValue(steps.get(i).getAccelerationZ().getAccelerationZ(), ChartUtils.COLOR_VIOLET));
+                    values.add(new SubcolumnValue(steps.get(i).getForce().getForce(), ChartUtils.COLOR_ORANGE));
                 }
 
                 Column column = new Column(values);
@@ -427,19 +566,19 @@ public class GraphActivityAcceleration extends ActionBarActivity
         {
             switch (dataType)
             {
-                case DEFAULT_DATA:
+                case Constant.DEFAULT_DATA:
                     generateDefaultData();
                     break;
-                case SUBCOLUMNS_DATA:
+                case Constant.SUBCOLUMNS_DATA:
                     generateSubcolumnsData();
                     break;
-                case STACKED_DATA:
+                case Constant.STACKED_DATA:
                     generateStackedData();
                     break;
-                case NEGATIVE_SUBCOLUMNS_DATA:
+                case Constant.NEGATIVE_SUBCOLUMNS_DATA:
                     generateNegativeSubcolumnsData();
                     break;
-                case NEGATIVE_STACKED_DATA:
+                case Constant.NEGATIVE_STACKED_DATA:
                     generateNegativeStackedData();
                     break;
                 default:

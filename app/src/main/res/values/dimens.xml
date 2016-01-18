@@ -18,6 +18,8 @@
     <dimen name="pad_30dp">30dp</dimen>
     <dimen name="pad_40dp">40dp</dimen>
 
+    <dimen name="text_6sp">6sp</dimen>
+    <dimen name="text_8sp">8sp</dimen>
     <dimen name="text_12sp">12sp</dimen>
     <dimen name="text_14sp">14sp</dimen>
     <dimen name="text_16sp">16sp</dimen>

@@ -22,12 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GraphActivityAcceleration"
-            android:screenOrientation="landscape"
-            android:label="@string/title_activity_graph">
-        </activity>
-        <activity
-            android:name=".GraphActivityForce"
+            android:name=".GraphActivity"
             android:screenOrientation="landscape"
             android:label="@string/title_activity_graph">
         </activity>

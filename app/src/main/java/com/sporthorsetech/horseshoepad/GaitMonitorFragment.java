@@ -88,8 +88,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Spinner selectGaitSpinner;
     private Spinner selectFootingSpinner;
 
-    private Button viewAccelerationDataGraphs;
-    private Button viewForceDataGraphs;
+    private Button viewDataGraphs;
     private Button beginMonitoringButton;
     private Button pauseMonitoringButton;
     private Button changeGaitButton;
@@ -406,8 +405,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         });
 
-        viewAccelerationDataGraphs = (Button) view.findViewById(R.id.view_acceleration_data_graphs_button);
-        viewAccelerationDataGraphs.setOnClickListener(new View.OnClickListener()
+        viewDataGraphs = (Button) view.findViewById(R.id.view_data_graphs_button);
+        viewDataGraphs.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -428,54 +427,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         Database.with(getActivity().getApplicationContext()).saveObject(horse);
                     }
 
-                    Intent intent = new Intent(getActivity(), GraphActivityAcceleration.class);
-                    startActivity(intent);
-                } else if (horseSelected == false)
-                {
-                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horse))
-                            .setPositiveButton("OK", new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    materialDialog.dismiss();
-                                }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            materialDialog.dismiss();
-                        }
-                    }).show();
-                }
-            }
-        });
-
-        viewForceDataGraphs = (Button) view.findViewById(R.id.view_force_data_graphs_button);
-        viewForceDataGraphs.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (horseSelected == true)
-                {
-                    if (gait.getSteps().size() > 0)
-                    {
-                        List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                        List<Gait> gaits = gaitActivity.getGaits();
-                        gaits.add(gait);
-                        gaitActivity.setGaits(gaits);
-
-                        gaitActivities.add(gaitActivity);
-
-                        horse.setGaitActivities(gaitActivities);
-
-                        Database.with(getActivity().getApplicationContext()).saveObject(horse);
-                    }
-
-                    Intent intent = new Intent(getActivity(), GraphActivityForce.class);
+                    Intent intent = new Intent(getActivity(), GraphActivity.class);
                     startActivity(intent);
                 } else if (horseSelected == false)
                 {
