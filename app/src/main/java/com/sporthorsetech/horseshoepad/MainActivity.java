@@ -23,12 +23,11 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.punchthrough.bean.sdk.BeanManager;
-import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
         WelcomeFragment.OnFragmentInteractionListener, GaitMonitorFragment.OnFragmentInteractionListener,
         ActivatePadsFragment.OnFragmentInteractionListener, DeleteHorseProfileFragment.OnFragmentInteractionListener,
-        HorseProfileListFragment.OnListFragmentInteractionListener
+        HorseProfileFragment.OnFragmentInteractionListener
 {
     private Toolbar toolbar;
     private String title = "";
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
                                 break;
                             case 4:
                                 title = getString(R.string.view_gait_data);
-                                fragment = HorseProfileListFragment.newInstance(1);
+                                fragment = HorseProfileFragment.newInstance();
                                 break;
                             case 5:
                                 title = getString(R.string.delete_all_horse_profiles);
@@ -160,11 +159,5 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     public void onFragmentInteraction(String title)
     {
         //getSupportActionBar().setTitle(title);
-    }
-
-    @Override
-    public void onListFragmentInteraction(Horse item)
-    {
-
     }
 }
