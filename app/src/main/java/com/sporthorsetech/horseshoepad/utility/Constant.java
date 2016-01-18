@@ -34,8 +34,7 @@ public final class Constant
     
     // CHART CONSTANTS.
     public static final int DEFAULT_DATA = 0;
-    public static final int SUBCOLUMNS_DATA = 1;
-    public static final int STACKED_DATA = 2;
-    public static final int NEGATIVE_SUBCOLUMNS_DATA = 3;
-    public static final int NEGATIVE_STACKED_DATA = 4;
+    public static final int STACKED_DATA = 1;
+    public static final int NEGATIVE_SUBCOLUMNS_DATA = 2;
+    public static final int NEGATIVE_STACKED_DATA = 3;
 }
