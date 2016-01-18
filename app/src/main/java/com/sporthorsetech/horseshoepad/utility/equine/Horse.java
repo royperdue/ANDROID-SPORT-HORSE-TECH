@@ -59,6 +59,12 @@ public class Horse implements Database.StoredObject
         this.discipline = discipline;
     }
 
+    public Horse(String id, String name)
+    {
+        this.id = id;
+        this.name = name;
+    }
+
     public TYPE getStoredObjectType()
     {
         return TYPE.horse;

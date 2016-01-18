@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -190,9 +191,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         yAxisAccelerationRF = (TextView) view.findViewById(R.id.axis_y_rf_textview);
         zAxisAccelerationRF = (TextView) view.findViewById(R.id.axis_z_rf_textview);
 
+
         horseList = Database.with(getActivity().getApplicationContext())
                 .load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-        Horse[] horseArray = horseList.toArray(new Horse[horseList.size()]);
+        Horse[] horseArray = new Horse[horseList.size() + 1];
+        Horse placeHolderHorse = new Horse("-100", "Select a horse...");
+        horseArray[0] = placeHolderHorse;
+
+        for (int i = 0; i < horseList.size(); i++)
+        {
+            horseArray[i + 1] = horseList.get(i);
+        }
 
         selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
 
@@ -202,22 +211,20 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectHorseSpinner.setAdapter(adapter);
+        selectHorseSpinner.setSelection(Adapter.NO_SELECTION, false);
+
         selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
-            // boolean variable that is used so that the onItemSelected method is not executed
-            // on the first initializing round that happens when the class is created.
-            boolean initializing = true;
-
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if (initializing == false)
+                if (position != 0)
                 {
                     horseSelected = true;
 
                     SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
 
-                    horse = spinnerAdapter.getItem(position);
+                    horse = spinnerAdapter.getSelectedItem(position);
                     LittleDB.getInstance(getActivity().getApplicationContext()).putString(Constant.HORSE_NAME, horse.getName());
 
                     Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
@@ -229,7 +236,13 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                     gait = new Gait(makeGaitId());
                     System.out.println("GAIT: " + gait.getName());
                 }
-                initializing = false;
+                else if (position == 0)
+                {
+                    horseSelected = false;
+                    horse = null;
+                    gaitActivity = null;
+                    gait = null;
+                }
             }
 
             @Override

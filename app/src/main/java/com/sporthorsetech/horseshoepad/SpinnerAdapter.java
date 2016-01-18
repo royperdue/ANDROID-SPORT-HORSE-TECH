@@ -42,6 +42,11 @@ public class SpinnerAdapter extends ArrayAdapter<Horse>
         return horses[position];
     }
 
+    public Horse getSelectedItem(int position)
+    {
+        return horses[position];
+    }
+
 
     public View getView(int position, View convertView, ViewGroup parent)
     {

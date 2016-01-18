@@ -87,6 +87,7 @@
     <string name="no_pads_detected">No horseshoe pads detected.</string>
     <string name="short_one_horseshoe_pad">You are one horseshoe pad short.</string>
     <string name="check_battery_levels">Pad Battery Levels</string>
+    <string name="must_detect_horseshoe_pads">Horseshoe pads not yet detected.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

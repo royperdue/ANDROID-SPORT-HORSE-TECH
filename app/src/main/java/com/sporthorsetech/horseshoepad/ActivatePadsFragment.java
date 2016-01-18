@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -82,12 +83,93 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         setHasOptionsMenu(true);
 
         horseList = Database.with(getActivity().getApplicationContext()).load(Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
-        horseArray = horseList.toArray(new Horse[horseList.size()]);
+        horseArray = new Horse[horseList.size() + 1];
+        Horse placeHolderHorse = new Horse("-100", "Select a horse...");
+        horseArray[0] = placeHolderHorse;
 
-        this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
-        dialog.show();
+        for (int i = 0; i < horseList.size(); i++)
+        {
+            horseArray[i + 1] = horseList.get(i);
+        }
 
-        BeanManager.getInstance().startDiscovery(this);
+        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
+
+        final ArrayAdapter adapter = new SpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                horseArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectHorseSpinner.setAdapter(adapter);
+        selectHorseSpinner.setSelection(Adapter.NO_SELECTION, false);
+
+        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if (position != 0)
+                {
+                    horseSelected = true;
+
+                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
+
+                    horse = spinnerAdapter.getSelectedItem(position);
+                    LittleDB.getInstance(getActivity().getApplicationContext()).putString(Constant.HORSE_NAME, horse.getName());
+
+                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
+
+                    if (horse.getHorseHooves() != null)
+                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
+                    else
+                        horseHooves = new ArrayList<>();
+                } else if (position == 0)
+                {
+                    horseSelected = false;
+                    horse = null;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
+
+        textView1 = (EditText) view.findViewById(R.id.textView1);
+        textView2 = (EditText) view.findViewById(R.id.textView2);
+        textView3 = (EditText) view.findViewById(R.id.textView3);
+        textView4 = (EditText) view.findViewById(R.id.textView4);
+
+        monitorGaitActivityButton = (Button) view.findViewById(R.id.monitor_gait_activity_button);
+        monitorGaitActivityButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                BeanManager.getInstance().cancelDiscovery();
+
+                for (Bean bean : beans)
+                {
+                    if (bean.isConnected())
+                    {
+                        bean.disconnect();
+                    }
+                }
+
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                String title = getString(R.string.monitor_gait_activity);
+                Fragment fragment = GaitMonitorFragment.newInstance();
+
+                transaction.addToBackStack(title);
+                transaction.replace(R.id.container, fragment, title);
+                transaction.commit();
+            }
+        });
+
+        activatePadsButton = (Button) view.findViewById(R.id.buttonActivatePads);
+        activatePadsButton.setEnabled(false);
 
         return view;
     }
@@ -178,67 +260,8 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         System.out.println("Total beans discovered: " + beans.size());
         Toast.makeText(getActivity().getApplicationContext(), "Total beans discovered: " + beans.size(), Toast.LENGTH_SHORT).show();
 
-        selectHorseSpinner = (Spinner) view.findViewById(R.id.spinnerSelectHorse);
-
-        final ArrayAdapter adapter = new SpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_item,
-                horseArray);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectHorseSpinner.setAdapter(adapter);
-
-        selectHorseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            // boolean variable that is used so that the onItemSelected method is not executed
-            // on the first initializing round that happens when the class is created.
-            boolean initializing = true;
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                if (initializing == false)
-                {
-                    horseSelected = true;
-
-                    SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
-
-                    horse = spinnerAdapter.getItem(position);
-                    Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
-
-                    if (horse.getHorseHooves() != null)
-                        horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                    else
-                        horseHooves = new ArrayList<>();
-
-                }
-                initializing = false;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                horseSelected = true;
-
-                SpinnerAdapter spinnerAdapter = (SpinnerAdapter) selectHorseSpinner.getAdapter();
-
-                horse = spinnerAdapter.getItem(0);
-                Toast.makeText(getActivity().getApplicationContext(), horse.getName(), Toast.LENGTH_SHORT).show();
-
-                if (horse.getHorseHooves() != null)
-                    horseHooves = (ArrayList<HorseHoof>) horse.getHorseHooves();
-                else
-                    horseHooves = new ArrayList<>();
-            }
-        });
-
-        textView1 = (EditText) view.findViewById(R.id.textView1);
-        textView2 = (EditText) view.findViewById(R.id.textView2);
-        textView3 = (EditText) view.findViewById(R.id.textView3);
-        textView4 = (EditText) view.findViewById(R.id.textView4);
-
         padIdLayout = (LinearLayout) view.findViewById(R.id.pad_id_Layout);
 
-        activatePadsButton = (Button) view.findViewById(R.id.buttonActivatePads);
         activatePadsButton.setOnClickListener(new View.OnClickListener()
 
         {
@@ -286,7 +309,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                 } else if (isCheckedList.size() == 0)
                 {
                     final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_select_horseshoe_pad))
+                    materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_detect_horseshoe_pads))
                             .setPositiveButton("OK", new View.OnClickListener()
                             {
                                 @Override
@@ -304,34 +327,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                     }).show();
                 }
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);
-            }
-        });
-
-        monitorGaitActivityButton = (Button) view.findViewById(R.id.monitor_gait_activity_button);
-        monitorGaitActivityButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                BeanManager.getInstance().cancelDiscovery();
-
-                for (Bean bean : beans)
-                {
-                    if (bean.isConnected())
-                    {
-                        bean.disconnect();
-                    }
-                }
-
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                String title = getString(R.string.monitor_gait_activity);
-                Fragment fragment = GaitMonitorFragment.newInstance();
-
-                transaction.addToBackStack(title);
-                transaction.replace(R.id.container, fragment, title);
-                transaction.commit();
             }
         });
 
@@ -379,6 +374,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                 padIdLayout.addView(checkBox);
             }
         }
+        activatePadsButton.setEnabled(true);
         dialog.dismiss();
     }
 
