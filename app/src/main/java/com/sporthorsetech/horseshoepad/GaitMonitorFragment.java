@@ -932,11 +932,4 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         void onFragmentInteraction(String title);
     }
-
-    private void startBeanDiscovery()
-    {
-        BeanManager.getInstance().startDiscovery(this);
-        this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
-        dialog.show();
-    }
 }
