@@ -140,6 +140,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
     private AlertDialog dialog;
     private boolean horseSelected = false;
+    private boolean horseshoePadsDetected = false;
 
     private int leftHind = 0;
     private int leftFront = 0;
@@ -148,6 +149,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
     private Menu menu;
     private int count = 0;
+    private BeanListener beanListener = this;
 
     public GaitMonitorFragment()
     {
@@ -235,8 +237,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                     gait = new Gait(makeGaitId());
                     System.out.println("GAIT: " + gait.getName());
-                }
-                else if (position == 0)
+                } else if (position == 0)
                 {
                     horseSelected = false;
                     horse = null;
@@ -294,7 +295,42 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
-                    new CommandThread(beans, Constant.TAKE_READINGS);
+                    if (horseshoePadsDetected)
+                    {
+                        for (Bean bean : beans)
+                        {
+                            if (!bean.isConnected())
+                            {
+                                bean.connect(getActivity(), beanListener);
+                                bean.sendSerialMessage("START");
+                            } else
+                            {
+                                bean.sendSerialMessage("START");
+                            }
+
+                        }
+                        new CommandThread(beans, Constant.TAKE_READINGS);
+                    }
+                    else if (!horseshoePadsDetected)
+                    {
+                        final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                        materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_detect_horseshoe_pads))
+                                .setPositiveButton("OK", new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v)
+                                    {
+                                        materialDialog.dismiss();
+                                    }
+                                }).setNegativeButton("CANCEL", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                materialDialog.dismiss();
+                            }
+                        }).show();
+                    }
                 } else if (horseSelected == false)
                 {
                     final MaterialDialog materialDialog = new MaterialDialog(getActivity());
@@ -347,20 +383,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
-                    if (gait.getSteps().size() > 0)
-                    {
-                        List<GaitActivity> gaitActivities = horse.getGaitActivities();
-                        List<Gait> gaits = gaitActivity.getGaits();
-                        gaits.add(gait);
-                        gaitActivity.setGaits(gaits);
-
-                        gaitActivities.add(gaitActivity);
-
-                        horse.setGaitActivities(gaitActivities);
-
-                        Database.with(getActivity().getApplicationContext()).saveObject(horse);
-                    }
-
                     Intent intent = new Intent(getActivity(), GraphActivity.class);
                     startActivity(intent);
                 } else if (horseSelected == false)
@@ -423,6 +445,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         super.onDetach();
 
+        mListener = null;
+    }
+
+    @Override
+    public void onPause()
+    {
         BeanManager.getInstance().cancelDiscovery();
 
         for (Bean bean : beans)
@@ -433,7 +461,33 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         }
 
-        mListener = null;
+        if (gait != null)
+        {
+            if (gait.getSteps().size() > 0)
+            {
+                List<GaitActivity> gaitActivities = horse.getGaitActivities();
+                List<Gait> gaits = gaitActivity.getGaits();
+                gaits.add(gait);
+                gaitActivity.setGaits(gaits);
+
+                gaitActivities.add(gaitActivity);
+
+                horse.setGaitActivities(gaitActivities);
+
+                Database.with(getActivity().getApplicationContext()).saveObject(horse);
+            }
+        }
+
+        horseSelected = false;
+        horseshoePadsDetected = false;
+        selectHorseSpinner.setSelection(0);
+        textView1.setText("");
+        textView2.setText("");
+        textView3.setText("");
+        textView4.setText("");
+        beans.clear();
+
+        super.onPause();
     }
 
     @Override
@@ -486,8 +540,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onBeanDiscovered(Bean bean, int rssi)
     {
-        beans.add(bean);
-        bean.connect(getActivity(), this);
+        List<HorseHoof> horseHoofs = horse.getHorseHooves();
+
+        for (HorseHoof horseHoof : horseHoofs)
+        {
+            if (horseHoof.getCurrentHorseShoePad().equals(bean.getDevice().getName()))
+            {
+                beans.add(bean);
+                bean.connect(getActivity(), this);
+                break;
+            }
+        }
     }
 
     @Override
@@ -521,6 +584,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         MenuItem batteryLevel = this.menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
         batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
+        horseshoePadsDetected = true;
         dialog.dismiss();
     }
 
@@ -546,6 +610,13 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
+        try
+        {
+            System.out.println(new String(data, "UTF-8"));
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

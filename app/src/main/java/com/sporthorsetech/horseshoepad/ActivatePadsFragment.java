@@ -181,7 +181,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-
     public void onButtonPressed(Uri uri)
     {
         if (mListener != null)
@@ -209,6 +208,12 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     {
         super.onDetach();
 
+        mListener = null;
+    }
+
+    @Override
+    public void onPause()
+    {
         BeanManager.getInstance().cancelDiscovery();
 
         for (Bean bean : beans)
@@ -219,7 +224,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
             }
         }
 
-        mListener = null;
+        super.onPause();
     }
 
     @Override
@@ -263,7 +268,6 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         padIdLayout = (LinearLayout) view.findViewById(R.id.pad_id_Layout);
 
         activatePadsButton.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View v)
@@ -298,8 +302,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                                 {
                                     materialDialog.dismiss();
                                 }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
+                            }).setNegativeButton("CANCEL", new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
                         {
@@ -317,8 +320,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                                 {
                                     materialDialog.dismiss();
                                 }
-                            }).setNegativeButton("CANCEL", new View.OnClickListener()
-                    {
+                            }).setNegativeButton("CANCEL", new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
                         {
@@ -376,6 +378,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
         }
         activatePadsButton.setEnabled(true);
         dialog.dismiss();
+
     }
 
     @Override
