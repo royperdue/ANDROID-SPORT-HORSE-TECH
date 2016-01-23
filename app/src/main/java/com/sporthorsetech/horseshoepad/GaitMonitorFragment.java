@@ -297,15 +297,57 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 {
                     if (horseshoePadsDetected)
                     {
-                        for (Bean bean : beans)
+                        for (final Bean bean : beans)
                         {
                             if (!bean.isConnected())
                             {
                                 bean.connect(getActivity(), beanListener);
-                                bean.sendSerialMessage("START");
+
+                                if (bean.isConnected())
+                                {
+                                    bean.readArduinoPowerState(new Callback<Boolean>()
+                                    {
+                                        @Override
+                                        public void onResult(Boolean result)
+                                        {
+                                            if (!result)
+                                            {
+                                                System.out.println("ARDUINO NOW ENABLED");
+                                                bean.setArduinoEnabled(true);
+                                                bean.sendSerialMessage("START");
+                                            }
+                                            else
+                                            {
+                                                System.out.println("ARDUINO ENABLED 1");
+                                                bean.sendSerialMessage("START");
+                                            }
+                                        }
+                                    });
+                                }
+
                             } else
                             {
-                                bean.sendSerialMessage("START");
+                                if (bean.isConnected())
+                                {
+                                    bean.readArduinoPowerState(new Callback<Boolean>()
+                                    {
+                                        @Override
+                                        public void onResult(Boolean result)
+                                        {
+                                            if (!result)
+                                            {
+                                                System.out.println("ARDUINO NOW ENABLED");
+                                                bean.setArduinoEnabled(true);
+                                                bean.sendSerialMessage("START");
+                                            }
+                                            else
+                                            {
+                                                System.out.println("ARDUINO ENABLED 2");
+                                                bean.sendSerialMessage("START");
+                                            }
+                                        }
+                                    });
+                                }
                             }
 
                         }
@@ -453,11 +495,23 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         BeanManager.getInstance().cancelDiscovery();
 
-        for (Bean bean : beans)
+        for (final Bean bean : beans)
         {
             if (bean.isConnected())
             {
-                bean.disconnect();
+                bean.readArduinoPowerState(new Callback<Boolean>()
+                {
+                    @Override
+                    public void onResult(Boolean result)
+                    {
+                        if (result)
+                        {
+                            bean.setArduinoEnabled(false);
+                            System.out.println("ARDUINO DISABLED");
+                            bean.disconnect();
+                        }
+                    }
+                });
             }
         }
 
@@ -538,7 +592,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     }
 
     @Override
-    public void onBeanDiscovered(Bean bean, int rssi)
+    public void onBeanDiscovered(final Bean bean, int rssi)
     {
         List<HorseHoof> horseHoofs = horse.getHorseHooves();
 
@@ -578,8 +632,23 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         textView4.setText(horseHoof.getCurrentHorseShoePad());
                     }
                 }
-
             }
+           /* if (bean.isConnected())
+            {
+                bean.readArduinoPowerState(new Callback<Boolean>()
+                {
+                    @Override
+                    public void onResult(Boolean result)
+                    {
+                        if (result)
+                            System.out.println("ARDUINO POWER ON.");
+                    }
+                });
+            }
+            else
+            {
+                System.out.println("NOT CONNECTED.");
+            }*/
         }
         MenuItem batteryLevel = this.menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
         batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
