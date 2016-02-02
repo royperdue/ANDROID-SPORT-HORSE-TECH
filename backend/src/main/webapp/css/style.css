@@ -1,8 +1,5 @@
 /*--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
+Author: Roy Perdue
 --*/
 h4, h5, h6,
 h1, h2, h3 {margin-top: 0;}
@@ -68,10 +65,10 @@ nav a:focus {
 	transform: translateX(0px);
 }
 .banner {
-	background: #FB7A08;
+	background: #9BC53D;
 }
 .header {
-	background: #EB7A00;
+	background: #498101;
 	padding: 26px 0px;
 }
 .banner-grids {
@@ -122,7 +119,7 @@ nav a:focus {
 }
 .banner-bwn a:hover {
 	text-decoration:none;
-	background: #F47910;
+	background: #F2BB05;
 	transition: 0.5s all;
  -webkit-transition: 0.5s all;
  -moz-transition:  0.5s all;
@@ -196,7 +193,7 @@ ul.res li a:hover,ul.res li a.active{
 	width: 40%;
 }
 .logo img {
-	width: 80%;
+	width: 100%;
 }
 .banner-right img {
 	width: 60%;
@@ -253,7 +250,7 @@ span.menu {
 .feature h3 {
 	font-size: 37px;
 	font-weight: 500;
-	color: #F47407;
+	color: #124E78;
 }
 .feature p {
 	font-size: 16px;
@@ -354,7 +351,7 @@ span.menu {
 /*--temp grid end here--*/
 /*--work start here--*/
 .work {
-	background: #FEF8F2;
+	background: #F0F0C9;
 	padding:90px 0px;
 }
 .work-top {
@@ -364,7 +361,7 @@ span.menu {
 .work-top h3 {
 	font-size: 37px;
 	font-weight: 500;
-	color: #F47407;
+	color: #124E78;
 }
 span.round-one {
 	font-size: 19px;
@@ -372,7 +369,7 @@ span.round-one {
 	color: #fff;
 	padding: 12px 19px;
 	width: 13%;
-	background: #f47407;
+	background: #124E78;
 	border-radius: 25px;
 	position: absolute;
 	top: 50px;
@@ -384,7 +381,7 @@ span.round-two {
 	color: #fff;
 	padding: 12px 19px;
 	width: 13%;
-	background: #f47407;
+	background: #124E78;
 	border-radius: 25px;
 	position: absolute;
 	top: 200px;
@@ -396,7 +393,7 @@ span.round-three {
 	color: #fff;
 	padding: 12px 19px;
 	width: 13%;
-	background: #f47407;
+	background: #124E78;
 	border-radius: 25px;
 	position: absolute;
 	top: 550px;
@@ -408,7 +405,7 @@ span.round-four {
 	color: #fff;
 	padding: 12px 19px;
 	width: 13%;
-	background: #f47407;
+	background: #124E78;
 	border-radius: 25px;
 	position: absolute;
 	top: 700px;
@@ -674,7 +671,7 @@ div#top {
 .screenshot-top h3 {
 	font-size: 37px;
 	font-weight: 500;
-	color: #F47407;
+	color: #124E78;
 }
 .screenshot-top p {
 	font-size: 16px;
@@ -967,7 +964,7 @@ div#top {
 .video-top h3 {
 	font-size: 25px;
 	font-weight: 500;
-	color: #000;
+	color: #124E78;
 	margin: 0px 0px 8px 0px;
 }
 .video-top p {
@@ -995,7 +992,7 @@ span.e {
 /*--review start here--*/
 .review {
 	padding: 65px 0px;
-	background: #FFF8F8;
+	background: #F0F0C9;
 }
 .review-top {
 	text-align: center;
@@ -1025,7 +1022,7 @@ span.e {
 .review-top h3 {
 	font-size: 37px;
 	font-weight: 500;
-	color: #F47407;
+	color: #124E78;
 }
 .review-top p {
 	font-size: 16px;
@@ -1755,7 +1752,7 @@ span.review-img1 {
 /*--contact end here--*/
 /*--footer start here--*/
 .footer {
-	background: #FC811C;
+	background: #498101;
 	padding: 50px 0px;
 	text-align: center;
 }
