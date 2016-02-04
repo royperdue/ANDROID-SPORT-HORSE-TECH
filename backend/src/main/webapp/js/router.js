@@ -65,5 +65,13 @@ router.config(['$stateProvider',
                           templateUrl: 'partials/video.html',
                       },
                   },
+              }).state('reviews', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'ReviewCtrl',
+                          templateUrl: 'partials/reviews.html',
+                      },
+                  },
               })
 }])
