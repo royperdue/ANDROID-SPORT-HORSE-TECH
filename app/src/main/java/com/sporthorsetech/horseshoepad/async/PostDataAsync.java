@@ -17,7 +17,6 @@ import java.io.IOException;
 
 public class PostDataAsync extends AsyncTask<Void, Void, Horse>
 {
-
     private Activity context;
     private HorseApi api;
     private GoogleAccountCredential credential;
@@ -34,7 +33,7 @@ public class PostDataAsync extends AsyncTask<Void, Void, Horse>
     private void init()
     {
         if (api == null)
-        {  // Only do this once
+        {
             HorseApi.Builder builder = new HorseApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), credential);
                     //.setRootUrl(context.getString(R.string.project_id));

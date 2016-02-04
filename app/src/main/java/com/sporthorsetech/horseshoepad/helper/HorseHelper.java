@@ -1,6 +1,6 @@
 package com.sporthorsetech.horseshoepad.helper;
 
-import android.app.Activity;
+import android.content.Context;
 import android.widget.Toast;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -13,10 +13,9 @@ public class HorseHelper
 {
     private static final String EMPTY = "";
     private static final int FIRST_POSITION = 0;
+    private Context context;
 
-    private Activity context;
-
-    public HorseHelper(Activity context)
+    public HorseHelper(Context context)
     {
         this.context = context;
     }
