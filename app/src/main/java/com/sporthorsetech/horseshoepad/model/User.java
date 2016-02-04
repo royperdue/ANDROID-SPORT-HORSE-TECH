@@ -1,35 +1,38 @@
 package com.sporthorsetech.horseshoepad.model;
 
-/**
- * Created by eltonjhony on 25/01/16.
- */
-public class User {
-
+public class User
+{
     private String email;
     private String name;
     private String urlPhotoUser;
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getUrlPhotoUser() {
+    public String getUrlPhotoUser()
+    {
         return urlPhotoUser;
     }
 
-    public void setUrlPhotoUser(String urlPhotoUser) {
+    public void setUrlPhotoUser(String urlPhotoUser)
+    {
         this.urlPhotoUser = urlPhotoUser;
     }
 }
