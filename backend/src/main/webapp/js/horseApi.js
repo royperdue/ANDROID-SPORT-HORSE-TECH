@@ -72,9 +72,18 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
                 };
 
         $rootScope.screenshots = function() {
+                    GAuth.logout().then(
+                       function () {
+                           $state.go('screenshots');
+                           document.getElementById("logout").style.visibility = "hidden";
+                           document.getElementById("login").style.visibility = "visible";
+                       });
+                };
+
+        $rootScope.video = function() {
                             GAuth.logout().then(
                                function () {
-                                   $state.go('screenshots');
+                                   $state.go('video');
                                    document.getElementById("logout").style.visibility = "hidden";
                                    document.getElementById("login").style.visibility = "visible";
                                });

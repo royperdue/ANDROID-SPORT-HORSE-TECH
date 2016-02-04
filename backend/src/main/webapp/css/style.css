@@ -780,10 +780,10 @@ div#top {
 	margin-top: -167px;
 }
 .callbacks_nav.prev{
-	background: transparent url("../images/sli-arr.png") no-repeat ;
+	background: transparent url("../../img/sli-arr.png") no-repeat ;
 }
 .callbacks_nav.next{
-	background: transparent url("../images/sli-arr.png") no-repeat ;
+	background: transparent url("../../img/sli-arr.png") no-repeat ;
 }
 .callbacks_nav {
   	position: absolute;
@@ -797,7 +797,7 @@ div#top {
 	text-decoration: none;
 	height: 40px;
 	width: 45px;
-	background: transparent url("../images/sli-rit.png") no-repeat left top;
+	background: transparent url("../../img/sli-rit.png") no-repeat left top;
 	margin-top: 240px;
 }
 .callbacks_nav:active {
@@ -973,7 +973,7 @@ div#top {
 	color: #000;
 }
 .video {
-	background: url(../images/video-bg.jpg) no-repeat;
+	background: url(../../img/video-bg.jpg) no-repeat;
 	min-height: 400px;
 	background-size: cover;
  -webkit-background-size: cover;
@@ -982,7 +982,7 @@ div#top {
 	text-decoration:none;
 }
 span.e {
-	background: url(../images/play.png)no-repeat 0px 0px;
+	background: url(../../img/play.png)no-repeat 0px 0px;
 	width: 51px;
 	height: 60px;
 	display: block;
@@ -1002,7 +1002,7 @@ span.e {
 	width: 21%;
 }
 .review-left {
-	background: url(../images/review-bg.jpg)no-repeat;
+	background: url(../../img/review-bg.jpg)no-repeat;
 	min-height: 410px;
 	background-size: cover;
 	background-size: cover;
@@ -1030,7 +1030,7 @@ span.e {
 	color: #000;
 }
 span.colons {
-	background: url(../images/collance.png)no-repeat;
+	background: url(../../img/collance.png)no-repeat;
 	width: 23px;
 	height: 20px;
 	display: block;
@@ -1050,14 +1050,14 @@ span.colons {
 	color: #000;
 }
 span.review-img {
-	background: url(../images/review-img.png)no-repeat;
+	background: url(../../img/review-img.png)no-repeat;
 	width: 206px;
 	height: 206px;
 	display: block;
 	margin:0 auto;
 }
 span.review-img1 {
-	background: url(../images/r2.png)no-repeat;
+	background: url(../../img/r2.png)no-repeat;
 	width: 206px;
 	height: 206px;
 	display: block;
@@ -1069,7 +1069,7 @@ span.review-img1 {
 	border: 4px solid #FEA963;
 }
 span.review-img2 {
-	background: url(../images/r3.png)no-repeat;
+	background: url(../../img/r3.png)no-repeat;
 	width: 206px;
 	height: 206px;
 	display: block;
@@ -1182,10 +1182,10 @@ span.review-img2 {
 	margin-top: -167px;
 }
 .callbacks_nav.prev{
-	background: transparent url("../images/sli-arr.png") no-repeat ;
+	background: transparent url("../../img/sli-arr.png") no-repeat ;
 }
 .callbacks_nav.next{
-	background: transparent url("../images/sli-arr.png") no-repeat ;
+	background: transparent url("../../img/sli-arr.png") no-repeat ;
 }
 .callbacks_nav {
   	position: absolute;
@@ -1199,7 +1199,7 @@ span.review-img2 {
 	text-decoration: none;
 	height: 40px;
 	width: 45px;
-	background: transparent url("../images/sli-rit.png") no-repeat left top;
+	background: transparent url("../../img/sli-rit.png") no-repeat left top;
 	margin-top: 240px;
 }
 .callbacks_nav:active {
@@ -1364,7 +1364,7 @@ span.review-img1 {
 	height: 160px;
 }
 span.review-img2 {
-	background: url(../images/r3.png)no-repeat;
+	background: url(../../img/r3.png)no-repeat;
 	width: 160px;
 	height:160px;
 }
@@ -1547,7 +1547,7 @@ span.review-img1 {
 /*--count end here--*/
 /*--download start here--*/
 .download {
-	background: url(../images/down-bg.jpg)no-repeat;
+	background: url(../../img/down-bg.jpg)no-repeat;
 	min-height: 500px;
 	background-size: cover;
 	-webkit-background-size: cover;
@@ -1784,28 +1784,28 @@ ul.image-sprit li a:hover{
  -o-transition:  0.5s all;
 }
 a.mes {
-	background: url(../images/me.png) no-repeat 0px 3px;
+	background: url(../../img/me.png) no-repeat 0px 3px;
 	width: 30px;
 	height: 20px;
 	display: inline-block;
 	margin: 0px 60px 0px 0px;
 }
 a.fa {
-	background: url(../images/fa.png) no-repeat 0px 3px;
+	background: url(../../img/fa.png) no-repeat 0px 3px;
 	width: 28px;
 	height: 20px;
 	display: inline-block;
 	margin: 0px 100px 0px 0px;
 }
 a.tw {
-	background: url(../images/tw.png)no-repeat 0px 4px;
+	background: url(../../img/tw.png)no-repeat 0px 4px;
 	width: 27px;
 	height: 20px;
 	display: inline-block;
 	margin: 0px 90px 0px 0px;
 }
 a.pin {
-	background: url(../images/pin.png) no-repeat 0px 3px;
+	background: url(../../img/pin.png) no-repeat 0px 3px;
 	width: 30px;
 	height: 20px;
 	display: inline-block;
@@ -1862,7 +1862,7 @@ a.mes {
 	border: none;
 	text-indent: 100%;
 	background-size: 35px;
-	background: url(../images/arr.png) no-repeat 0px 0px;
+	background: url(../../img/arr.png) no-repeat 0px 0px;
 }
 .copyright {
 	background: #464646;

@@ -57,5 +57,13 @@ router.config(['$stateProvider',
                           templateUrl: 'partials/screenshots.html',
                       },
                   },
+              }).state('video', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'VideoCtrl',
+                          templateUrl: 'partials/video.html',
+                      },
+                  },
               })
 }])
