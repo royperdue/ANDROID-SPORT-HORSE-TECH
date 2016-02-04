@@ -81,12 +81,21 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
                 };
 
         $rootScope.video = function() {
-                            GAuth.logout().then(
-                               function () {
-                                   $state.go('video');
-                                   document.getElementById("logout").style.visibility = "hidden";
-                                   document.getElementById("login").style.visibility = "visible";
-                               });
-                        };
+                    GAuth.logout().then(
+                       function () {
+                           $state.go('video');
+                           document.getElementById("logout").style.visibility = "hidden";
+                           document.getElementById("login").style.visibility = "visible";
+                       });
+                };
+
+        $rootScope.reviews = function() {
+                    GAuth.logout().then(
+                       function () {
+                           $state.go('reviews');
+                           document.getElementById("logout").style.visibility = "hidden";
+                           document.getElementById("login").style.visibility = "visible";
+                       });
+                };
     }
 ]);
