@@ -5,7 +5,6 @@ import com.sporthorsetech.horseshoepad.backend.model.Horse;
 
 public interface IfHorseRepository
 {
-
     Horse save(Horse story);
     Horse update(Horse story);
     Horse findByIdDAO(Long id);

@@ -11,7 +11,6 @@ import static com.sporthorsetech.horseshoepad.backend.ofy.OfyService.ofy;
 
 public class HorseRepositoryImpl implements IfHorseRepository
 {
-
     private static HorseRepositoryImpl horseRepository = null;
 
     public static synchronized HorseRepositoryImpl getInstance()
