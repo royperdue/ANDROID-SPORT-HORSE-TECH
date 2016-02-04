@@ -73,5 +73,13 @@ router.config(['$stateProvider',
                           templateUrl: 'partials/reviews.html',
                       },
                   },
+              }).state('purchase', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'PurchaseCtrl',
+                          templateUrl: 'partials/purchase.html',
+                      },
+                  },
               })
 }])
