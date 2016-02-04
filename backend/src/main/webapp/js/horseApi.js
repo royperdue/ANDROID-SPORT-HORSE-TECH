@@ -97,5 +97,14 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
                            document.getElementById("login").style.visibility = "visible";
                        });
                 };
+
+        $rootScope.purchase = function() {
+                    GAuth.logout().then(
+                       function () {
+                           $state.go('purchase');
+                           document.getElementById("logout").style.visibility = "hidden";
+                           document.getElementById("login").style.visibility = "visible";
+                       });
+                };
     }
 ]);
