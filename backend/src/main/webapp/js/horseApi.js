@@ -26,6 +26,7 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
             }, function() {
                 $state.go('login');
                 document.getElementById("logout").style.visibility = "hidden";
+                document.getElementById("login").style.visibility = "hidden";
             }
         );
 
@@ -48,11 +49,35 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
             };
 
         $rootScope.features = function() {
-                        $state.go('features');
+                        GAuth.logout().then(
+                           function () {
+                               $state.go('features');
+                               document.getElementById("logout").style.visibility = "hidden";
+                               document.getElementById("login").style.visibility = "visible";
+                           });
                     };
 
         $rootScope.login = function() {
             $state.go('login');
+            document.getElementById("login").style.visibility = "hidden";
         };
+
+        $rootScope.howItWorks = function() {
+                    GAuth.logout().then(
+                       function () {
+                           $state.go('howItWorks');
+                           document.getElementById("logout").style.visibility = "hidden";
+                           document.getElementById("login").style.visibility = "visible";
+                       });
+                };
+
+        $rootScope.screenshots = function() {
+                            GAuth.logout().then(
+                               function () {
+                                   $state.go('screenshots');
+                                   document.getElementById("logout").style.visibility = "hidden";
+                                   document.getElementById("login").style.visibility = "visible";
+                               });
+                        };
     }
 ]);

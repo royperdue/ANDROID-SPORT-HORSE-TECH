@@ -3,6 +3,7 @@ var router = angular.module('angular-google-api-horse.router', []);
 router.config(['$urlRouterProvider',
     function($urlRouterProvider) {
         $urlRouterProvider.otherwise("/login");
+        document.getElementById("login").style.visibility = "hidden";
     }]);
 
 router.config(['$stateProvider',
@@ -38,6 +39,22 @@ router.config(['$stateProvider',
                       '': {
                           controller: 'FeaturesCtrl',
                           templateUrl: 'partials/features.html',
+                      },
+                  },
+              }).state('howItWorks', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'HowItWorksCtrl',
+                          templateUrl: 'partials/howItWorks.html',
+                      },
+                  },
+              }).state('screenshots', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'ScreenshotsCtrl',
+                          templateUrl: 'partials/screenshots.html',
                       },
                   },
               })
