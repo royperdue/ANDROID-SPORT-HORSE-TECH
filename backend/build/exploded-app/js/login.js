@@ -3,12 +3,14 @@ horseApi.controller('login.controller', function($scope,$window,$timeout,GApi,GA
     function clientList($scope, GAuth, GData, $state) {
         if(GData.isLogin()) {
             $state.go('home');
+            document.getElementById("logout").style.visibility = "visible";
         }
     }
 
     $scope.doLogin = function() {
         GAuth.login().then(function(){
             $state.go('home');
+            document.getElementById("logout").style.visibility = "visible";
         });
     };
 

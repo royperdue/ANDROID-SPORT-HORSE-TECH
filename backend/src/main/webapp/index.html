@@ -9,6 +9,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Custom Theme files -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
@@ -32,13 +34,19 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand text-danger" href="#" style="margin-top: -15px">
-                <img src="/img/logo_one.png" width="150px" height="105px">
+                <img src="/img/logo_one.png" width="100px" height="55px">
             </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="" ng-click="logout()"><i class="fa fa-sign-out"></i></a></li>
-                <li><a href="" ng-click="logout()">{{gdata.getUser().name}}</a></li>
+                <li><a href="" ng-click="intro()">Home</a></li>
+                <li><a href="" ng-click="features()">Features</a></li>
+                <li><a href="" ng-click="howItWorks()">How it works</a></li>
+                <li><a href="" ng-click="screenshots()">Screenshots</a></li>
+                <li><a href="" ng-click="reviews()">Reviews</a></li>
+                <li><a href="" ng-click="download()">Download</a></li>
+                <li id="logout"><a href="" ng-click="logout()">Logout</a></li>
+                <li id="login"><a href="" ng-click="login()">Login</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

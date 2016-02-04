@@ -18,17 +18,41 @@ var horseApi = angular.module('horseApi', ['ui.router', 'angular-google-gapi', '
         GAuth.checkAuth().then(
             function () {
                 if($state.includes('login'))
+                {
                     $state.go('home');
+                    document.getElementById("logout").style.visibility = "visible";
+                    document.getElementById("login").style.visibility = "hidden";
+                }
             }, function() {
                 $state.go('login');
+                document.getElementById("logout").style.visibility = "hidden";
             }
         );
 
         $rootScope.logout = function() {
             GAuth.logout().then(
             function () {
-                $state.go('login');
+                $state.go('intro');
+                document.getElementById("logout").style.visibility = "hidden";
+                document.getElementById("login").style.visibility = "visible";
             });
+        };
+
+        $rootScope.intro = function() {
+                GAuth.logout().then(
+                   function () {
+                       $state.go('intro');
+                       document.getElementById("logout").style.visibility = "hidden";
+                       document.getElementById("login").style.visibility = "visible";
+                   });
+            };
+
+        $rootScope.features = function() {
+                        $state.go('features');
+                    };
+
+        $rootScope.login = function() {
+            $state.go('login');
         };
     }
 ]);

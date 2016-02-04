@@ -24,5 +24,21 @@ router.config(['$stateProvider',
                         templateUrl: 'partials/home.html',
                     },
                 },
-            })
+            }).state('intro', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'IntroCtrl',
+                          templateUrl: 'partials/intro.html',
+                      },
+                  },
+              }).state('features', {
+                  url :'/',
+                  views :  {
+                      '': {
+                          controller: 'FeaturesCtrl',
+                          templateUrl: 'partials/features.html',
+                      },
+                  },
+              })
 }])
