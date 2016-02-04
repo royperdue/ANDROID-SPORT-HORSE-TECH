@@ -9,7 +9,7 @@ enum ObjectsTableColumn implements DatabaseColumn
 
     private final SqliteType sqliteType;
 
-    private ObjectsTableColumn(SqliteType sqliteType)
+    ObjectsTableColumn(SqliteType sqliteType)
     {
         this.sqliteType = sqliteType;
     }

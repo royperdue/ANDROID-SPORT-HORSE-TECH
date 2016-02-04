@@ -9,7 +9,7 @@ enum TagsTableColumn implements DatabaseColumn
 
     private final SqliteType sqliteType;
 
-    private TagsTableColumn(SqliteType sqliteType)
+    TagsTableColumn(SqliteType sqliteType)
     {
         this.sqliteType = sqliteType;
     }

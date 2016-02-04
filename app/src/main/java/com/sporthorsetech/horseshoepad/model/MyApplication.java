@@ -10,6 +10,13 @@ public class MyApplication extends android.app.Application
     private GoogleAccountCredential googleAccountCredential;
     private User user;
 
+    @Override
+    public void onCreate()
+    {
+        MultiDex.install(this);
+        super.onCreate();
+    }
+
     protected void attachBaseContext(Context base)
     {
         super.attachBaseContext(base);

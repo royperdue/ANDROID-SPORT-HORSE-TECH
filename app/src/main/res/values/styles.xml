@@ -17,7 +17,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="CustomProgressDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="CustomProgressDialog" parent="android:Theme.DeviceDefault.Light">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Detecting Horseshoe Pads…</item>
         <item name="DialogSpotColor">@color/colorOutline</item>

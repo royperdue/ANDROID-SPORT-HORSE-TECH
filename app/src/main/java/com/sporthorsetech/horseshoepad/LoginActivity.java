@@ -113,11 +113,7 @@ public class LoginActivity extends Activity
         ConnectivityManager conMgr = (ConnectivityManager) this.getApplicationContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-        if (netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable())
-        {
-            return false;
-        }
-        return true;
+        return !(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable());
     }
 
     public void handleException(final Exception e)

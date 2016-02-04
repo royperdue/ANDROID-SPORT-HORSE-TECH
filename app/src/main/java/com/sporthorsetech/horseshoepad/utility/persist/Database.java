@@ -27,20 +27,20 @@ public class Database
 
     public interface StoredObject
     {
-        public interface TYPE
+        interface TYPE
         {
-            public String getTypeName();
+            String getTypeName();
 
-            public Class getTypeClass();
+            Class getTypeClass();
         }
 
-        public TYPE getStoredObjectType();
+        TYPE getStoredObjectType();
 
-        public String getStoredObjectId();
+        String getStoredObjectId();
 
-        public List<SearchableTagValuePair> getStoredObjectSearchableTags();
+        List<SearchableTagValuePair> getStoredObjectSearchableTags();
 
-        public Long getStoredObjectTimestampMillis();
+        Long getStoredObjectTimestampMillis();
     }
 
     public enum SORT_ORDER

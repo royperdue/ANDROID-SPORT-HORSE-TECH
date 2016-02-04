@@ -288,7 +288,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                             horseHoof.setCurrentHorseShoePad(padId);
                             horseHooves.add(horseHoof);
                             horse.setHorseHooves(horseHooves);
-                            ((CheckBox) view).setEnabled(false);
+                            view.setEnabled(false);
                         }
                     }
                 } else if (horseSelected == false)
@@ -420,7 +420,7 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
     @Override
     public void onClick(View v)
     {
-        if (isCheckedList.contains(((CheckBox) v).getId()))
+        if (isCheckedList.contains(v.getId()))
         {
             if (!((CheckBox) v).isChecked())
             {
@@ -433,13 +433,13 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                 else if (textView4.getText().toString().equals(((CheckBox) v).getText().toString()))
                     textView4.setText("");
 
-                isCheckedList.remove(((CheckBox) v).getId());
+                isCheckedList.remove(v.getId());
             }
         }
 
         if (((CheckBox) v).isChecked())
         {
-            isCheckedList.add(((CheckBox) v).getId());
+            isCheckedList.add(v.getId());
 
             if (TextUtils.isEmpty(textView1.getText().toString()))
             {
