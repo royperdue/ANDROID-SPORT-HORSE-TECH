@@ -1,6 +1,6 @@
 package com.sporthorsetech.horseshoepad;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,14 +10,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.Drawer.OnDrawerItemClickListener;
@@ -25,9 +25,9 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.punchthrough.bean.sdk.BeanManager;
-import com.sporthorsetech.horseshoepad.backend.registration.Registration;
-
-import java.io.IOException;
+import com.sporthorsetech.horseshoepad.async.PostDataAsync;
+import com.sporthorsetech.horseshoepad.helper.HorseHelper;
+import com.sporthorsetech.horseshoepad.model.MyApplication;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
         GaitMonitorFragment.OnFragmentInteractionListener, ActivatePadsFragment.OnFragmentInteractionListener,
@@ -108,13 +108,31 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
             @Override
             public void onClick(View view)
             {
-
-                new PostDataAsync().execute("-REGISTRATION_ID-");
-
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                register(view);
             }
         });
+    }
+
+    public void register(View view)
+    {
+        // feedback animation onClick()
+        Animation onClickAnimation = AnimationUtils.loadAnimation(this, R.anim.onclickanim);
+        view.startAnimation(onClickAnimation);
+        GoogleAccountCredential credential = ((MyApplication) this.getApplication()).getGoogleAccountCredential();
+        HorseHelper horseHelper = new HorseHelper(this);
+
+        if (horseHelper.validate(credential))
+        {
+            new PostDataAsync(this, credential, horseHelper.createHorseRequestDTO()).execute();
+        }
+        else
+        {
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+
+            Snackbar.make(view, "You must be authenticated", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
@@ -153,43 +171,5 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
     public void onFragmentInteraction(String title)
     {
         //getSupportActionBar().setTitle(title);
-    }
-
-    class PostDataAsync extends AsyncTask<String, Void, Void>
-    {
-        private Registration regService = null;
-
-        protected void onPreExecute()
-        {
-            Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://sporthorsetech.appspot.com/_ah/api/");
-            builder.setApplicationName("SportHorseTech");
-            regService = builder.build();
-            Log.d("Pre-Execute", "Building Registration Service......");
-        }
-
-        protected Void doInBackground(String... params)
-        {
-            try
-            {
-                regService.register(params[0]).execute();
-
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-            Log.d("DoInBackground", "Posting Data......");
-
-            return null;
-        }
-
-        protected void onProgressUpdate()
-        {
-        }
-
-        protected void onPostExecute(String result)
-        {
-        }
     }
 }

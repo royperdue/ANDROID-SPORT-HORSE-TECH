@@ -1,0 +1,210 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/F20cCOssF0BqA2nboIkXMKaLVMc\"",
+ "discoveryVersion": "v1",
+ "id": "horseApi:v1",
+ "name": "horseApi",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "backend.horseshoepad.sporthorsetech.com",
+ "ownerName": "backend.horseshoepad.sporthorsetech.com",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://sporthorsetech.appspot.com/_ah/api/horseApi/v1/",
+ "basePath": "/_ah/api/horseApi/v1/",
+ "rootUrl": "https://sporthorsetech.appspot.com/_ah/api/",
+ "servicePath": "horseApi/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "CollectionResponse_Horse": {
+   "id": "CollectionResponse_Horse",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Horse"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "Horse": {
+   "id": "Horse",
+   "type": "object",
+   "properties": {
+    "horseName": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "regDate": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  }
+ },
+ "resources": {
+  "horse": {
+   "methods": {
+    "remove": {
+     "id": "horseApi.horse.remove",
+     "path": "horse/{id}",
+     "httpMethod": "DELETE",
+     "parameters": {
+      "id": {
+       "type": "string",
+       "required": true,
+       "format": "int64",
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "id"
+     ],
+     "response": {
+      "$ref": "Horse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    },
+    "save": {
+     "id": "horseApi.horse.save",
+     "path": "horse",
+     "httpMethod": "POST",
+     "request": {
+      "$ref": "Horse",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "Horse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    },
+    "update": {
+     "id": "horseApi.horse.update",
+     "path": "horse",
+     "httpMethod": "PUT",
+     "request": {
+      "$ref": "Horse",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "Horse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    }
+   },
+   "resources": {
+    "by": {
+     "methods": {
+      "id": {
+       "id": "horseApi.horse.by.id",
+       "path": "horse/{id}",
+       "httpMethod": "GET",
+       "parameters": {
+        "id": {
+         "type": "string",
+         "required": true,
+         "format": "int64",
+         "location": "path"
+        }
+       },
+       "parameterOrder": [
+        "id"
+       ],
+       "response": {
+        "$ref": "Horse"
+       },
+       "scopes": [
+        "https://www.googleapis.com/auth/userinfo.email"
+       ]
+      }
+     }
+    }
+   }
+  },
+  "horses": {
+   "methods": {
+    "list": {
+     "id": "horseApi.horses.list",
+     "path": "horse",
+     "httpMethod": "GET",
+     "response": {
+      "$ref": "CollectionResponse_Horse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    }
+   }
+  }
+ }
+}

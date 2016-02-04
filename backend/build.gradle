@@ -31,12 +31,15 @@ dependencies {
 }
 
 appengine {
-  downloadSdk = true
-  appcfg {
-    oauth2 = true
-  }
-  endpoints {
-    getClientLibsOnBuild = true
-    getDiscoveryDocsOnBuild = true
-  }
+    downloadSdk = true
+    appcfg {
+        oauth2 = true
+        noCookies = true
+        email = "roy.perdue.a@gmail.com"
+    }
+    endpoints {
+        getClientLibsOnBuild = true
+        getDiscoveryDocsOnBuild = true
+    }
+    jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
 }

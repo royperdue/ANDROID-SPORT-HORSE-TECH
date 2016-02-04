@@ -38,4 +38,11 @@ public final class Constant
     public static final int STACKED_DATA = 1;
     public static final int NEGATIVE_SUBCOLUMNS_DATA = 2;
     public static final int NEGATIVE_STACKED_DATA = 3;
+
+    // LOGIN CONSTANTS.
+    public static final int REQUEST_ACCOUNT_PICKER = 2;
+    public static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1001;
+    public static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1002;
+    public static String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+    public static String AUTH_SCOPE = "server:client_id:378118509102-lplka736j8irn1scev0jbo2ui78t99t5.apps.googleusercontent.com";
 }
