@@ -1,38 +1,64 @@
-<div style="margin-top:80px">
-    <div class="countgrid">
-        <div class="container">
-            <div class="countgrid-main">
-                <div class="col-md-3 count-boxs">
-                    <img src="../../img/clood.png" alt=""/>
+<div class="countgrid">
+    <div class="container">
+        <script src="../dist/minicart.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-                    <h3>15 0000</h3>
+        <div class="countgrid-main">
+            <div class="col-md-3 count-boxs">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <fieldset>
+                        <input type="hidden" name="cmd" value="_cart"/>
+                        <input type="hidden" name="add" value="1"/>
+                        <input type="hidden" name="business" value="example@minicartjs.com"/>
+                        <input type="hidden" name="item_name"
+                               value="Test Product with a really, really long name"/>
+                        <input type="hidden" name="amount" value="1.00"/>
+                        <input type="hidden" name="currency_code" value="USD"/>
+                        <input type="hidden" name="return"
+                               value="http://localhost/minicartjs.com/?success"/>
+                        <input type="hidden" name="cancel_return"
+                               value="http://localhost/minicartjs.com/?cancel"/>
 
-                    <p>APP DOWNLOAD</p>
-                </div>
-                <div class="col-md-3 count-boxs">
-                    <img src="../../img/star.png" alt=""/>
+                        <p>
+                            <label>
+                                My color:
+                                <input type="hidden" name="on0" value="My option"/>
+                                <select name="os0">
+                                    <option value=""></option>
+                                    <option value="R">Red</option>
+                                    <option value="O">Orange</option>
+                                    <option value="Y">Yellow</option>
+                                    <option value="G">Green</option>
+                                    <option value="B">Blue</option>
+                                    <option value="I">Indigo</option>
+                                    <option value="V">Violet</option>
+                                </select>
+                            </label>
+                        </p>
 
-                    <h3>59 000</h3>
+                        <input type="submit" value="Add to cart"/>
+                    </fieldset>
+                </form>
 
-                    <p>PEOPLE RETED STARS</p>
-                </div>
-                <div class="col-md-3 count-boxs">
-                    <img src="../../img/dna.png" alt=""/>
+                <script src="../dist/minicart.js"></script>
+                <script>
+		paypal.minicart.render();
 
-                    <h3>12 0000</h3>
+		paypal.minicart.cart.on('add', function (idx, product, isExisting) {
+			if (!product.get('os0')) {
+				this.remove(idx);
+				alert('Please select an option first!');
+			}
+		});
 
-                    <p>TWEETER FOLLOWERS</p>
-                </div>
-                <div class="col-md-3 count-boxs">
-                    <img src="../../img/mess.png" alt=""/>
 
-                    <h3>70 000</h3>
 
-                    <p>CUSTOMER REVIES</p>
-                </div>
+                </script>
             </div>
         </div>
     </div>
+
+
     <!--countgrids  end here-->
     <!--download star here-->
     <div class="download" id="Download">
@@ -53,7 +79,6 @@
                         <div class="down-text">
                             <h4>APPLE USER</h4>
                         </div>
-                        <div class="clearfix"></div>
                     </div>
                     <div class="user">
                         <div class="down-img">
@@ -62,7 +87,6 @@
                         <div class="down-text">
                             <h4>ANDROLD USER</h4>
                         </div>
-                        <div class="clearfix"></div>
                     </div>
                     <div class="user">
                         <div class="down-img">
@@ -71,10 +95,8 @@
                         <div class="down-text">
                             <h4>WINDOWS USER</h4>
                         </div>
-                        <div class="clearfix"></div>
                     </div>
                 </div>
-                <div class="clearfix"></div>
             </div>
         </div>
     </div>
@@ -93,7 +115,6 @@
                 <div class="con-sub">
                     <input type="submit" value="SUBSCRIBE"/>
                 </div>
-                <div class="clearfix"></div>
             </div>
         </div>
     </div>

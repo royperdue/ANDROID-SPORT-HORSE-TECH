@@ -11,6 +11,11 @@ font-family: 'Lato', sans-serif;
    background:#fff; 
 }
 /*--header start here--*/
+
+.navbar navbar-default navbar-fixed-top{
+    padding: 10px 10px 10px 10px;
+}
+
 nav a {
 	position: relative;
 	display: inline-block;
@@ -237,6 +242,10 @@ span.menu {
 	font-size: 13px;
 	padding: 6px 0px;
 }
+}
+
+#mainContainer {
+	margin-top: 10%;
 }
 /*--header end here--*/
 /*--temp grid start here--*/
