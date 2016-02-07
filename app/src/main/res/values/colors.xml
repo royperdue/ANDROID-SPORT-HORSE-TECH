@@ -3,8 +3,8 @@
     <color name="colorPrimary">#9BC53D</color>
     <color name="colorPrimaryDark">#498101</color>
     <color name="colorAccent">#124E78</color>
-    <color name="colorOutline">#F2BB05</color>
     <color name="colorBackground">#F0F0C9</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="spots_dialog_color">#F2BB05</color>
 </resources>

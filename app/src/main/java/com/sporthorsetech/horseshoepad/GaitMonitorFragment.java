@@ -34,6 +34,7 @@ import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.service.CommandThread;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.SpotsDialog;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationX;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationY;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationZ;
@@ -50,7 +51,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import dmax.dialog.SpotsDialog;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListener, BeanListener

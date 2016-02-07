@@ -33,6 +33,7 @@ import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.ScratchBank;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.SpotsDialog;
 import com.sporthorsetech.horseshoepad.utility.equine.Horse;
 import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
 import com.sporthorsetech.horseshoepad.utility.persist.Database;
@@ -40,7 +41,6 @@ import com.sporthorsetech.horseshoepad.utility.persist.Database;
 import java.util.ArrayList;
 import java.util.List;
 
-import dmax.dialog.SpotsDialog;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListener, BeanListener, View.OnClickListener
