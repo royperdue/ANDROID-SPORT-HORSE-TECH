@@ -3,7 +3,6 @@ package com.sporthorsetech.horseshoepad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,10 +13,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.Drawer.OnDrawerItemClickListener;
@@ -25,9 +21,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.punchthrough.bean.sdk.BeanManager;
-import com.sporthorsetech.horseshoepad.async.PostDataAsync;
-import com.sporthorsetech.horseshoepad.helper.HorseHelper;
-import com.sporthorsetech.horseshoepad.model.MyApplication;
 
 public class MainActivity extends AppCompatActivity implements NewHorseFragment.OnFragmentInteractionListener,
         GaitMonitorFragment.OnFragmentInteractionListener, ActivatePadsFragment.OnFragmentInteractionListener,
@@ -115,24 +108,8 @@ public class MainActivity extends AppCompatActivity implements NewHorseFragment.
 
     public void register(View view)
     {
-        // feedback animation onClick()
-        Animation onClickAnimation = AnimationUtils.loadAnimation(this, R.anim.onclickanim);
-        view.startAnimation(onClickAnimation);
-        GoogleAccountCredential credential = ((MyApplication) this.getApplication()).getGoogleAccountCredential();
-        HorseHelper horseHelper = new HorseHelper(this);
-
-        if (horseHelper.validate(credential))
-        {
-            new PostDataAsync(this, credential, horseHelper.createHorseRequestDTO()).execute();
-        }
-        else
-        {
-            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-            startActivity(intent);
-
-            Snackbar.make(view, "You must be authenticated", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
+        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override

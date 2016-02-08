@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 
-group = 'com.sporthorsetech.horseshoepad.backend'
+group = 'com.sporthorsetech.www'
 archivesBaseName = 'horseApi'
 version = 'v1-1.21.0-SNAPSHOT'
 

@@ -32,4 +32,6 @@
     <dimen name="title_margin">10dp</dimen>
     <dimen name="progress_margin">24dp</dimen>
     <dimen name="progress_width">250dp</dimen>
+
+    <dimen name="g_top_margin">100dp</dimen>
 </resources>

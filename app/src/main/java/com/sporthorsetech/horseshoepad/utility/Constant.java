@@ -21,6 +21,7 @@ public final class Constant
     public static final String HORSE_NAME = "horseName";
     public static final String NUMBER_OF_HORSESHOE_PADS_ACTIVATED = "numberOfHorseshoePadsActivated";
     public static final String ACTIVATED_PAD_IDS = "activatedPadIds";
+    public static final String HORSE_OWNER_EMAIL = "horseOwnerEmail";
 
     public static final int MAX_HORSES = 20;
 
@@ -44,5 +45,5 @@ public final class Constant
     public static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1001;
     public static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1002;
     public static String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-    public static String AUTH_SCOPE = "server:client_id:378118509102-lplka736j8irn1scev0jbo2ui78t99t5.apps.googleusercontent.com";
+    public static String WEB_CLIENT_ID = "378118509102-lplka736j8irn1scev0jbo2ui78t99t5.apps.googleusercontent.com";
 }

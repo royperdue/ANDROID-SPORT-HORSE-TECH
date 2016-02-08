@@ -1,7 +1,6 @@
 package com.sporthorsetech.horseshoepad.backend.api;
 
 import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
@@ -18,19 +17,14 @@ import java.util.Calendar;
 
 @Api(
         name = "horseApi",
-        version = "v1",
-        namespace = @ApiNamespace(
-                ownerDomain = AppConstants.API_OWNER,
-                ownerName = AppConstants.API_OWNER,
-                packagePath = AppConstants.API_PACKAGE_PATH
-        )
-)
-@ApiClass(resource = "horse",
-        scopes = {AppConstants.EMAIL_SCOPE},
-        clientIds = {AppConstants.ANDROID_CLIENT_ID, AppConstants.WEB_CLIENT_ID,
-                com.google.api.server.spi.Constant.API_EXPLORER_CLIENT_ID},
-        audiences = {AppConstants.AUDIENCE_ID}
-)
+        version = AppConstants.VERSION,
+        resource = AppConstants.RESOURCE,
+        description = AppConstants.DESCRIPTION, namespace = @ApiNamespace(
+        ownerDomain = AppConstants.NAMESPACE_OWNER_DOMAIN,
+        ownerName = AppConstants.NAMESPACE_OWNER_NAME,
+        packagePath = AppConstants.NAMESPACE_PACKAGE_PATH), clientIds = {
+        AppConstants.WEB_CLIENT_ID, AppConstants.ANDROID_CLIENT_ID_PRO},
+        audiences = {AppConstants.AUDIENCE}, scopes = {AppConstants.EMAIL_SCOPE})
 public class HorseEndpoint
 {
 
