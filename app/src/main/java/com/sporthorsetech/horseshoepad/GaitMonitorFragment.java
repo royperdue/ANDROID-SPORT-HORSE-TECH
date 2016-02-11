@@ -315,8 +315,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                                                 System.out.println("ARDUINO NOW ENABLED");
                                                 bean.setArduinoEnabled(true);
                                                 bean.sendSerialMessage("START");
-                                            }
-                                            else
+                                            } else
                                             {
                                                 System.out.println("ARDUINO ENABLED 1");
                                                 bean.sendSerialMessage("START");
@@ -339,8 +338,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                                                 System.out.println("ARDUINO NOW ENABLED");
                                                 bean.setArduinoEnabled(true);
                                                 bean.sendSerialMessage("START");
-                                            }
-                                            else
+                                            } else
                                             {
                                                 System.out.println("ARDUINO ENABLED 2");
                                                 bean.sendSerialMessage("START");
@@ -352,8 +350,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                         }
                         new CommandThread(beans, Constant.TAKE_READINGS);
-                    }
-                    else if (!horseshoePadsDetected)
+
+                        MenuItem batteryLevel = menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
+                        batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+                    } else if (!horseshoePadsDetected)
                     {
                         final MaterialDialog materialDialog = new MaterialDialog(getActivity());
                         materialDialog.setTitle(getString(R.string.notice)).setMessage(getString(R.string.must_detect_horseshoe_pads))
@@ -650,8 +651,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                 System.out.println("NOT CONNECTED.");
             }*/
         }
-        MenuItem batteryLevel = this.menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
-        batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         horseshoePadsDetected = true;
         dialog.dismiss();
