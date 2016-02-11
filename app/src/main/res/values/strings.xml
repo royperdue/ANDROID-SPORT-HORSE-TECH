@@ -83,6 +83,7 @@
     <string name="detect_horseshoe_pads">Detect Horseshoe Pads</string>
     <string name="bank_data">Bank Data</string>
     <string name="deactivate_horseshoe_pads">Deactivate Horseshoe Pads</string>
+    <string name="reconnect_horseshoe_pads">Reconnect Horseshoe Pads</string>
 
     <!--Dialog titles-->
     <string name="confirm_pad_assignment">Please Confirm</string>

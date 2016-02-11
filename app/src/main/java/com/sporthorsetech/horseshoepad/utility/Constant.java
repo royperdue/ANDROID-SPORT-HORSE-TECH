@@ -33,6 +33,7 @@ public final class Constant
     public static final String BANK_DATA = "BANK_DATA";
     public static final String PAUSE_READINGS = "PAUSE_READINGS";
     public static final String TAKE_READINGS = "TAKE_READINGS";
+    public static final String BATTERY_VOLTAGE = "BATTERY_VOLTAGE";
     
     // CHART CONSTANTS.
     public static final int DEFAULT_DATA = 0;

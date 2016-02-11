@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -27,7 +26,6 @@ import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
 import com.punchthrough.bean.sdk.BeanListener;
 import com.punchthrough.bean.sdk.BeanManager;
-import com.punchthrough.bean.sdk.message.BatteryLevel;
 import com.punchthrough.bean.sdk.message.BeanError;
 import com.punchthrough.bean.sdk.message.Callback;
 import com.punchthrough.bean.sdk.message.ScratchBank;
@@ -150,6 +148,7 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     private Menu menu;
     private int count = 0;
     private BeanListener beanListener = this;
+    private final StringBuilder stringBuilder = new StringBuilder();
 
     public GaitMonitorFragment()
     {
@@ -350,10 +349,6 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
                         }
                         new CommandThread(beans, Constant.TAKE_READINGS);
-
-                        MenuItem batteryLevel = menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
-                        batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-
                     } else if (!horseshoePadsDetected)
                     {
                         final MaterialDialog materialDialog = new MaterialDialog(getActivity());
@@ -552,6 +547,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
 
         inflater.inflate(R.menu.menu_monitor, menu);
         this.menu = menu;
+        MenuItem reconnect = menu.findItem(R.id.reconnect);
+        reconnect.setVisible(false);
     }
 
     @Override
@@ -561,9 +558,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         {
             if (horseSelected == true)
             {
-                BeanManager.getInstance().startDiscovery(this);
-                this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
-                dialog.show();
+                if (beans.size() == 0)
+                {
+                    BeanManager.getInstance().startDiscovery(this);
+                    this.dialog = new SpotsDialog(getActivity(), R.style.CustomProgressDialog);
+                    dialog.show();
+                }
             } else if (horseSelected == false)
             {
                 final MaterialDialog materialDialog = new MaterialDialog(getActivity());
@@ -586,7 +586,39 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }
         } else if (item.getItemId() == Constant.DETECT_BATTERY_LEVELS)
         {
-            checkBatteryLevels();
+            for (final Bean bean : beans)
+            {
+                if (bean.isConnected())
+                {
+                    bean.readArduinoPowerState(new Callback<Boolean>()
+                    {
+                        @Override
+                        public void onResult(Boolean result)
+                        {
+                            if (!result)
+                            {
+                                System.out.println("ARDUINO NOW ENABLED");
+                                bean.setArduinoEnabled(true);
+                                bean.sendSerialMessage("START");
+                            } else
+                            {
+                                System.out.println("ARDUINO ENABLED 2");
+                                bean.sendSerialMessage("START");
+                            }
+                        }
+                    });
+                }
+            }
+            checkBatteryVoltage();
+        }else if (item.getItemId() == R.id.reconnect)
+        {
+            for (Bean bean : beans)
+            {
+                if (!bean.isConnected())
+                {
+                    bean.connect(getActivity(), this);
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -652,6 +684,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }*/
         }
 
+        MenuItem batteryLevel = menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
+        batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+        MenuItem reconnect = menu.findItem(R.id.reconnect);
+        reconnect.setVisible(true);
+
         horseshoePadsDetected = true;
         dialog.dismiss();
     }
@@ -680,6 +718,42 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         try
         {
+            String message = new String(data, "UTF-8");
+
+            if(message.contains("Battery Voltage"))
+            {
+                if(message.matches(".*\\d.*"))
+                {
+                    stringBuilder.append(message).insert(message.length() - 2, ".").toString();
+                    stringBuilder.append("\n");
+                    count++;
+                }
+
+                if (count == beans.size())
+                {
+                    final MaterialDialog materialDialog = new MaterialDialog(getActivity());
+                    materialDialog.setTitle(getString(R.string.battery_levels)).setMessage(stringBuilder.toString())
+                            .setPositiveButton("OK", new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    materialDialog.dismiss();
+                                }
+                            }).setNegativeButton("CANCEL", new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            materialDialog.dismiss();
+                        }
+                    }).show();
+
+                    count = 0;
+                    stringBuilder.setLength(0);
+                }
+            }
+
             System.out.println(new String(data, "UTF-8"));
         } catch (UnsupportedEncodingException e)
         {
@@ -1267,83 +1341,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         return gaitActivityId;
     }
 
-    private void checkBatteryLevels()
+    private void checkBatteryVoltage()
     {
-        new BatteryLevelAsync().execute();
-    }
-
-    class BatteryLevelAsync extends AsyncTask<Void, Integer, String>
-    {
-        final StringBuilder stringBuilder = new StringBuilder();
-
-        protected void onPreExecute()
-        {
-        }
-
-        protected String doInBackground(Void... arg0)
-        {
-            while (count < beans.size())
-            {
-                try
-                {
-                    for (final Bean bean : beans)
-                    {
-                        if (bean.isConnected())
-                        {
-                            bean.readBatteryLevel(new Callback<BatteryLevel>()
-                            {
-                                @Override
-                                public void onResult(BatteryLevel result)
-                                {
-                                    stringBuilder.append(bean.getDevice().getName());
-                                    stringBuilder.append(" Battery Voltage = ");
-                                    stringBuilder.append(result.getVoltage());
-                                    stringBuilder.append("\n");
-                                    count++;
-                                }
-                            });
-                        }
-                    }
-                } catch (Exception e)
-                {
-                    try
-                    {
-                        Thread.sleep(300);
-                    } catch (InterruptedException ie)
-                    {
-                    }
-                    continue;
-                }
-            }
-            return stringBuilder.toString();
-        }
-
-        protected void onPostExecute(String result)
-        {
-            super.onPostExecute(result);
-
-            if (result != null)
-            {
-                final MaterialDialog materialDialog = new MaterialDialog(getActivity());
-                materialDialog.setTitle(getString(R.string.battery_levels)).setMessage(result)
-                        .setPositiveButton("OK", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                materialDialog.dismiss();
-                            }
-                        }).setNegativeButton("CANCEL", new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        materialDialog.dismiss();
-                    }
-                }).show();
-
-                count = 0;
-            }
-        }
+        new CommandThread(beans, Constant.BATTERY_VOLTAGE);
     }
 }
