@@ -24,12 +24,27 @@ import com.google.android.gms.common.api.Status;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.sporthorsetech.horseshoepad.backend.horseApi.HorseApi;
-import com.sporthorsetech.horseshoepad.backend.horseApi.model.Horse;
 import com.sporthorsetech.horseshoepad.utility.Constant;
 import com.sporthorsetech.horseshoepad.utility.LittleDB;
+import com.sporthorsetech.horseshoepad.utility.equine.BatteryReading;
+import com.sporthorsetech.horseshoepad.utility.equine.Gait;
+import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
+import com.sporthorsetech.horseshoepad.utility.equine.HorseHoof;
+import com.sporthorsetech.horseshoepad.utility.equine.Step;
+import com.sporthorsetech.horseshoepad.utility.persist.Database;
+import com.sporthorsetech.www.horseApi.HorseApi;
+import com.sporthorsetech.www.horseApi.model.AccelerationX;
+import com.sporthorsetech.www.horseApi.model.AccelerationY;
+import com.sporthorsetech.www.horseApi.model.AccelerationZ;
+import com.sporthorsetech.www.horseApi.model.Account;
+import com.sporthorsetech.www.horseApi.model.Force;
+import com.sporthorsetech.www.horseApi.model.Horse;
+import com.sporthorsetech.www.horseApi.model.JsonMap;
+import com.sporthorsetech.www.horseApi.model.Owner;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener
@@ -144,6 +159,7 @@ public class LoginActivity extends AppCompatActivity implements
             GoogleSignInAccount acct = result.getSignInAccount();
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             LittleDB.getInstance(getApplicationContext()).putString(Constant.HORSE_OWNER_EMAIL, acct.getEmail());
+            LittleDB.getInstance(getApplicationContext()).putString(Constant.HORSE_OWNER_NAME, acct.getDisplayName());
 
             updateUI(true);
         } else
@@ -194,13 +210,10 @@ public class LoginActivity extends AppCompatActivity implements
                     }
                 });
     }
-    // [END revokeAccess]
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult)
     {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
@@ -262,8 +275,12 @@ public class LoginActivity extends AppCompatActivity implements
 
     class PostDataAsync extends AsyncTask<Void, Void, Void>
     {
+        private List<com.sporthorsetech.horseshoepad.utility.equine.Horse> horseList;
+
         protected void onPreExecute()
         {
+            horseList = Database.with(getApplicationContext())
+                    .load(com.sporthorsetech.horseshoepad.utility.equine.Horse.TYPE.horse).orderByTs(Database.SORT_ORDER.ASC).limit(Constant.MAX_HORSES).execute();
         }
 
         protected Void doInBackground(Void... arg0)
@@ -278,16 +295,137 @@ public class LoginActivity extends AppCompatActivity implements
             builder.setApplicationName(getApplicationContext().getString(R.string.app_name));
             horseApi = builder.build();
 
-            if (activeNetwork != null &&
-                    activeNetwork.isConnectedOrConnecting())
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting())
             {
-                Horse horse = new Horse();
-                horse.setId(1L);
-                horse.setHorseName("NAME-1");
+                JsonMap horses = new JsonMap();
+
+                List<com.sporthorsetech.www.horseApi.model.HorseHoof> horseHooves = new ArrayList<>();
+                List<com.sporthorsetech.www.horseApi.model.GaitActivity> gaitActivities = new ArrayList<>();
+                List<com.sporthorsetech.www.horseApi.model.Gait> gaits = new ArrayList<>();
+                List<com.sporthorsetech.www.horseApi.model.BatteryReading> batteryReadings = new ArrayList<>();
+                List<com.sporthorsetech.www.horseApi.model.Step> steps = new ArrayList<>();
+
+                for (com.sporthorsetech.horseshoepad.utility.equine.Horse h : horseList)
+                {
+                    Horse horse = new Horse();
+                    horse.setId(Long.parseLong(h.getStoredObjectId()));
+                    horse.setName(h.getName());
+                    horse.setTimeCreated(h.getTimeCreated());
+                    horse.setHeight(h.getHeight());
+                    horse.setAge(h.getAge());
+                    horse.setBreed(h.getBreed());
+                    horse.setSex(h.getSex());
+                    horse.setDiscipline(h.getDiscipline());
+
+                    if (h.getHorseHooves().size() > 0)
+                    {
+                        for (HorseHoof hoof : h.getHorseHooves())
+                        {
+                            com.sporthorsetech.www.horseApi.model.HorseHoof horseHoof = new com.sporthorsetech.www.horseApi.model.HorseHoof();
+                            horseHoof.setId(Long.parseLong(hoof.getStoredObjectId()));
+                            horseHoof.setTimeCreated(hoof.getTimeCreated());
+                            horseHoof.setFoot(hoof.getFoot());
+                            horseHoof.setCurrentHorseShoePad(hoof.getCurrentHorseShoePad());
+                            horseHoof.setPreviousHorseshoePads(hoof.getPreviousHorseshoePads());
+                            horseHooves.add(horseHoof);
+                        }
+                    }
+
+                    if (h.getGaitActivities().size() > 0)
+                    {
+                        for (GaitActivity g : h.getGaitActivities())
+                        {
+                            com.sporthorsetech.www.horseApi.model.GaitActivity gaitActivity = new com.sporthorsetech.www.horseApi.model.GaitActivity();
+                            gaitActivity.setId(Long.parseLong(g.getStoredObjectId()));
+                            gaitActivity.setTimeCreated(g.getTimeCreated());
+                            gaitActivity.setFooting(g.getFooting());
+
+                            if (g.getGaits().size() > 0)
+                            {
+                                for (Gait gt : g.getGaits())
+                                {
+                                    com.sporthorsetech.www.horseApi.model.Gait gait = new com.sporthorsetech.www.horseApi.model.Gait();
+                                    gait.setId(Long.parseLong(gt.getStoredObjectId()));
+                                    gait.setName(gt.getName());
+                                    gait.setTimeCreated(gt.getTimeCreated());
+
+                                    if (gt.getSteps().size() > 0)
+                                    {
+                                        for (Step s : gt.getSteps())
+                                        {
+                                            com.sporthorsetech.www.horseApi.model.Step step = new com.sporthorsetech.www.horseApi.model.Step();
+                                            step.setId(Long.parseLong(s.getStoredObjectId()));
+                                            step.setTimeCreated(s.getTimeCreated());
+                                            step.setHoof(s.getHoof());
+
+                                            AccelerationX accelerationX = new AccelerationX();
+                                            accelerationX.setId((Long.parseLong(s.getAccelerationX().getStoredObjectId())));
+                                            accelerationX.setAccelerationX(s.getAccelerationX().getAccelerationX());
+
+                                            AccelerationY accelerationY = new AccelerationY();
+                                            accelerationY.setId((Long.parseLong(s.getAccelerationY().getStoredObjectId())));
+                                            accelerationY.setAccelerationY(s.getAccelerationY().getAccelerationY());
+
+                                            AccelerationZ accelerationZ = new AccelerationZ();
+                                            accelerationZ.setId((Long.parseLong(s.getAccelerationZ().getStoredObjectId())));
+                                            accelerationZ.setAccelerationZ(s.getAccelerationZ().getAccelerationZ());
+
+                                            Force force = new Force();
+                                            force.setId((Long.parseLong(s.getForce().getStoredObjectId())));
+                                            force.setForce(s.getForce().getForce());
+
+                                            steps.add(step);
+                                        }
+                                    }
+                                    gait.setSteps(steps);
+                                    gaits.add(gait);
+                                }
+                            }
+
+                            if (g.getBatteryReadings().size() > 0)
+                            {
+                                for (BatteryReading b : g.getBatteryReadings())
+                                {
+                                    com.sporthorsetech.www.horseApi.model.BatteryReading batteryReading = new com.sporthorsetech.www.horseApi.model.BatteryReading();
+                                    batteryReading.setId(Long.parseLong(b.getStoredObjectId()));
+                                    batteryReading.setTimeCreated(b.getTimeCreated());
+                                    batteryReading.setPadIdOne(b.getPadIdOne());
+                                    batteryReading.setPadOneBatteryVoltage(b.getPadOneBatteryVoltage());
+                                    batteryReading.setPadIdTwo(b.getPadIdTwo());
+                                    batteryReading.setPadTwoBatteryVoltage(b.getPadTwoBatteryVoltage());
+                                    batteryReading.setPadIdThree(b.getPadIdThree());
+                                    batteryReading.setPadThreeBatteryVoltage(b.getPadThreeBatteryVoltage());
+                                    batteryReading.setPadIdFour(b.getPadIdFour());
+                                    batteryReading.setPadFourBatteryVoltage(b.getPadFourBatteryVoltage());
+
+                                    batteryReadings.add(batteryReading);
+                                }
+                            }
+                            gaitActivity.setGaits(gaits);
+                            gaitActivity.setBatteryReadings(batteryReadings);
+                            gaitActivities.add(gaitActivity);
+                        }
+                        horse.setHorseHooves(horseHooves);
+                        horses.put(String.valueOf(horse.getId()), horse);
+                    }
+                }
+
                 try
                 {
-                    Horse h = horseApi.horse().save(horse).execute();
-                    System.out.println(h.toString());
+                    String ownerEmail = LittleDB.getInstance(getApplicationContext()).getString(Constant.HORSE_OWNER_EMAIL);
+                    String ownerName = LittleDB.getInstance(getApplicationContext()).getString(Constant.HORSE_OWNER_NAME);
+                    Account account = horseApi.checkAccount(ownerEmail).execute();
+
+                    if (!account.getAccount())
+                    {
+                        Owner owner = new Owner();
+                        owner.setId(ownerEmail);
+                        owner.setOwnerEmail(ownerEmail);
+                        owner.setOwnerName(ownerName);
+                        owner.setHorses(horses);
+
+                        horseApi.register(owner).execute();
+                    }
                 } catch (IOException e)
                 {
                     e.printStackTrace();

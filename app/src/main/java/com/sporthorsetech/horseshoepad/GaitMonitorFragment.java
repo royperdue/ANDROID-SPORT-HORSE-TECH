@@ -717,7 +717,17 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
-        String id = String.valueOf(Long.parseLong(gaitActivity.getBatteryReadings().get(gaitActivity.getBatteryReadings().size() - 1).getId()) + 1);
+        String id;
+
+        if (gaitActivity.getBatteryReadings().size() > 0)
+        {
+            id = String.valueOf(Long.parseLong(gaitActivity.getBatteryReadings().get(gaitActivity.getBatteryReadings().size() - 1).getId()) + 1);
+        }
+        else
+        {
+            id = "1";
+        }
+
         final BatteryReading batteryReading = new BatteryReading(id);
         try
         {

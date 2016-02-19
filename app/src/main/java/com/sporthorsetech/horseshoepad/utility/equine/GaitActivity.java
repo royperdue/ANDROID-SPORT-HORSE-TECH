@@ -14,9 +14,9 @@ public class GaitActivity implements Database.StoredObject
 {
     String id;
     Long timeCreated;
+    String footing;
     List<Gait> gaits = new ArrayList<>();
     List<BatteryReading> batteryReadings = new ArrayList<>();
-    String footing;
 
     public enum TYPE implements Database.StoredObject.TYPE
     {

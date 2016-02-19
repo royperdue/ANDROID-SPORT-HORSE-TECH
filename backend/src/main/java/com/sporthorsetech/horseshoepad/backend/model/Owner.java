@@ -6,6 +6,7 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by royperdue on 2/19/16.
@@ -21,7 +22,7 @@ public class Owner
     @Unindex
     String ownerEmail;
 
-    HashMap<String, Horse> horses = new HashMap<>();
+    Map<String, Horse> horses = new HashMap<>();
 
     public Owner()
     {
@@ -57,12 +58,12 @@ public class Owner
         this.ownerEmail = ownerEmail;
     }
 
-    public HashMap<String, Horse> getHorses()
+    public Map<String, Horse> getHorses()
     {
         return horses;
     }
 
-    public void setHorses(HashMap<String, Horse> horses)
+    public void setHorses(Map<String, Horse> horses)
     {
         this.horses = horses;
     }

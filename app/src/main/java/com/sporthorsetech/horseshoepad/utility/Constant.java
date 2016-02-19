@@ -22,6 +22,7 @@ public final class Constant
     public static final String NUMBER_OF_HORSESHOE_PADS_ACTIVATED = "numberOfHorseshoePadsActivated";
     public static final String ACTIVATED_PAD_IDS = "activatedPadIds";
     public static final String HORSE_OWNER_EMAIL = "horseOwnerEmail";
+    public static final String HORSE_OWNER_NAME = "horseOwnerName";
 
     public static final int MAX_HORSES = 20;
 

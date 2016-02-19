@@ -28,6 +28,7 @@ import com.sporthorsetech.horseshoepad.backend.service.GetService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -64,25 +65,25 @@ public class HorseEndpoint
     }
 
     @ApiMethod(name = "checkAccount")
-    public List<Account> checkAccount(@Named("ownerEmail") String ownerEmail, User user) throws UnauthorizedException
+    public Account checkAccount(@Named("ownerEmail") String ownerEmail, User user) throws UnauthorizedException
     {
         if (user == null)
         {
             throw new UnauthorizedException("The user is not authorized.");
         }
-        List<Account> accounts = new ArrayList<>();
+
         Account account = new Account();
 
         Owner owner = ofy().load().type(Owner.class).id(ownerEmail).now();
         if (owner == null)
         {
             account.setAccount(false);
-            accounts.add(account);
-            return accounts;
+
+            return account;
         }
         account.setAccount(true);
-        accounts.add(account);
-        return accounts;
+
+        return account;
     }
 
     @ApiMethod(
@@ -96,14 +97,9 @@ public class HorseEndpoint
             throw new UnauthorizedException("The user is not authorized.");
         }
 
-        Owner o = new Owner();
-        o.setId(owner.getId());
-        o.setOwnerEmail(owner.getOwnerEmail());
-        o.setHorses(new HashMap<String, Horse>());
-
         if (checkOwnerExists(owner.getId()) == false)
         {
-            ofy().save().entity(o).now();
+            ofy().save().entity(owner).now();
             logger.info("OWNER-CREATED.");
         }
     }
@@ -122,7 +118,7 @@ public class HorseEndpoint
         if (checkOwnerExists(ownerEmail) == true)
         {
             Owner owner = getService.getOwner(ownerEmail);
-            HashMap<String, Horse> horses = owner.getHorses();
+            Map<String, Horse> horses = owner.getHorses();
             horses.put(String.valueOf(horse.getId()), horse);
             owner.setHorses(horses);
             ofy().save().entity(owner).now();
@@ -138,7 +134,7 @@ public class HorseEndpoint
             logger.info("OWNER-CREATED.");
 
             Owner owner = getService.getOwner(ownerEmail);
-            HashMap<String, Horse> horses = owner.getHorses();
+            Map<String, Horse> horses = owner.getHorses();
             horses.put(String.valueOf(horse.getId()), horse);
             owner.setHorses(horses);
             ofy().save().entity(owner).now();
@@ -181,7 +177,7 @@ public class HorseEndpoint
         if (checkOwnerExists(ownerEmail) == true)
         {
             Owner owner = getService.getOwner(ownerEmail);
-            HashMap<String, Horse> horses = owner.getHorses();
+            Map<String, Horse> horses = owner.getHorses();
 
             for (Horse horse : horses.values())
             {
@@ -211,7 +207,7 @@ public class HorseEndpoint
         if (checkOwnerExists(ownerEmail) == true)
         {
             Owner owner = getService.getOwner(ownerEmail);
-            HashMap<String, Horse> horses = owner.getHorses();
+            Map<String, Horse> horses = owner.getHorses();
 
             horseList = new ArrayList<Horse>(horses.values());
         }
