@@ -18,6 +18,7 @@ public final class Constant
     public static final String HORSE_HOOF_IDS = "horseHoofIds";
     public static final String GAIT_IDS = "gaitIds";
     public static final String STEP_IDS = "stepIds";
+    public static final String BATTERY_READING_IDS = "batteryReadingIds";
     public static final String HORSE_NAME = "horseName";
     public static final String NUMBER_OF_HORSESHOE_PADS_ACTIVATED = "numberOfHorseshoePadsActivated";
     public static final String ACTIVATED_PAD_IDS = "activatedPadIds";

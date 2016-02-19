@@ -717,18 +717,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
-        String id;
+        final BatteryReading batteryReading = new BatteryReading(makeBatteryReadingId());
 
-        if (gaitActivity.getBatteryReadings().size() > 0)
-        {
-            id = String.valueOf(Long.parseLong(gaitActivity.getBatteryReadings().get(gaitActivity.getBatteryReadings().size() - 1).getId()) + 1);
-        }
-        else
-        {
-            id = "1";
-        }
-
-        final BatteryReading batteryReading = new BatteryReading(id);
         try
         {
             String message = new String(data, "UTF-8");
@@ -1378,6 +1368,28 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
         }
 
         return gaitActivityId;
+    }
+
+    private String makeBatteryReadingId()
+    {
+        String batteryReadingId = "-1";
+        ArrayList<String> batteryReadingIds = LittleDB.getInstance(getActivity().getApplicationContext()).getListString(Constant.BATTERY_READING_IDS);
+
+        if (batteryReadingIds == null || batteryReadingIds.size() == 0)
+        {
+            batteryReadingId = "1";
+            batteryReadingIds.add("1");
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.BATTERY_READING_IDS, batteryReadingIds);
+        } else if (batteryReadingIds != null && batteryReadingIds.size() > 0)
+        {
+            String lastId = batteryReadingIds.get(batteryReadingIds.size() - 1);
+            batteryReadingId = String.valueOf(Integer.parseInt(lastId) + 1);
+            batteryReadingIds.add(lastId);
+            batteryReadingIds.add(batteryReadingId);
+            LittleDB.getInstance(getActivity().getApplicationContext()).putListString(Constant.BATTERY_READING_IDS, batteryReadingIds);
+        }
+
+        return batteryReadingId;
     }
 
     private void checkBatteryVoltage()

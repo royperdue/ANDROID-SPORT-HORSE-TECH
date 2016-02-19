@@ -21,6 +21,7 @@ import com.sporthorsetech.horseshoepad.backend.model.Gait;
 import com.sporthorsetech.horseshoepad.backend.model.GaitActivity;
 import com.sporthorsetech.horseshoepad.backend.model.Horse;
 import com.sporthorsetech.horseshoepad.backend.model.HorseHoof;
+import com.sporthorsetech.horseshoepad.backend.model.Horses;
 import com.sporthorsetech.horseshoepad.backend.model.Owner;
 import com.sporthorsetech.horseshoepad.backend.model.Step;
 import com.sporthorsetech.horseshoepad.backend.service.GetService;
@@ -137,6 +138,33 @@ public class HorseEndpoint
             Map<String, Horse> horses = owner.getHorses();
             horses.put(String.valueOf(horse.getId()), horse);
             owner.setHorses(horses);
+            ofy().save().entity(owner).now();
+            logger.info("HORSE-ADDED.");
+        }
+    }
+
+    @ApiMethod(
+            name = "insertHorses",
+            path = "horses",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void insertHorses(@Named("ownerEmail") String ownerEmail, Horses horses, User user) throws NotFoundException, UnauthorizedException
+    {
+        if (user == null)
+        {
+            throw new UnauthorizedException("The user is not authorized.");
+        }
+
+        if (checkOwnerExists(ownerEmail) == true)
+        {
+            Owner owner = getService.getOwner(ownerEmail);
+            Map<String, Horse> horsesMap = owner.getHorses();
+
+            for (Horse h : horses.getHorseList())
+            {
+                horsesMap.put(String.valueOf(h.getId()), h);
+            }
+
+            owner.setHorses(horsesMap);
             ofy().save().entity(owner).now();
             logger.info("HORSE-ADDED.");
         }
