@@ -4,16 +4,33 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
-import com.google.api.server.spi.response.BadRequestException;
-import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.ObjectifyService;
 import com.sporthorsetech.horseshoepad.backend.constants.AppConstants;
+import com.sporthorsetech.horseshoepad.backend.model.AccelerationX;
+import com.sporthorsetech.horseshoepad.backend.model.AccelerationY;
+import com.sporthorsetech.horseshoepad.backend.model.AccelerationZ;
+import com.sporthorsetech.horseshoepad.backend.model.Account;
+import com.sporthorsetech.horseshoepad.backend.model.BatteryReading;
+import com.sporthorsetech.horseshoepad.backend.model.Force;
+import com.sporthorsetech.horseshoepad.backend.model.Gait;
+import com.sporthorsetech.horseshoepad.backend.model.GaitActivity;
 import com.sporthorsetech.horseshoepad.backend.model.Horse;
-import com.sporthorsetech.horseshoepad.backend.repository.HorseRepositoryImpl;
+import com.sporthorsetech.horseshoepad.backend.model.HorseHoof;
+import com.sporthorsetech.horseshoepad.backend.model.Owner;
+import com.sporthorsetech.horseshoepad.backend.model.Step;
+import com.sporthorsetech.horseshoepad.backend.service.GetService;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Api(
         name = "horseApi",
@@ -27,76 +44,172 @@ import java.util.Calendar;
         audiences = {AppConstants.AUDIENCE}, scopes = {AppConstants.EMAIL_SCOPE})
 public class HorseEndpoint
 {
+    private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    private static final Logger logger = Logger.getLogger(HorseEndpoint.class.getName());
+    private GetService getService = new GetService();
 
-    @ApiMethod(name = "horse.by.id", httpMethod = ApiMethod.HttpMethod.GET)
-    public Horse findById(User user, @Named("id") Long id) throws BadRequestException, UnauthorizedException
+    static
     {
-        if (user == null)
-        {
-            throw new UnauthorizedException("User not found");
-        }
-        if (id == null)
-        {
-            throw new BadRequestException("Missing attribute id");
-        }
-        return HorseRepositoryImpl.getInstance().findByIdDAO(id);
+        ObjectifyService.register(Owner.class);
+        ObjectifyService.register(Horse.class);
+        ObjectifyService.register(HorseHoof.class);
+        ObjectifyService.register(Gait.class);
+        ObjectifyService.register(GaitActivity.class);
+        ObjectifyService.register(Step.class);
+        ObjectifyService.register(Force.class);
+        ObjectifyService.register(BatteryReading.class);
+        ObjectifyService.register(AccelerationX.class);
+        ObjectifyService.register(AccelerationY.class);
+        ObjectifyService.register(AccelerationZ.class);
     }
 
-    @ApiMethod(name = "horses.list", httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<Horse> listStories(User user) throws UnauthorizedException
+    @ApiMethod(name = "checkAccount")
+    public List<Account> checkAccount(@Named("ownerEmail") String ownerEmail, User user) throws UnauthorizedException
     {
         if (user == null)
         {
-            throw new UnauthorizedException("User not found");
+            throw new UnauthorizedException("The user is not authorized.");
         }
-        return HorseRepositoryImpl.getInstance().findAllStoriesDAO();
+        List<Account> accounts = new ArrayList<>();
+        Account account = new Account();
+
+        Owner owner = ofy().load().type(Owner.class).id(ownerEmail).now();
+        if (owner == null)
+        {
+            account.setAccount(false);
+            accounts.add(account);
+            return accounts;
+        }
+        account.setAccount(true);
+        accounts.add(account);
+        return accounts;
     }
 
-    @ApiMethod(name = "horse.save", httpMethod = ApiMethod.HttpMethod.POST)
-    public Horse save(User user, Horse horse) throws UnauthorizedException
+    @ApiMethod(
+            name = "register",
+            path = "owner",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void register(Owner owner, User user) throws UnauthorizedException, NotFoundException
     {
         if (user == null)
         {
-            throw new UnauthorizedException("User not found");
+            throw new UnauthorizedException("The user is not authorized.");
         }
-        if (horse == null)
+
+        Owner o = new Owner();
+        o.setId(owner.getId());
+        o.setOwnerEmail(owner.getOwnerEmail());
+        o.setHorses(new HashMap<String, Horse>());
+
+        if (checkOwnerExists(owner.getId()) == false)
         {
-            throw new UnauthorizedException("Request is invalid");
+            ofy().save().entity(o).now();
+            logger.info("OWNER-CREATED.");
         }
-        horse.setRegDate(Calendar.getInstance().getTime());
-        return HorseRepositoryImpl.getInstance().save(horse);
     }
 
-    @ApiMethod(name = "horse.remove", httpMethod = ApiMethod.HttpMethod.DELETE)
-    public Horse remove(User user, @Named("id") Long id) throws NotFoundException, BadRequestException, UnauthorizedException
+    @ApiMethod(
+            name = "insertHorse",
+            path = "horse",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void insertHorse(@Named("ownerEmail") String ownerEmail, Horse horse, User user) throws NotFoundException, UnauthorizedException
     {
         if (user == null)
         {
-            throw new UnauthorizedException("User not found");
+            throw new UnauthorizedException("The user is not authorized.");
         }
-        if (id == null)
+
+        if (checkOwnerExists(ownerEmail) == true)
         {
-            throw new BadRequestException("Missing attribute id");
+            Owner owner = getService.getOwner(ownerEmail);
+            HashMap<String, Horse> horses = owner.getHorses();
+            horses.put(String.valueOf(horse.getId()), horse);
+            owner.setHorses(horses);
+            ofy().save().entity(owner).now();
+            logger.info("HORSE-ADDED.");
         }
-        Horse horse = findById(user, id);
-        if (horse == null)
-        {
-            throw new NotFoundException("Cannot find horse to remove");
-        }
-        return HorseRepositoryImpl.getInstance().remove(horse);
     }
 
-    @ApiMethod(name = "horse.update", httpMethod = ApiMethod.HttpMethod.PUT)
-    public Horse update(User user, Horse horse) throws BadRequestException, UnauthorizedException
+    @ApiMethod(
+            name = "getOwner",
+            path = "owner/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public Owner getOwner(@Named("ownerEmail") String ownerEmail, User user) throws UnauthorizedException, NotFoundException
     {
         if (user == null)
         {
-            throw new UnauthorizedException("User not found");
+            throw new UnauthorizedException("The user is not authorized.");
         }
-        if (horse == null || horse.getId() == null)
+
+        //Removed removed = ofy().load().type(Removed.class).id("REMOVED").now();
+
+        //if(removed.checkRemoved(teacherEmail) == false)
+        //{
+        return getService.getOwner(ownerEmail);
+        //}
+    }
+
+    @ApiMethod(
+            name = "getHorse",
+            path = "horse/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public Horse getHorse(@Named("ownerEmail") String ownerEmail, @Named("horseName") String horseName, User user) throws UnauthorizedException, NotFoundException
+    {
+        if (user == null)
         {
-            throw new BadRequestException("Missing attribute id");
+            throw new UnauthorizedException("The user is not authorized.");
         }
-        return HorseRepositoryImpl.getInstance().update(horse);
+
+        Horse h = null;
+
+        if (checkOwnerExists(ownerEmail) == true)
+        {
+            Owner owner = getService.getOwner(ownerEmail);
+            HashMap<String, Horse> horses = owner.getHorses();
+
+            for (Horse horse : horses.values())
+            {
+                if (horse.getName().equals(horseName))
+                {
+                    h = horse;
+                    break;
+                }
+            }
+        }
+        return h;
+    }
+
+    @ApiMethod(
+            name = "getHorses",
+            path = "horse",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public List<Horse> getHorses(@Named("ownerEmail") String ownerEmail, User user) throws UnauthorizedException, NotFoundException
+    {
+        if (user == null)
+        {
+            throw new UnauthorizedException("The user is not authorized.");
+        }
+
+        List<Horse> horseList = null;
+
+        if (checkOwnerExists(ownerEmail) == true)
+        {
+            Owner owner = getService.getOwner(ownerEmail);
+            HashMap<String, Horse> horses = owner.getHorses();
+
+            horseList = new ArrayList<Horse>(horses.values());
+        }
+
+        return horseList;
+    }
+
+    private boolean checkOwnerExists(String ownerEmail)
+    {
+        Owner owner = ofy().load().type(Owner.class).filter("ownerEmail", ownerEmail).first().now();
+
+        if (owner != null)
+            return true;
+        else
+            return false;
     }
 }
