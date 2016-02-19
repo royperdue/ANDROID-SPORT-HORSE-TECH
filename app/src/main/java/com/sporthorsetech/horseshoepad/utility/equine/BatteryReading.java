@@ -13,14 +13,14 @@ public class BatteryReading implements Database.StoredObject
 {
     String id;
     Long timeCreated;
-    String padIdOne = "";
-    String padOneBatteryVoltage = "";
-    String padIdTwo = "";
-    String padTwoBatteryVoltage = "";
-    String padIdThree = "";
-    String padThreeBatteryVoltage = "";
-    String padIdFour = "";
-    String padFourBatteryVoltage = "";
+    String padIdOne = "-";
+    String padOneBatteryVoltage = "-";
+    String padIdTwo = "-";
+    String padTwoBatteryVoltage = "-";
+    String padIdThree = "-";
+    String padThreeBatteryVoltage = "-";
+    String padIdFour = "-";
+    String padFourBatteryVoltage = "-";
 
     public enum TYPE implements Database.StoredObject.TYPE
     {

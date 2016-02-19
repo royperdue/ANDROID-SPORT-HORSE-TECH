@@ -36,6 +36,7 @@ import com.sporthorsetech.horseshoepad.utility.SpotsDialog;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationX;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationY;
 import com.sporthorsetech.horseshoepad.utility.equine.AccelerationZ;
+import com.sporthorsetech.horseshoepad.utility.equine.BatteryReading;
 import com.sporthorsetech.horseshoepad.utility.equine.Force;
 import com.sporthorsetech.horseshoepad.utility.equine.Gait;
 import com.sporthorsetech.horseshoepad.utility.equine.GaitActivity;
@@ -716,6 +717,8 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     @Override
     public void onSerialMessageReceived(byte[] data)
     {
+        String id = String.valueOf(Long.parseLong(gaitActivity.getBatteryReadings().get(gaitActivity.getBatteryReadings().size() - 1).getId()) + 1);
+        final BatteryReading batteryReading = new BatteryReading(id);
         try
         {
             String message = new String(data, "UTF-8");
@@ -724,6 +727,26 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if(message.matches(".*\\d.*"))
                 {
+                    String[] reading = message.split(" ");
+
+                    if (batteryReading.getPadIdOne().equals("-"))
+                    {
+                        batteryReading.setPadIdOne(reading[0]);
+                        batteryReading.setPadOneBatteryVoltage(reading[reading.length - 1]);
+                    }else if (batteryReading.getPadIdTwo().equals("-") && beans.size() >= 2)
+                    {
+                        batteryReading.setPadIdTwo(reading[0]);
+                        batteryReading.setPadTwoBatteryVoltage(reading[reading.length - 1]);
+                    }else if (batteryReading.getPadIdThree().equals("-") && beans.size() >= 3)
+                    {
+                        batteryReading.setPadIdThree(reading[0]);
+                        batteryReading.setPadThreeBatteryVoltage(reading[reading.length - 1]);
+                    }else if (batteryReading.getPadIdFour().equals("-") && beans.size() >= 4)
+                    {
+                        batteryReading.setPadIdFour(reading[0]);
+                        batteryReading.setPadFourBatteryVoltage(reading[reading.length - 1]);
+                    }
+
                     stringBuilder.append(message).insert(message.length() - 2, ".").toString();
                     stringBuilder.append("\n");
                     count++;
@@ -738,6 +761,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                                 @Override
                                 public void onClick(View v)
                                 {
+                                    List<BatteryReading> batteryReadings = gaitActivity.getBatteryReadings();
+                                    batteryReadings.add(batteryReading);
+                                    gaitActivity.setBatteryReadings(batteryReadings);
                                     materialDialog.dismiss();
                                 }
                             }).setNegativeButton("CANCEL", new View.OnClickListener()
@@ -745,6 +771,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
                         @Override
                         public void onClick(View v)
                         {
+                            List<BatteryReading> batteryReadings = gaitActivity.getBatteryReadings();
+                            batteryReadings.add(batteryReading);
+                            gaitActivity.setBatteryReadings(batteryReadings);
                             materialDialog.dismiss();
                         }
                     }).show();

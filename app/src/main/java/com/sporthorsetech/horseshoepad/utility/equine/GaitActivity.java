@@ -15,6 +15,7 @@ public class GaitActivity implements Database.StoredObject
     String id;
     Long timeCreated;
     List<Gait> gaits = new ArrayList<>();
+    List<BatteryReading> batteryReadings = new ArrayList<>();
     String footing;
 
     public enum TYPE implements Database.StoredObject.TYPE
@@ -98,6 +99,16 @@ public class GaitActivity implements Database.StoredObject
     public void setFooting(String footing)
     {
         this.footing = footing;
+    }
+
+    public List<BatteryReading> getBatteryReadings()
+    {
+        return batteryReadings;
+    }
+
+    public void setBatteryReadings(List<BatteryReading> batteryReadings)
+    {
+        this.batteryReadings = batteryReadings;
     }
 
     // Return a list of tags that you want to be able to search for this object by.
