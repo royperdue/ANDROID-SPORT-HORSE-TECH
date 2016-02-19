@@ -2,54 +2,142 @@ package com.sporthorsetech.horseshoepad.backend.model;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Horse
 {
-    @Id
-    private long id;
-    private String horseName;
-    private Date regDate;
+    @Id@Index
+    long id;
+    @Unindex
+    String name;
+    @Unindex
+    Long timeCreated;
+    @Unindex
+    String sex;
+    @Unindex
+    Long age;
+    @Unindex
+    String breed;
+    @Unindex
+    Long height;
+    @Unindex
+    String discipline;
+
+    List<HorseHoof> horseHooves = new ArrayList<>();
+    List<GaitActivity> gaitActivities = new ArrayList<>();
 
     public Horse()
     {
     }
 
-    public Horse(Long id, String horseName)
+    public Horse(Long id, String name)
     {
         this.id = id;
-        this.horseName = horseName;
+        this.name = name;
     }
 
-    public Long getId()
+    public long getId()
     {
         return id;
     }
 
-    public void setId(Long id)
+    public void setId(long id)
     {
         this.id = id;
     }
 
-    public String getHorseName()
+    public String getName()
     {
-        return horseName;
+        return name;
     }
 
-    public void setHorseName(String horseName)
+    public void setName(String name)
     {
-        this.horseName = horseName;
+        this.name = name;
     }
 
-    public Date getRegDate()
+    public Long getTimeCreated()
     {
-        return regDate;
+        return timeCreated;
     }
 
-    public void setRegDate(Date regDate)
+    public void setTimeCreated(Long timeCreated)
     {
-        this.regDate = regDate;
+        this.timeCreated = timeCreated;
+    }
+
+    public String getSex()
+    {
+        return sex;
+    }
+
+    public void setSex(String sex)
+    {
+        this.sex = sex;
+    }
+
+    public Long getAge()
+    {
+        return age;
+    }
+
+    public void setAge(Long age)
+    {
+        this.age = age;
+    }
+
+    public String getBreed()
+    {
+        return breed;
+    }
+
+    public void setBreed(String breed)
+    {
+        this.breed = breed;
+    }
+
+    public Long getHeight()
+    {
+        return height;
+    }
+
+    public void setHeight(Long height)
+    {
+        this.height = height;
+    }
+
+    public String getDiscipline()
+    {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline)
+    {
+        this.discipline = discipline;
+    }
+
+    public List<HorseHoof> getHorseHooves()
+    {
+        return horseHooves;
+    }
+
+    public void setHorseHooves(List<HorseHoof> horseHooves)
+    {
+        this.horseHooves = horseHooves;
+    }
+
+    public List<GaitActivity> getGaitActivities()
+    {
+        return gaitActivities;
+    }
+
+    public void setGaitActivities(List<GaitActivity> gaitActivities)
+    {
+        this.gaitActivities = gaitActivities;
     }
 }
