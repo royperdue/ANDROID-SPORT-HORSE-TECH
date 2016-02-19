@@ -128,6 +128,22 @@ public class HorseEndpoint
             ofy().save().entity(owner).now();
             logger.info("HORSE-ADDED.");
         }
+        else if (checkOwnerExists(ownerEmail) == false)
+        {
+            Owner o = new Owner();
+            o.setId(ownerEmail);
+            o.setOwnerEmail(ownerEmail);
+            o.setHorses(new HashMap<String, Horse>());
+            ofy().save().entity(o).now();
+            logger.info("OWNER-CREATED.");
+
+            Owner owner = getService.getOwner(ownerEmail);
+            HashMap<String, Horse> horses = owner.getHorses();
+            horses.put(String.valueOf(horse.getId()), horse);
+            owner.setHorses(horses);
+            ofy().save().entity(owner).now();
+            logger.info("HORSE-ADDED.");
+        }
     }
 
     @ApiMethod(
