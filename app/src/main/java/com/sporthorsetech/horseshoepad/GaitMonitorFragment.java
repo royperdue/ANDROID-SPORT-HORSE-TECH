@@ -422,6 +422,9 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             {
                 if (horseSelected == true)
                 {
+                    MenuItem batteryLevel = menu.findItem(Constant.DETECT_BATTERY_LEVELS);
+                    batteryLevel.setVisible(false);
+
                     Intent intent = new Intent(getActivity(), GraphActivity.class);
                     startActivity(intent);
                 } else if (horseSelected == false)

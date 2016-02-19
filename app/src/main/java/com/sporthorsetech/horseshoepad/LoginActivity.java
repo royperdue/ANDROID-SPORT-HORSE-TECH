@@ -404,10 +404,10 @@ public class LoginActivity extends AppCompatActivity implements
                             gaitActivity.setGaits(gaits);
                             gaitActivity.setBatteryReadings(batteryReadings);
                             gaitActivities.add(gaitActivity);
-                            h.getGaitActivities().remove(g);
                         }
                         horse.setHorseHooves(horseHooves);
                         horses.put(String.valueOf(horse.getId()), horse);
+                        h.getGaitActivities().clear();
                     }
                 }
 
