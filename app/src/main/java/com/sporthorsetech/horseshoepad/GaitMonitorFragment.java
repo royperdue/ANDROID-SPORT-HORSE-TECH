@@ -1399,4 +1399,12 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
     {
         new CommandThread(beans, Constant.BATTERY_VOLTAGE);
     }
+
+    public void removeBatteryLevelOption()
+    {
+        MenuItem batteryLevel = menu.findItem(Constant.DETECT_BATTERY_LEVELS);
+
+        if (batteryLevel != null)
+            batteryLevel.setVisible(false);
+    }
 }

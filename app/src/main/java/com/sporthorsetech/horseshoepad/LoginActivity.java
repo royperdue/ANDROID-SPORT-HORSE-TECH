@@ -411,6 +411,8 @@ public class LoginActivity extends AppCompatActivity implements
                     }
                 }
 
+                Database.with(getApplicationContext()).saveObjects(horseList);
+
                 try
                 {
                     String ownerEmail = LittleDB.getInstance(getApplicationContext()).getString(Constant.HORSE_OWNER_EMAIL);
