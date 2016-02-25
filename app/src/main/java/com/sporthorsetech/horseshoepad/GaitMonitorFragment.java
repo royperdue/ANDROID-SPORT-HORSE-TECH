@@ -688,6 +688,11 @@ public class GaitMonitorFragment extends Fragment implements BeanDiscoveryListen
             }*/
         }
 
+        MenuItem bl = menu.findItem(Constant.DETECT_BATTERY_LEVELS);
+
+        if (bl != null)
+            bl.setVisible(false);
+
         MenuItem batteryLevel = menu.add(Menu.NONE, Constant.DETECT_BATTERY_LEVELS, 0, getResources().getString(R.string.check_battery_levels));
         batteryLevel.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 

@@ -132,6 +132,8 @@ public class NewHorseFragment extends Fragment
             public void onClick(View v)
             {
                 createHorseProfile();
+                createHorseProfileButton.setVisibility(View.GONE);
+                activateHorseshoePadsButton.setVisibility(View.VISIBLE);
             }
         });
 

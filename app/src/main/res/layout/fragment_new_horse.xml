@@ -193,6 +193,7 @@
                 android:layout_marginTop="@dimen/pad_20dp"
                 android:text="@string/activate_pads"
                 android:id="@+id/activate_horseshoe_pads_button"
+                android:visibility="gone"
                 android:paddingLeft="@dimen/pad_10dp"
                 android:paddingRight="@dimen/pad_10dp"
                 android:paddingTop="@dimen/pad_20dp"

@@ -329,6 +329,8 @@ public class ActivatePadsFragment extends Fragment implements BeanDiscoveryListe
                     }).show();
                 }
                 Database.with(getActivity().getApplicationContext()).saveObject(horse);
+                activatePadsButton.setVisibility(View.GONE);
+                monitorGaitActivityButton.setVisibility(View.VISIBLE);
             }
         });
 
